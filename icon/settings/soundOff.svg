@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="231px" height="229px"
+	 viewBox="0 0 231 229" enable-background="new 0 0 231 229" xml:space="preserve">
+<metadata>
+	<sfw  xmlns="&ns_sfw;">
+		<slices></slices>
+		<sliceSourceBounds  height="16383" width="16383" y="-8306" x="-8076" bottomLeftOrigin="true"></sliceSourceBounds>
+	</sfw>
+</metadata>
+<g id="compass_icon">
+</g>
+<g id="Layer_3">
+</g>
+<g id="Layer_4">
+	<polygon opacity="0.6" fill="#FFFFFF" points="153.791,48.31 117.25,76.992 117.25,76.992 77.707,76.992 77.707,143.544 
+		117.25,143.544 117.25,143.544 153.791,172.226 	"/>
+	<g>
+		<path fill="#FFFFFF" d="M115.876,205.685c0,9.277-5.663,14.257-12.57,14.257c-7.189,0-12.169-5.582-12.169-13.775
+			c0-8.594,5.301-14.217,12.53-14.217C111.097,191.949,115.876,197.612,115.876,205.685z M94.832,206.086
+			c0,5.823,3.133,11.004,8.675,11.004s8.675-5.1,8.675-11.244c0-5.422-2.812-11.045-8.635-11.045S94.832,200.183,94.832,206.086z"/>
+		<path fill="#FFFFFF" d="M132.982,219.5v-16.747h-8.192V219.5h-3.493v-16.747h-2.691v-2.69h2.691v-0.603
+			c0-2.731,0.643-5.061,2.168-6.627c1.125-1.124,2.73-1.808,4.9-1.808c1.123,0,2.168,0.361,2.771,0.684l-0.724,2.65
+			c-0.521-0.281-1.285-0.522-2.088-0.522c-2.771,0-3.534,2.37-3.534,5.422v0.804h8.192v-0.924c0-2.731,0.604-5.222,2.25-6.787
+			c1.324-1.285,3.092-1.808,4.699-1.808c1.285,0,2.369,0.281,3.012,0.563l-0.441,2.73c-0.563-0.241-1.246-0.441-2.29-0.441
+			c-2.972,0-3.735,2.61-3.735,5.622v1.045h4.659v2.69h-4.659V219.5H132.982z"/>
+	</g>
+</g>
+</svg>

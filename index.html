@@ -1,0 +1,208 @@
+<html>
+
+<head>
+    <title>bilo</title>
+
+    <script src="./babylon/earcut.js"></script>
+    <script src="./babylon/babylon.js"></script>
+    <script src="./babylon/pep.js"></script>
+
+    <script src="./camera.js"></script>
+    <script src="./sound.js"></script>
+
+    <script src="./meshes.js"></script>
+
+    <script src="./mesh.js"></script>
+    <script src="./block.js"></script>
+    <script src="./gui.js"></script>
+
+    <script src="./settings.js"></script>
+
+    <script src="./ble.js"></script>
+
+  <!--   <script src="./compass.js"></script>-->
+    
+
+
+    <!--   <script src="./material.js"></script>-->
+
+
+    <script src="./world.js"></script>
+    <!--<script src="./screen.js"></script>-->
+    <script src="./game.js"></script>
+    <script src="./game/compassCalibration.js"></script>
+
+    <!-- games -->
+    <script src="./game/guidedBuild.js"></script>
+    <script src="./game/guidedBuildLevel.js"></script>
+
+    <script src="./game/freeBuild.js"></script>
+
+    <script src="./game/tangram.js"></script>
+    <script src="./game/tangramLevel.js"></script>
+
+    <style>
+        html,
+        body,
+        can {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            -webkit-user-select: none;
+
+        }
+
+        .text {
+            cursor: zoom-in;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+
+        }
+    </style>
+
+
+</head>
+
+<body ondragstart="return false;" ondrop="return false;" oncontextmenu="return false;">
+    <canvas id="renderCanvas" touch-action="none"></canvas>
+
+    <script>
+
+
+
+
+        /*
+        
+                ^
+                X
+                |
+        <Z------0
+        //front
+        
+        */
+
+
+ 
+
+
+        var canvas = document.getElementById("renderCanvas");
+        var engine = new BABYLON.Engine(canvas, true);//, {}, true);
+
+        if (engine.getGlInfo().renderer == "Adreno (TM) 308") {
+            engine.getCaps().highPrecisionShaderSupported = false;
+        }
+
+
+        let scene = new BABYLON.Scene(engine);
+        scene.clearColor = new BABYLON.Color3(0.7, 0.8, 0.9);
+        engine.displayLoadingUI();
+
+
+        camera.init();
+        sound.init();
+        Mesh.init();
+
+        MeshBase.init();
+        MeshPixel.init(meshesPixel());
+
+        Mesh2x2.init(meshes2x2());
+        Mesh2x4.init(meshes2x4());
+        Mesh2x2Trans.init(meshes2x2Full());
+        Mesh2x4Trans.init(meshes2x4Full());
+
+        MeshStar.init(meshesStar());
+
+        MeshShadow.init();
+        MeshShadowLeft.init(meshesShadowLeft());
+        MeshShadowRight.init(meshesShadowRight());
+        MeshShadowBack.init(meshesShadowBack());
+        MeshShadowFront.init(meshesShadowFront());
+        MeshShadowBottom.init(meshesShadowBottom());
+
+
+        Gui.init();
+        GuiButton.init();
+        GuiButtonPaint.init();
+
+        Block.init();
+        Game.init();
+
+        world.init(meshesBase());
+
+        settings.init();
+        ble.init();
+      //  compass.init();
+
+     
+
+        //--
+
+        let colorWheel = new GuiColorWheel();
+
+        window.onload = function () {
+            engine.hideLoadingUI();
+            meshesShadowLeft();
+
+          /*  let f = new Block2x2({ x : 4, y : 0, z : 7, r : 0, color : [1,0]});
+           // let x = new Mesh2x2(f);
+            let p = BlockPixel.convertBlock(f);
+            new MeshPixel(p[0]);
+            new MeshPixel(p[1]);
+            new MeshPixel(p[2]);
+            new MeshPixel(p[3]);*/
+                // let sta = new MeshStar({height : world.maxHeight+1.5});
+           // meshesStar();
+           //let s = new MeshStar({height : 1.5});
+/*
+           s.dispose();
+            s = null;
+
+             s = new MeshStar({height : 2});*/
+              /* let b = new Block2x2({ x: 0, y: 0, z: 0, r: 0 });
+             let xxx = new MeshShadowBottom(b);*/
+                         
+        };
+
+
+        window.addEventListener('DOMContentLoaded', function () {
+            scene.onPointerDown = function (evt, pickResult) {
+
+
+                if (Gui.pointerDown(evt)) {
+
+                } else if (pickResult.hit) {
+
+
+
+                   colorWheel.pointerDown(evt, pickResult.pickedMesh.name)
+   
+
+                } else {
+                    camera.pointerDown();
+                }
+
+            };
+
+
+
+
+            engine.runRenderLoop(function () {
+                scene.render();
+            });
+            window.addEventListener("resize", function () {
+                engine.resize();
+                Gui.resize();
+            });
+        });
+
+
+    </script>
+</body>
+
+</html>

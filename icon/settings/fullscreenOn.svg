@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="231px" height="229px"
+	 viewBox="0 0 231 229" enable-background="new 0 0 231 229" xml:space="preserve">
+<metadata>
+	<sfw  xmlns="&ns_sfw;">
+		<slices></slices>
+		<sliceSourceBounds  height="16383" width="16383" y="-8306" x="-8076" bottomLeftOrigin="true"></sliceSourceBounds>
+	</sfw>
+</metadata>
+<g id="compass_icon">
+</g>
+<g id="Layer_3">
+</g>
+<g id="Layer_5">
+	
+		<rect x="43.52" y="25.582" fill="none" stroke="#FFFFFF" stroke-width="6.9602" stroke-miterlimit="10" width="143.962" height="119.668"/>
+	<g>
+		<path fill="none" d="M180.073,33.694"/>
+	</g>
+	<g>
+		<g>
+			
+				<line fill="none" stroke="#FFFFFF" stroke-width="5.3544" stroke-linejoin="round" x1="57.788" y1="132.814" x2="144.702" y2="61.36"/>
+			<g>
+				<polygon fill="#FFFFFF" points="64.656,137.478 48.855,140.101 54.484,125.104 				"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			
+				<line fill="none" stroke="#FFFFFF" stroke-width="5.3544" stroke-linejoin="round" x1="173.159" y1="38.025" x2="144.702" y2="61.36"/>
+			<g>
+				<polygon fill="#FFFFFF" points="166.298,33.353 182.102,30.75 176.454,45.739 				"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<path fill="#FFFFFF" d="M88.895,192.432h14.579v2.932H92.429v8.996h10.201v2.892H92.429V219.5h-3.534V192.432z"/>
+		<path fill="#FFFFFF" d="M123.232,214.158c0,2.049,0.041,3.815,0.161,5.342h-3.133l-0.2-3.173h-0.081
+			c-0.884,1.566-2.972,3.614-6.426,3.614c-3.052,0-6.707-1.727-6.707-8.514v-11.365h3.534v10.723c0,3.694,1.165,6.225,4.338,6.225
+			c2.369,0,4.016-1.646,4.658-3.253c0.201-0.481,0.321-1.124,0.321-1.808v-11.887h3.534V214.158z"/>
+		<path fill="#FFFFFF" d="M129.096,190.985h3.533V219.5h-3.533V190.985z"/>
+		<path fill="#FFFFFF" d="M138.572,190.985h3.535V219.5h-3.535V190.985z"/>
+	</g>
+</g>
+</svg>

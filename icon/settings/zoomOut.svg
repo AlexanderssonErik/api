@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="231px" height="229px"
+	 viewBox="0 0 231 229" enable-background="new 0 0 231 229" xml:space="preserve">
+<metadata>
+	<sfw  xmlns="&ns_sfw;">
+		<slices></slices>
+		<sliceSourceBounds  height="16383" width="16383" y="-8306" x="-8076" bottomLeftOrigin="true"></sliceSourceBounds>
+	</sfw>
+</metadata>
+<g id="compass_icon">
+</g>
+<g id="Layer_3">
+</g>
+<g id="Layer_4">
+	<path fill="none" stroke="#FFFFFF" stroke-width="8.2415" stroke-linecap="square" stroke-linejoin="round" d="M57.58,129.906
+		c20.382,20.384,53.43,20.384,73.816,0c20.382-20.384,20.382-53.433,0-73.816c-20.387-20.383-53.435-20.383-73.816,0
+		C37.196,76.474,37.196,109.522,57.58,129.906z"/>
+	
+		<rect x="120.032" y="156.689" transform="matrix(0.7071 0.7071 -0.7071 0.7071 158.7501 -65.8259)" fill="none" stroke="#FFFFFF" stroke-width="9.615" stroke-linecap="round" stroke-linejoin="round" width="77.606" height="4.058"/>
+	
+		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="78.821" y1="92.998" x2="110.154" y2="92.998"/>
+</g>
+</svg>

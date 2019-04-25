@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
+	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
+	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
+	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
+	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
+	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
+	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
+	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
+]>
+<svg version="1.1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="231px" height="229px"
+	 viewBox="0 0 231 229" enable-background="new 0 0 231 229" xml:space="preserve">
+<metadata>
+	<sfw  xmlns="&ns_sfw;">
+		<slices></slices>
+		<sliceSourceBounds  x="-8076" y="-8306" width="16383" height="16383" bottomLeftOrigin="true"></sliceSourceBounds>
+	</sfw>
+</metadata>
+<g id="compass_icon">
+</g>
+<g id="Layer_3">
+</g>
+<g id="Layer_4">
+	<path fill="none" stroke="#FFFFFF" stroke-width="7.4182" stroke-linecap="round" stroke-linejoin="round" d="M184.998,136.92
+		c0,8.193-6.644,14.837-14.837,14.837H44.67c-8.194,0-14.836-6.644-14.836-14.837V92.412c0-8.194,6.643-14.836,14.836-14.836
+		h125.491c8.193,0,14.837,6.642,14.837,14.836V136.92z"/>
+	<path fill="#FFFFFF" d="M184.998,93.648c8.193,0,14.836,6.642,14.836,14.836v8.654c0,8.193-6.643,14.836-14.836,14.836"/>
+	<path fill="#FFFFFF" d="M65.169,139.806c0,2.106-1.708,3.813-3.811,3.813l0,0c-2.106,0-3.813-1.707-3.813-3.813V88.29
+		c0-2.105,1.708-3.812,3.813-3.812l0,0c2.103,0,3.811,1.707,3.811,3.812V139.806z"/>
+	<path fill="#FFFFFF" d="M49.922,139.806c0,2.106-1.707,3.813-3.813,3.813l0,0c-2.105,0-3.813-1.707-3.813-3.813V88.289
+		c0-2.105,1.708-3.812,3.813-3.812l0,0c2.106,0,3.813,1.707,3.813,3.812V139.806z"/>
+</g>
+</svg>
