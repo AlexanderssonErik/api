@@ -6,7 +6,7 @@ class FreeBuild extends Game {
  
         level[0].difficulty.push({image: "./icon/games/freeBuild/lvlRgb.svg"});
         level[0].difficulty.push({image: "./icon/games/freeBuild/lvlTwoRow.svg"});
-        level[0].difficulty.push({image: "./icon/games/freeBuild/lvlTwoRow.svg"});
+        level[0].difficulty.push({image: "./icon/games/freeBuild/lvlOnBase.svg"});
 
 
         colorWheel.colorSection();
@@ -33,8 +33,8 @@ class FreeBuild extends Game {
         this._paintBrush =  meshColor.black;
         this._paintedBlocks = [];
         
-
-        this.update(); //Remove?
+        this._setLevel ({level: 0, difficulty: 0 }); 
+      //  this.update(); //Remove?
     
       //  this._level = [];
       //  guidedBuildLevel.buildLevel(this._level);
@@ -43,6 +43,8 @@ class FreeBuild extends Game {
     }
 
     _setLevel ({level = 0, difficulty = 0 } ){
+
+      database.setLevel({name: this.constructor.name, level: level, difficulty: difficulty});
       this.reset();
       switch(difficulty){
         case 0:

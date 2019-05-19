@@ -360,6 +360,18 @@ class Block2x4 extends Block {
 
 class BlockPixel extends Block {
 
+    
+    static setBlockColor({ block = [], color = 0, blink = false, colorComplete = true }) {
+        if (!Array.isArray(block)) {
+            block = [block];
+        }
+
+        block.forEach(function (pixel) {          
+            pixel.setBlockColor({color: color, blink: blink, colorComplete: colorComplete });              
+        });
+
+    }
+
     static convertBlock(block) {
         if (!Array.isArray(block)) {
             block = [block];
@@ -451,10 +463,38 @@ class BlockPixel extends Block {
              return false;
      }*/
 
-    setBlockColor({color = 0, blink = false }) {
+    setBlockColor({color = 0, blink = false, colorComplete = true }) {
+        if(colorComplete){
+            this.block.color = color;
+        }else{
+            //rotation 
+            //distacne
+            let distance = 0;
 
-        this.block.color = color;
+            if(this.block.r == 0 || this.block.r == 2 ){
+                distance = this.x - this.block.x;               
+            }else{
+                distance = this.z - this.block.z;
+            }
+           
+            switch(Math.abs(distance)){
+                case 0:
+                this.block.ledA = color;
+                break;
+                case 1:
+                this.block.ledB = color;
+                break;
+                case 2:
+                this.block.ledC = color;
+                break;
+                case 3:
+                this.block.ledD = color;
+                break;
+            }
+           
 
+        }
+      
         if (blink) {
             this.block.blink();
         } else {
@@ -840,5 +880,176 @@ class BlockShadowBottom extends BlockShadow {
 
     
 
+}
+
+class BlockNumber extends Block {
+    constructor({ x = null, y = null, z = null, color = [0,0,0]}) { // color = [null]?
+        super({ x: x, y: y, z: z, color: color });
+      
+    
+
+    }
+}
+
+class BlockPillar extends Block {
+
+    static convertBlock(block) {
+        if (!Array.isArray(block)) {
+            block = [block];
+        }
+        let pillar = [];
+
+
+        block.forEach(function (item) {
+            //let pixel = 
+            //if(! (item instanceof Block2x2))
+
+            if(item.r == 0){
+                pillar.push(new BlockPillar({ x: item.x, y: 0, z: item.z, color: [item.color[0]]}) );
+                if(item instanceof Block2x4){
+                    pillar.push(new BlockPillar({ x: item.x+2, y: 0, z: item.z, color: [item.color[2]]}) );
+                }
+            }else if(item.r == 1){
+                pillar.push(new BlockPillar({ x: item.x , y: 0, z: item.z-1, color: [item.color[0]]}) );
+                if(item instanceof Block2x4){
+                    pillar.push(new BlockPillar({ x: item.x, y: 0, z: item.z-3, color: [item.color[2]]}) );
+                }
+            }else if(item.r == 2){
+                pillar.push(new BlockPillar({ x: item.x -1, y: 0, z: item.z-1, color: [item.color[0]]}) );
+                if(item instanceof Block2x4){
+                    pillar.push(new BlockPillar({ x: item.x-3, y: 0, z: item.z-1, color: [item.color[2]]}) );
+                }
+            }else if(item.r == 3){
+                pillar.push(new BlockPillar({ x: item.x-1, y: 0, z: item.z, color: [item.color[0]]}) );
+                if(item instanceof Block2x4){
+                    pillar.push(new BlockPillar({ x: item.x-1, y: 0, z: item.z+2, color: [item.color[2]]}) );
+                }
+            }
+
+        });
+
+        return pillar;
+
+     
+    }
+
+
+    static _isIn({isInItem = null, block = []}){
+
+        let neededEqual = 1;
+
+        let convertedItem = [isInItem];
+        let convertedBlock = block;
+
+      
+        if(isInItem instanceof Block2x2 ){
+            convertedItem = BlockPillar.convertBlock(convertedItem);        
+        }else if(isInItem instanceof Block2x4){
+            neededEqual = 2;
+            convertedItem = BlockPillar.convertBlock(convertedItem);
+        }else if(block[0] instanceof Block2x2 || block[0] instanceof Block2x4){
+            convertedBlock =  BlockPillar.convertBlock(convertedBlock);
+        }else if(isInItem instanceof BlockPixel){
+            for (let i = 0; i < block.length; i++) {
+                if(isInItem.x == block[i].x || isInItem.x == block[i].x+1){
+                    if(isInItem.z == block[i].z || isInItem.z == block[i].z+1){
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }else if(block[0] instanceof BlockPixel){
+            let found = 0;           
+            for (let i = 0; i < block.length; i++) {
+                if(isInItem.x == block[i].x || isInItem.x+1 == block[i].x){
+                    if(isInItem.z == block[i].z || isInItem.z+1 == block[i].z){
+                        found++;
+                    }
+                }
+            }
+            if(found == 4){
+                return true;
+            }
+            return false;
+        }
+
+        
+        let found = 0;
+        convertedItem.forEach(function (item) {
+            convertedBlock.forEach(function (itemBlock) {
+                if(item.x == itemBlock.x || item.z == itemBlock.z){
+                    found++;
+                }          
+            });
+        });
+
+        if(neededEqual == found){
+            return true;
+        }
+        return false;
+
+
+
+
+
+        /*
+        item        block       action1                                        comment
+       
+        2x2         pillar      convert equal 1 ok      
+        2x4         pillar      convert equal 2 ok
+        pillar      block       convert block to pillar(2x4 -> 2)              want pillar to is in if perfect match 2x4, but not if in middle
+        pillar      pixel       overlapfunction need 4 //convert pillar to pixel equal 1 ok
+        pixel       pillar      overlap function need 1   -- " --
+
+        */
+
+
+
+    }
+
+    static calcSet({ left = [], right = []}) {
+
+        if (!Array.isArray(left)) {
+            left = [left];
+        }
+        if (!Array.isArray(right)) {
+            right = [right];
+        }
+        let set = {
+            intersectionLeft: [],
+            intersectionRight: [],
+            diffLeft: [],
+            diffRight: [],
+            get union() {
+                return this.diffLeft.concat(this.intersectionLeft, this.diffRight);
+            }
+        }
+
+
+        left.forEach(function (item) {       
+            if (BlockPillar._isIn({isInItem: item, block: right})) {
+
+                set.intersectionLeft.push(item);
+            } else {
+                set.diffLeft.push(item);
+            }
+        });
+        right.forEach(function (item) {        
+            if (BlockPillar._isIn({isInItem: item, block: left})) {
+                set.intersectionRight.push(item);
+            } else {
+                set.diffRight.push(item);
+            }
+        });
+        return set;
+
+    }
+
+    constructor({ x = null, y = null, z = null, color = [0]}) { // color = [null]?
+        super({ x: x, y: 0, z: z, color: color });
+      
+    
+
+    }
 }
 

@@ -8,6 +8,8 @@ let tangramLevel = {
 
       // level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push( [new Block2x2({ x : 4, y : 0, z : 1, r : 0, color : [1,0]})]);
       level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push( [new Block2x2({ x : 4, y : 0, z : 7, r : 0, color : [0,0]}), new Block2x2({ x : 3, y : 0, z : 4, r : 0, color : [0,0]}),]);
+    
+     // level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push( [new Block2x2({ x : 4, y : 0, z : 7, r : 0, color : [0,0]}), new Block2x2({ x : 3, y : 0, z : 4, r : 0, color : [0,0]}),]);
       //level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push( [new Block2x2({ x : 4, y : 0, z : 7, r : 0, color : [1,0]}),]);
 //       level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push( [new Block2x2({ x : 4, y : 0, z : 7, r : 0, color : [1,0]}),new Block2x4({ x : 5, y : 1, z : 5, r : 3, color : [0,0,0,0]}),]);
       // level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push( [new Block2x2({ x : 4, y : 0, z : 1, r : 0, color : [1,0]}),new Block2x4({ x : 5, y : 1, z : -1, r : 3, color : [0,0,0,0]}),]);
@@ -25,7 +27,8 @@ let tangramLevel = {
 
 
        level[level.length-1].difficulty.push({stage: [], image: null});
-       level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push( [new Block2x2({ x : 4, y : 0, z : 7, r : 0, color : [1,0]}),]);
+       level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push( [new Block2x2({ x : 4, y : 0, z : 7, r : 0, color : [2,2]}),]);
+      
        //  level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push( [new Block2x2({ x : 4, y : 0, z : 7, r : 0, color : [1,0]}),new Block2x2({ x : 4, y : 1, z : 7, r : 0, color : [0,0]})]);
      
   /*     level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push( [new Block2x2({ x : 4, y : 0, z : 4, r : 0, color : [1,0]}),new Block2x4({ x : 6, y : 1, z : 3, r : 3, color : [0,0,0,0]}),new Block2x2({ x : 4, y : 1, z : 4, r : 3, color : [0,0]}),new Block2x2({ x : 5, y : 2, z : 4, r : 3, color : [0,0]}),]);
@@ -35,7 +38,9 @@ let tangramLevel = {
        level.push({difficulty: [], image: null});
        
        level[level.length-1].difficulty.push({stage: [], image: null});
-       level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push( [new Block2x2({ x : 4, y : 0, z : 7, r : 0, color : [1,0]}),]);
+       level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push( [new Block2x2({ x : 4, y : 0, z : 7, r : 0, color : [6,6]}), new Block2x2({ x : 4, y : 1, z : 7, r : 0, color : [4,4]})]);
+    
+      // level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push( [new Block2x2({ x : 4, y : 0, z : 7, r : 0, color : [1,0]}),]);
      
 /*
        level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push( [new Block2x2({ x : 4, y : 0, z : 4, r : 0, color : [1,0]}),new Block2x4({ x : 6, y : 1, z : 3, r : 3, color : [0,0,0,0]}),new Block2x2({ x : 4, y : 1, z : 4, r : 3, color : [0,0]}),new Block2x2({ x : 5, y : 2, z : 4, r : 3, color : [0,0]}),]);
@@ -47,8 +52,9 @@ let tangramLevel = {
 
        level[level.length-1].difficulty.push({stage: [], image: null});
        level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push( [new Block2x2({ x : 4, y : 0, z : 7, r : 0, color : [1,0]}), new Block2x2({ x : 3, y : 0, z : 4, r : 0, color : [1,0]}),]);
-
-         //5
+       level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push( [new Block2x2({ x : 5, y : 0, z : 7, r : 2, color : [0,0]}),new Block2x2({ x : 2, y : 0, z : 5, r : 1, color : [0,0]}),new Block2x2({ x : 7, y : 0, z : 4, r : 3, color : [0,0]}),new Block2x2({ x : 4, y : 0, z : 3, r : 1, color : [0,0]}),new Block2x4({ x : 5, y : 1, z : 3, r : 3, color : [0,0,0,0]}),]);
+      
+       //5
          level.push({difficulty: [], image: null});
        
 

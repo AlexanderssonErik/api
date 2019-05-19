@@ -2,15 +2,34 @@ class GuidedBuild extends Game {
     constructor() {
         let level = [];
        
+ 
         level.push({difficulty: [], image: null});
-        
         guidedBuildLevel.buildLevel(level)       
-        super(     {level : level}     );
+
+          /*level.push({difficulty: [], image: null});
+        level[level.length-1].difficulty.push({stage: [], image: "./icon/level/lvl1.svg"});
+        level[level.length-1].difficulty.push({stage: [], image: "./icon/level/lvl2.svg"});*/
+       
+
+        //menu under?
+
+    
+        super(     {level : level, userCreatedLevel : true}     );
 
        
-        this.update(); //Remove?
+        this._setLevel ({level: 1, difficulty: 0 }); 
+       // this.update(); //Remove?
 
 
+    }
+
+    _setLevel({ level = 0, difficulty = 0 }) {
+
+      super._setLevel({ level: level, difficulty: difficulty });
+
+      if(level > 0){
+        this.showDifficultyButton();
+      }
     }
 
     reset() {
@@ -24,6 +43,11 @@ class GuidedBuild extends Game {
     update(){
 
         super.update();    
+
+        if(this.state == this.enumState.busyCreatingShape){
+          return;
+        }
+
 
         let set = Block.calcSet({left: world.block, right: this.activeStage, careColor: false, careRotation: false});
 

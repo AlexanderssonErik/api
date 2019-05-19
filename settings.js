@@ -67,7 +67,13 @@ let settings = {
         button = new GuiButtonImg("./icon/games/categoryProjection.svg");
         startButton.addChild(button, guiOptions.childBottom)
         button.addChild(new GuiButtonImg("./icon/games/tangram.svg",  function () { new Tangram()}),  guiOptions.childRight );
+
+        button = new GuiButtonImg("./icon/games/categoryMath.svg");
+        startButton.addChild(button, guiOptions.childBottom)
+        button.addChild(new GuiButtonImg("./icon/games/algebra.svg",  function () { new Algebra()}),  guiOptions.childRight );
    
+
+     
 
         //--------------------------------------------
 

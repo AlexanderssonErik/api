@@ -3,6 +3,10 @@
 <head>
     <title>bilo</title>
 
+    <script src="./firebase/firebase-app.js"></script>
+    <script src="./firebase/firebase-auth.js"></script>
+    <script src="./firebase/firebase-firestore.js"></script>
+
     <script src="./babylon/earcut.js"></script>
     <script src="./babylon/babylon.js"></script>
     <script src="./babylon/pep.js"></script>
@@ -19,6 +23,8 @@
     <script src="./settings.js"></script>
 
     <script src="./ble.js"></script>
+    <script src="./database.js"></script>
+    
 
   <!--   <script src="./compass.js"></script>-->
     
@@ -40,6 +46,10 @@
 
     <script src="./game/tangram.js"></script>
     <script src="./game/tangramLevel.js"></script>
+
+    <script src="./game/algebra.js"></script>
+
+
 
     <style>
         html,
@@ -85,6 +95,30 @@
         <Z------0
         //front
         
+
+        Rotation clockwise
+
+
+        2x2 r0 x0 z0
+
+                ^
+                X
+                |
+              B B
+        <Z----B-0
+
+
+        2x4 r0 x0 z0
+
+                ^
+                X
+                |
+              B B
+              B B
+              B B
+        <Z----B-0
+
+
         */
 
 
@@ -125,6 +159,12 @@
         MeshShadowFront.init(meshesShadowFront());
         MeshShadowBottom.init(meshesShadowBottom());
 
+        MeshNumber.init(meshesNumber());
+        MeshNumberPillar.init(meshesNumberPillar());
+    //    MeshOperator.init(meshesOperator());
+        //let mx = meshesNumber();
+   //     console.log ("PPP: " + mx);
+      //  console.log ("PPP: " + mx.mesh.length);
 
         Gui.init();
         GuiButton.init();
@@ -137,7 +177,12 @@
 
         settings.init();
         ble.init();
-      //  compass.init();
+
+        database.init({enabled: true}); //first create your own firebase account and configure database.js before enabling the database (still need to call database.init)
+      
+
+      
+       //  compass.init();
 
      
 
@@ -147,7 +192,27 @@
 
         window.onload = function () {
             engine.hideLoadingUI();
-            meshesShadowLeft();
+/*
+
+            let x = BlockPillar.convertBlock([new Block2x4({ x : 0, y : 0, z : 8, r : 0, color : [0,0,0,0]}),new Block2x4({ x : 0, y : 0, z : 6, r : 0, color : [0,0,0,0]}),new Block2x4({ x : 4, y : 0, z : 9, r : 1, color : [0,0,0,0]}),new Block2x2({ x : 8, y : 0, z : 8, r : 0, color : [0,0]}),new Block2x2({ x : 9, y : 0, z : 7, r : 2, color : [0,0]}),new Block2x4({ x : 7, y : 0, z : 6, r : 3, color : [0,0,0,0]}),new Block2x4({ x : 0, y : 0, z : 4, r : 0, color : [0,0,0,0]}),new Block2x4({ x : 4, y : 0, z : 5, r : 1, color : [0,0,0,0]}),new Block2x2({ x : 8, y : 0, z : 5, r : 1, color : [0,0]}),new Block2x4({ x : 6, y : 0, z : 5, r : 1, color : [0,0,0,0]}),new Block2x4({ x : 0, y : 0, z : 2, r : 0, color : [0,0,0,0]}),new Block2x2({ x : 3, y : 0, z : 1, r : 2, color : [0,0]}),new Block2x2({ x : 1, y : 0, z : 0, r : 3, color : [0,0]}),new Block2x2({ x : 5, y : 0, z : 0, r : 3, color : [0,0]}),new Block2x2({ x : 8, y : 0, z : 3, r : 1, color : [0,0]}),new Block2x2({ x : 8, y : 0, z : 1, r : 1, color : [0,0]}),new Block2x2({ x : 7, y : 0, z : 1, r : 2, color : [0,0]}),]);
+
+            console.log("x.lenght: " + x.length)
+
+            x.forEach(function (item) {
+                new MeshNumberPillar(item)
+            });*/
+
+           /* let b = new BlockNumber({ x: 0, y: 0, z: 0, color: [0]});
+
+            let x = new MeshNumberLeft(b, 0);*/
+
+
+  
+
+          /*  meshesShadowLeft();
+
+            let z = new GuiInput("erik.alexandersson@gmail.com");
+            z.setVisible(0,0 , guiOptions.center, guiOptions.center);*/
 
           /*  let f = new Block2x2({ x : 4, y : 0, z : 7, r : 0, color : [1,0]});
            // let x = new Mesh2x2(f);
@@ -172,6 +237,10 @@
 
         window.addEventListener('DOMContentLoaded', function () {
             scene.onPointerDown = function (evt, pickResult) {
+              //  console.log("mx.mesh.length: "+ mx.mesh.length);
+               // console.log("mx.mesh[0].length: "+ mx.mesh[0].length);
+
+                
 
 
                 if (Gui.pointerDown(evt)) {
@@ -193,6 +262,7 @@
 
 
             engine.runRenderLoop(function () {
+              //  console.log("mx.mesh.length: "+ mx.mesh.length);
                 scene.render();
             });
             window.addEventListener("resize", function () {

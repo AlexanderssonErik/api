@@ -15,7 +15,7 @@ let ble = {
 
 
     this._connectButton = new GuiButtonImg( "./icon/ble/bluetooth.svg", ble.connect);
-    this._connectButton.setVisible(0,0, guiOptions.center, guiOptions.center);
+   // this._connectButton.setVisible(0,0, guiOptions.center, guiOptions.center);
   },
   buttonHideTimeOutFunction : function(){
 
@@ -24,7 +24,7 @@ let ble = {
 
 
   },
-  callAfterDBlogin : function(){
+  callAfterDatabaseLogin : function(){
     ble._connectButton.setVisible(0,0, guiOptions.center, guiOptions.center);
   },
   connect: function(){

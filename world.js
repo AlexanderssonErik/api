@@ -202,8 +202,9 @@ let world = {
     },
 
 
-    printBlock: function () {
-        let str = " level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push( [";
+    get blockString(){
+        console.log("blockstring")
+        let str = "[";
         world.block.forEach(function (item) {
             if (item instanceof Block2x2) {
                 str += "new Block2x2({ x : ";
@@ -217,7 +218,17 @@ let world = {
             str += ", color : [" + item.color + "]";
             str += "}),";
         });
-        str += "]);";
+        str += "]";
+
+        return str;
+
+
+    },
+
+    printBlock: function () {
+        let str = " level[level.length-1].difficulty[level[level.length-1].difficulty.length-1].stage.push(";
+        str += world.blockString;
+        str += ");";
         console.log(str);
     },
 

@@ -994,9 +994,217 @@ function meshesShadowBottom() {
 }
 
 
+function createNumber (newMeshes, particleSystems, skeletons, id, data){
+ //   console.log("add id:" + id)
+
+    if(newMeshes.length > 0){
+       // console.log("tick")
+        scene.meshes.pop();
+     //   newMeshes.rotation.y = Math.PI/2;
+    //    newMeshes.rotation.z = Math.PI/2;
+      //  console.log("tick1")
+        data.mesh[id] =  BABYLON.Mesh.MergeMeshes(newMeshes); 
+
+        data.mesh[id].rotation.y = Math.PI/2;
+        data.mesh[id].rotation.x = -Math.PI/2 + Math.PI/8 ;
+        data.mesh[id].position.y =2;
+        data.mesh[id].scaling = new BABYLON.Vector3(0.1875, 0.1875, 0.1875);
+        if(id == 10){
+            data.mesh[id].position.z = 1;
+        }
+        
+        if(id > 10 && id < 14 ){
+            data.mesh[id].position.z = -1.2;
+            data.mesh[id].position.y = 2.7;
+            data.mesh[id].scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
+        }/*else{
+            data.mesh[id].scaling = new BABYLON.Vector3(0.1875, 0.1875, 0.1875);
+        }*/
+
+        
+
+        data.mesh[id]  =  BABYLON.Mesh.MergeMeshes([data.mesh[id]] ); 
+     //   console.log("tick3")
+      //  console.log("add id:" + id)
+       // console.log(" data.mesh[id]:" +  data.mesh[id])
+        scene.meshes.pop();
+    }
+
+
+}
 
 
 
+function meshesNumber() {
+
+    let data = {
+        mesh: []     
+     
+    }
+
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/0.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 0, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/1.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 1, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/2.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 2, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/3.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 3, data);});
+
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/4.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 4, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/5.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 5, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/6.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 6, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/7.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 7, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/8.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 8, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/9.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 9, data);});
+    
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/1.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 10, data);});
+
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/forth.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 11, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/half.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 12, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/third.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 13, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/x.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 14, data);});
+
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/less.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 15, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/greater.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 16, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/equal.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 17, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/plus.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 18, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/minus.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 19, data);});
+ 
+ //   BABYLON.SceneLoader.ImportMesh("", "", "numbers/x.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 18, data);});*/
+    
+   /* BABYLON.SceneLoader.ImportMesh("", "", "numbers/0.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 0, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/1.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 1, data);}.bind(data));
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/2.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 2);}.bind(data));
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/3.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 3);}.bind(data));
+
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/4.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 4);}.bind(data));
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/5.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 5);}.bind(data));
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/6.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 6);}.bind(data));
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/7.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 7);}.bind(data));
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/8.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 8);}.bind(data));
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/9.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 9);}.bind(data));
+    
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/forth.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 10);}.bind(data));
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/half.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 11);}.bind(data));
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/third.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 12);}.bind(data));
+   
+
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/less.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 13);}.bind(data));
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/greater.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 14);}.bind(data));
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/equal.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 15);}.bind(data));
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/plus.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 16);}.bind(data));
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/minus.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 17);}.bind(data));
+ 
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/x.jpg", scene, function(newMeshes, particleSystems, skeletons) {createNumber(newMeshes, particleSystems, skeletons, 18);}.bind(data));*/
+
+
+   // for(let i = 0; i < 2; i++){
+    /*for(let i = 0; i < 19; i++){
+        while(data.mesh[i] == null){
+            await createNumberSleep(100);
+            console.log("i: " + i)
+        }
+    }*/
+    //console.log("meshes fineished")
+
+  //  let shadow = createShadowBottom();
+
+    //shadow.position.x = proj[i].x + offsetX;
+    //shadow.position.y = offsetY + proj[i].y * this.pitchY;
+    //shadow.position.z = proj[i].z + offsetZ;
+    //shadow.material = material[proj[i].color];
+    /*shadow.rotation.x = Math.PI/2;
+   // shadow.position.x = 0; 
+
+    shadow = BABYLON.Mesh.MergeMeshes([shadow]); 
+    shadow.isPickable = false;
+   // shadow.rotation.x = 0;
+
+       //!! scene.meshes.pop();
+    scene.meshes.pop();
+    data.mesh.push(shadow);*/
+    return data;
+
+}
+
+function meshesNumberPillar() {
+
+    let data = {
+        mesh: []     
+     
+    }
+    
+    let shape = [ 		
+        new BABYLON.Vector3( -0.46,1.18,-0.3),   
+        new BABYLON.Vector3(-0.28,1.18,-0.46 ),   
+        new BABYLON.Vector3( 1.28,1.18,-0.46),         
+        new BABYLON.Vector3( 1.46,1.18, -0.28),   
+        new BABYLON.Vector3( 1.46,1.18,1.28),   
+        new BABYLON.Vector3( 1.28,1.18,1.46), 
+        new BABYLON.Vector3( -0.28,1.18,1.46), 
+        new BABYLON.Vector3( -0.46,1.18,1.28),
+        new BABYLON.Vector3( -0.46,1.18,-0.28),         
+        ];
+
+
+    let mesh = BABYLON.MeshBuilder.ExtrudePolygon("", {shape:shape, depth: Mesh._staticPitch* 11, sideOrientation: BABYLON.Mesh.FRONTSIDE }, scene);
+    mesh.rotation.z = Math.PI;
+    mesh.rotation.y = Math.PI/2;
+
+    mesh.position.x = 0;
+    mesh.position.y = 0.01;
+    mesh.position.z = 0;
+    mesh.alphaIndex = -1;
+
+    mesh = BABYLON.Mesh.MergeMeshes([mesh]);
+    mesh.isPickable = false;
+    data.mesh.push( mesh); 
+
+       scene.meshes.pop();
+
+
+    return data;
+
+
+}
+
+/*
+function createOperator (newMeshes, particleSystems, skeletons, id, data){
+   
+       if(newMeshes.length > 0){
+
+           scene.meshes.pop();
+
+           data.mesh[id] =  BABYLON.Mesh.MergeMeshes(newMeshes); 
+   
+           data.mesh[id].rotation.y = Math.PI/2;
+           data.mesh[id].rotation.x = -Math.PI/2 + Math.PI/8 ;
+           data.mesh[id].position.y =2;
+           data.mesh[id].scaling = new BABYLON.Vector3(0.1875, 0.1875, 0.1875);          
+   
+           data.mesh[id]  =  BABYLON.Mesh.MergeMeshes([data.mesh[id]] ); 
+
+          scene.meshes.pop();
+       }
+   
+   
+   }
+
+
+function meshesOperator() {
+
+    let data = {
+        mesh: []     
+     
+    }
+ 
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/less.jpg", scene, function(newMeshes, particleSystems, skeletons) {createOperator(newMeshes, particleSystems, skeletons, 0, data);});
+  /*  BABYLON.SceneLoader.ImportMesh("", "", "numbers/greater.jpg", scene, function(newMeshes, particleSystems, skeletons) {createOperator(newMeshes, particleSystems, skeletons, 1, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/equal.jpg", scene, function(newMeshes, particleSystems, skeletons) {createOperator(newMeshes, particleSystems, skeletons, 2, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/plus.jpg", scene, function(newMeshes, particleSystems, skeletons) {createOperator(newMeshes, particleSystems, skeletons, 3, data);});
+    BABYLON.SceneLoader.ImportMesh("", "", "numbers/minus.jpg", scene, function(newMeshes, particleSystems, skeletons) {createOperator(newMeshes, particleSystems, skeletons, 4, data);});
+*/
+ 
+/*    return data;
+
+}*/
 
 
 

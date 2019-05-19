@@ -68,7 +68,6 @@ class Mesh {
     }
     constructor({ mesh = [], line = [] }, block) {
 
-
         this._mesh = mesh;
         this._line = line;
         this._mesh.forEach(item => item.material = Mesh._staticMaterial[0]);
@@ -102,6 +101,7 @@ class Mesh {
         this._updatePos();
     }
     _updatePos() {
+
         this._mesh.forEach(function (item) {
             item.position.x = this._block.x;
             item.position.y = this._block.y * Mesh._staticPitch;
@@ -135,27 +135,27 @@ class Mesh {
 
 
 
-  
+
     colorWheel({ index = 0, color = 0, section = 0, colorComplete = false }) {
 
         if (colorComplete) {
-            this._mesh.forEach( item => item.material = Mesh._staticMaterial[color]);
-            this._line.forEach( item => item.color = Mesh._staticColor[color]);
+            this._mesh.forEach(item => item.material = Mesh._staticMaterial[color]);
+            this._line.forEach(item => item.color = Mesh._staticColor[color]);
             this._block.color = color;
 
         } else {
-           
-            if(index % 2 == 0){
+
+            if (index % 2 == 0) {
                 index += section;
-            }else{
+            } else {
                 index -= section;
-            }            
+            }
 
             this._mesh[index].material = Mesh._staticMaterial[color];
-            this._line[index].color = Mesh._staticColor[color];  
-            
+            this._line[index].color = Mesh._staticColor[color];
+
             switch (index) {
-                case 0:                    
+                case 0:
                     this._block.ledA = color;
                     break;
                 case 1:
@@ -243,7 +243,7 @@ class MeshBase extends Mesh {
         this._ledSideRightCW[3].material = MeshBase._staticMaterial[this._blockBase.ledBack];
 
     }
-    showRgbNipple(){
+    showRgbNipple() {
         this._rgbNipple[0].material = Mesh._staticMaterial[meshColor.red];
         this._rgbNippleLine[0] = Mesh._staticColor[meshColor.red];
 
@@ -255,7 +255,7 @@ class MeshBase extends Mesh {
 
         this._rgbNipple[3].material = Mesh._staticMaterial[meshColor.cyan];
         this._rgbNippleLine[3] = Mesh._staticColor[meshColor.cyan];
-        
+
         this._rgbNipple[4].material = Mesh._staticMaterial[meshColor.blue];
         this._rgbNippleLine[4] = Mesh._staticColor[meshColor.blue];
 
@@ -269,10 +269,10 @@ class MeshBase extends Mesh {
         this._rgbNippleLine[7] = Mesh._staticColor[meshColor.white];
 
     }
-    hideRgbNipple(){
-     
-        this._rgbNipple.forEach( item => item.material = Mesh._staticMaterial[meshColor.black])
-        this._rgbNippleLine.forEach( item => item.material = Mesh._staticColor[meshColor.black])
+    hideRgbNipple() {
+
+        this._rgbNipple.forEach(item => item.material = Mesh._staticMaterial[meshColor.black])
+        this._rgbNippleLine.forEach(item => item.material = Mesh._staticColor[meshColor.black])
         this._rgbNipple[7].material = Mesh._staticMaterial[meshColor.black];
         this._rgbNippleLine[7] = Mesh._staticColor[meshColor.black];
 
@@ -517,6 +517,12 @@ class Mesh2x2Trans extends Mesh {
 
 
     }
+    _updatePos() {
+        super._updatePos();
+        this._mesh[0].alphaIndex = this._block.y;
+
+
+    }
 
     _updateColor() {
 
@@ -544,6 +550,15 @@ class Mesh2x4Trans extends Mesh {
         //   this._mesh.forEach(item => item.material = Mesh2x2Trans._staticMaterial[0]);  //remove?
     }
 
+    _updatePos() {
+        super._updatePos();
+        this._mesh[0].alphaIndex = this._block.y;
+        //   this._mesh.forEach( item => item.alphaIndex = item.position.y );           
+
+
+    }
+
+
     _updateColor() {
 
         this._mesh[0].material = Mesh2x2Trans._staticMaterial[this._block.color[0]]; //remove?
@@ -556,7 +571,7 @@ class Mesh2x4Trans extends Mesh {
 
     }
 
-    
+
 
 }
 
@@ -567,69 +582,69 @@ class MeshShadow extends Mesh {
         let alphaSetting = 0.4;
 
         MeshShadow._staticMaterial = [];
-        MeshShadow._staticMaterial[0] = new BABYLON.StandardMaterial("", scene); 
-        MeshShadow._staticMaterial[0].diffuseColor  = new BABYLON.Color3(1, 1, 1);
+        MeshShadow._staticMaterial[0] = new BABYLON.StandardMaterial("", scene);
+        MeshShadow._staticMaterial[0].diffuseColor = new BABYLON.Color3(1, 1, 1);
         MeshShadow._staticMaterial[0].emissiveColor = new BABYLON.Color3(0.1, 0.1, 0.1);
         MeshShadow._staticMaterial[1] = new BABYLON.StandardMaterial("", scene);
-        MeshShadow._staticMaterial[1].diffuseColor  = new BABYLON.Color3(1, 0, 0);
+        MeshShadow._staticMaterial[1].diffuseColor = new BABYLON.Color3(1, 0, 0);
         MeshShadow._staticMaterial[1].emissiveColor = new BABYLON.Color3(emissiveColor, 0, 0);
         MeshShadow._staticMaterial[2] = new BABYLON.StandardMaterial("", scene);
-        MeshShadow._staticMaterial[2].diffuseColor  = new BABYLON.Color3(0, 1, 0);
+        MeshShadow._staticMaterial[2].diffuseColor = new BABYLON.Color3(0, 1, 0);
         MeshShadow._staticMaterial[2].emissiveColor = new BABYLON.Color3(0, emissiveColor, 0);
         MeshShadow._staticMaterial[3] = new BABYLON.StandardMaterial("", scene);
-        MeshShadow._staticMaterial[3].diffuseColor  = new BABYLON.Color3(1, 1, 0);
+        MeshShadow._staticMaterial[3].diffuseColor = new BABYLON.Color3(1, 1, 0);
         MeshShadow._staticMaterial[3].emissiveColor = new BABYLON.Color3(emissiveColor, emissiveColor, 0);
-        MeshShadow._staticMaterial[4] = new BABYLON.StandardMaterial("", scene); 
-        MeshShadow._staticMaterial[4].diffuseColor  = new BABYLON.Color3(0, 0, 1);
-        MeshShadow._staticMaterial[4].emissiveColor = new BABYLON.Color3(0, 0,emissiveColor );
-        MeshShadow._staticMaterial[5] = new BABYLON.StandardMaterial("", scene); 
-        MeshShadow._staticMaterial[5].diffuseColor  = new BABYLON.Color3(1, 0, 1);
+        MeshShadow._staticMaterial[4] = new BABYLON.StandardMaterial("", scene);
+        MeshShadow._staticMaterial[4].diffuseColor = new BABYLON.Color3(0, 0, 1);
+        MeshShadow._staticMaterial[4].emissiveColor = new BABYLON.Color3(0, 0, emissiveColor);
+        MeshShadow._staticMaterial[5] = new BABYLON.StandardMaterial("", scene);
+        MeshShadow._staticMaterial[5].diffuseColor = new BABYLON.Color3(1, 0, 1);
         MeshShadow._staticMaterial[5].emissiveColor = new BABYLON.Color3(emissiveColor, 0, emissiveColor);
-        MeshShadow._staticMaterial[6] = new BABYLON.StandardMaterial("", scene); 
-        MeshShadow._staticMaterial[6].diffuseColor  = new BABYLON.Color3(0, 1, 1);
+        MeshShadow._staticMaterial[6] = new BABYLON.StandardMaterial("", scene);
+        MeshShadow._staticMaterial[6].diffuseColor = new BABYLON.Color3(0, 1, 1);
         MeshShadow._staticMaterial[6].emissiveColor = new BABYLON.Color3(0, emissiveColor, emissiveColor);
         MeshShadow._staticMaterial[7] = new BABYLON.StandardMaterial("", scene);
-        MeshShadow._staticMaterial[7].diffuseColor  = new BABYLON.Color3(1, 1, 1);
+        MeshShadow._staticMaterial[7].diffuseColor = new BABYLON.Color3(1, 1, 1);
         MeshShadow._staticMaterial[7].emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3);
         MeshShadow._staticMaterial[8] = new BABYLON.StandardMaterial("", scene);
-        MeshShadow._staticMaterial[8].diffuseColor  = new BABYLON.Color3(1, 1, 1);
+        MeshShadow._staticMaterial[8].diffuseColor = new BABYLON.Color3(1, 1, 1);
         MeshShadow._staticMaterial[8].emissiveColor = new BABYLON.Color3(0.1, 0.1, 0.1);
-        MeshShadow._staticMaterial[8].alpha =  alphaSetting;
+        MeshShadow._staticMaterial[8].alpha = alphaSetting;
         MeshShadow._staticMaterial[9] = new BABYLON.StandardMaterial("", scene);
-        MeshShadow._staticMaterial[9].diffuseColor  = new BABYLON.Color3(1, 0, 0);
+        MeshShadow._staticMaterial[9].diffuseColor = new BABYLON.Color3(1, 0, 0);
         MeshShadow._staticMaterial[9].emissiveColor = new BABYLON.Color3(emissiveColor, 0, 0);
-        MeshShadow._staticMaterial[9].alpha =  alphaSetting;
-        MeshShadow._staticMaterial[10] = new BABYLON.StandardMaterial("", scene); 
-        MeshShadow._staticMaterial[10].diffuseColor  = new BABYLON.Color3(0, 1, 0);
+        MeshShadow._staticMaterial[9].alpha = alphaSetting;
+        MeshShadow._staticMaterial[10] = new BABYLON.StandardMaterial("", scene);
+        MeshShadow._staticMaterial[10].diffuseColor = new BABYLON.Color3(0, 1, 0);
         MeshShadow._staticMaterial[10].emissiveColor = new BABYLON.Color3(0, emissiveColor, 0);
-        MeshShadow._staticMaterial[10].alpha =  alphaSetting;
-        MeshShadow._staticMaterial[11] = new BABYLON.StandardMaterial("", scene); 
-        MeshShadow._staticMaterial[11].diffuseColor  = new BABYLON.Color3(1, 1, 0);
+        MeshShadow._staticMaterial[10].alpha = alphaSetting;
+        MeshShadow._staticMaterial[11] = new BABYLON.StandardMaterial("", scene);
+        MeshShadow._staticMaterial[11].diffuseColor = new BABYLON.Color3(1, 1, 0);
         MeshShadow._staticMaterial[11].emissiveColor = new BABYLON.Color3(emissiveColor, emissiveColor, 0);
-        MeshShadow._staticMaterial[11].alpha =  alphaSetting;
-        MeshShadow._staticMaterial[12] = new BABYLON.StandardMaterial("", scene); 
-        MeshShadow._staticMaterial[12].diffuseColor  = new BABYLON.Color3(0, 0, 1);
-        MeshShadow._staticMaterial[12].emissiveColor = new BABYLON.Color3(0, 0,emissiveColor );
-        MeshShadow._staticMaterial[12].alpha =  alphaSetting;
-        MeshShadow._staticMaterial[13] = new BABYLON.StandardMaterial("", scene); 
-        MeshShadow._staticMaterial[13].diffuseColor  = new BABYLON.Color3(1, 0, 1);
+        MeshShadow._staticMaterial[11].alpha = alphaSetting;
+        MeshShadow._staticMaterial[12] = new BABYLON.StandardMaterial("", scene);
+        MeshShadow._staticMaterial[12].diffuseColor = new BABYLON.Color3(0, 0, 1);
+        MeshShadow._staticMaterial[12].emissiveColor = new BABYLON.Color3(0, 0, emissiveColor);
+        MeshShadow._staticMaterial[12].alpha = alphaSetting;
+        MeshShadow._staticMaterial[13] = new BABYLON.StandardMaterial("", scene);
+        MeshShadow._staticMaterial[13].diffuseColor = new BABYLON.Color3(1, 0, 1);
         MeshShadow._staticMaterial[13].emissiveColor = new BABYLON.Color3(emissiveColor, 0, emissiveColor);
-        MeshShadow._staticMaterial[13].alpha =  alphaSetting;
-        MeshShadow._staticMaterial[14] = new BABYLON.StandardMaterial("", scene); 
-        MeshShadow._staticMaterial[14].diffuseColor  = new BABYLON.Color3(0, 1, 1);
+        MeshShadow._staticMaterial[13].alpha = alphaSetting;
+        MeshShadow._staticMaterial[14] = new BABYLON.StandardMaterial("", scene);
+        MeshShadow._staticMaterial[14].diffuseColor = new BABYLON.Color3(0, 1, 1);
         MeshShadow._staticMaterial[14].emissiveColor = new BABYLON.Color3(0, emissiveColor, emissiveColor);
-        MeshShadow._staticMaterial[14].alpha =  alphaSetting;
-        MeshShadow._staticMaterial[15] = new BABYLON.StandardMaterial("", scene); 
-        MeshShadow._staticMaterial[15].diffuseColor  = new BABYLON.Color3(1, 1, 1);
+        MeshShadow._staticMaterial[14].alpha = alphaSetting;
+        MeshShadow._staticMaterial[15] = new BABYLON.StandardMaterial("", scene);
+        MeshShadow._staticMaterial[15].diffuseColor = new BABYLON.Color3(1, 1, 1);
         MeshShadow._staticMaterial[15].emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3);
-        MeshShadow._staticMaterial[15].alpha =  alphaSetting;
+        MeshShadow._staticMaterial[15].alpha = alphaSetting;
 
     }
     _updateColor() {
-            //console.log("this._block.color[0]: " + this._block.color[0])
-            this._mesh[0].material = MeshShadow._staticMaterial[this._block.color[0]]; //remove?
-         /* console.log("this._block.color: " + this._block.color);
-            this._mesh[0].material = MeshShadow._staticMaterial[this._block.color]; //remove?*/
+        //console.log("this._block.color[0]: " + this._block.color[0])
+        this._mesh[0].material = MeshShadow._staticMaterial[this._block.color[0]]; //remove?
+        /* console.log("this._block.color: " + this._block.color);
+           this._mesh[0].material = MeshShadow._staticMaterial[this._block.color]; //remove?*/
 
 
     }
@@ -647,8 +662,8 @@ class MeshShadowRight extends MeshShadow {
     }
     _updatePos() {
         this._mesh.forEach(function (item) {
-            item.position.y = this._block.y * Mesh._staticPitch;  
-            item.position.x = this._block.x; 
+            item.position.y = this._block.y * Mesh._staticPitch;
+            item.position.x = this._block.x;
         }.bind(this));
 
         this._updateColor();
@@ -665,14 +680,14 @@ class MeshShadowFront extends MeshShadow {
     }
     _updatePos() {
         this._mesh.forEach(function (item) {
-            item.position.y = this._block.y * Mesh._staticPitch;;  
-            item.position.z = this._block.z; 
+            item.position.y = this._block.y * Mesh._staticPitch;;
+            item.position.z = this._block.z;
         }.bind(this));
 
         this._updateColor();
     }
 }
-        
+
 class MeshShadowLeft extends MeshShadow {
     static init({ mesh = [] }) {
         MeshShadowLeft._staticMesh = mesh;
@@ -684,31 +699,33 @@ class MeshShadowLeft extends MeshShadow {
 
     _updatePos() {
         this._mesh.forEach(function (item) {
-            item.position.y = this._block.y * Mesh._staticPitch;;  
-            item.position.x = this._block.x; 
+            item.position.y = this._block.y * Mesh._staticPitch;;
+            item.position.x = this._block.x;
         }.bind(this));
 
         this._updateColor();
     }
-    
+
 }
 
 class MeshShadowBack extends MeshShadow {
 
     static init({ mesh = [] }) {
         MeshShadowBack._staticMesh = mesh;
+
+        
     }
     constructor(block) {
-       
+
         super({ mesh: MeshShadowBack._staticMesh.map(item => item.clone()) }, block);
         this._updateColor();
-  
+
     }
 
     _updatePos() {
         this._mesh.forEach(function (item) {
-            item.position.y = this._block.y * Mesh._staticPitch;  
-            item.position.z = this._block.z; 
+            item.position.y = this._block.y * Mesh._staticPitch;
+            item.position.z = this._block.z;
         }.bind(this));
 
         this._updateColor();
@@ -725,7 +742,7 @@ class MeshShadowBottom extends MeshShadow {
 
         MeshShadowBottom._staticMaterial = [];
         MeshShadowBottom._staticMaterial[0] = new BABYLON.StandardMaterial("", scene); // NA
-        MeshShadowBottom._staticMaterial[0].diffuseColor  = new BABYLON.Color3(0.9, 0.9, 0.9);
+        MeshShadowBottom._staticMaterial[0].diffuseColor = new BABYLON.Color3(0.9, 0.9, 0.9);
         MeshShadowBottom._staticMaterial[0].emissiveColor = new BABYLON.Color3(0, 0, 0);
 
     }
@@ -736,12 +753,12 @@ class MeshShadowBottom extends MeshShadow {
 
     _updateColor() {
 
-        if(this._block.color[0] == 0 ){
-            this._mesh[0].material = MeshShadowBottom._staticMaterial[0]; 
-        }else{
+        if (this._block.color[0] == 0) {
+            this._mesh[0].material = MeshShadowBottom._staticMaterial[0];
+        } else {
             super._updateColor()
         }
-       
+
 
 
 
@@ -749,8 +766,8 @@ class MeshShadowBottom extends MeshShadow {
 
     _updatePos() {
         this._mesh.forEach(function (item) {
-            item.position.x = this._block.x;  
-            item.position.z = this._block.z; 
+            item.position.x = this._block.x;
+            item.position.z = this._block.z;
         }.bind(this));
 
         this._updateColor();
@@ -758,6 +775,135 @@ class MeshShadowBottom extends MeshShadow {
 
 }
 
+/*
+class MeshNumber extends Mesh {
 
 
 
+}*/
+
+
+class MeshNumber extends Mesh {
+
+    static init({ mesh = [] }) {
+        MeshNumber._staticMesh = mesh;
+
+        MeshNumber._staticOperator = {
+            x : 100,
+            less : 101,
+            greater : 102,
+            equal : 103,
+            plus: 104,
+            minus :105
+        }
+
+    }
+
+    constructor(block, number) {
+
+        //console.log("MeshNumber._staticMesh.length: "+ MeshNumber._staticMesh.length)        
+        let mesh = [];
+
+        if (number - Math.floor(number) > 0) {
+            if (number - Math.floor(number) <= 0.25) {
+                mesh.push(MeshNumber._staticMesh[11].clone());
+            } else if (number - Math.floor(number) <= 0.5) {
+                mesh.push(MeshNumber._staticMesh[12].clone());
+            } else {
+                mesh.push(MeshNumber._staticMesh[13].clone());
+            }
+        }
+        if (number > 10 && number < 100) {
+            mesh.push(MeshNumber._staticMesh[10].clone());
+        }
+
+        if(number >99){
+            mesh.push(MeshNumber._staticMesh[number - 86].clone());
+        }else{
+            mesh.push(MeshNumber._staticMesh[Math.floor(number % 10)].clone());
+        }
+        super({ mesh: mesh }, block);
+
+        //  super({ mesh: MeshNumber._staticMesh[number].map(item => item.clone()), block });
+        // this._updateColor();
+    }
+
+
+}
+
+
+class MeshNumberPillar extends Mesh {
+
+    static init({ mesh = [] }) {
+        MeshNumberPillar._staticMesh = mesh;
+
+        MeshNumberPillar._staticMaterial = [];
+        MeshNumberPillar._staticMaterial[0] = new BABYLON.StandardMaterial("", scene); // NA
+        MeshNumberPillar._staticMaterial[0].diffuseColor = new BABYLON.Color3(0.95, 1, 0.98);
+        MeshNumberPillar._staticMaterial[0].emissiveColor = new BABYLON.Color3(0.18, 0.2, 0.19);
+        MeshNumberPillar._staticMaterial[0].alpha = 0.5;
+
+    }
+
+    constructor(block) {
+        super({ mesh: MeshNumberPillar._staticMesh.map(item => item.clone()) }, block);
+       // console.log("MeshOperator._staticMesh[operator]" + MeshOperator._staticMesh[operator])
+      //  super({ mesh: [MeshOperator._staticMesh[operator]] }, block);
+
+    }
+
+    _updateColor() {
+        if(this._block.color[0] == 0){
+        this._mesh[0].material = MeshNumberPillar._staticMaterial[this._block.color[0]];  
+        }else{
+            super._updateColor();
+        }
+    
+        /*  this._mesh.forEach(function(item, index){
+              item.material = Mesh2x2Trans._staticMaterial[this._block.color[index]];
+       
+          }.bind(this));*/
+
+
+    }
+
+
+}
+
+class MeshNumberPillarPad extends Mesh {
+
+    static init({ mesh = [] }) {
+        MeshNumberPillarPad._staticMesh = mesh;
+
+        MeshNumberPillarPad._staticMaterial = [];
+        MeshNumberPillarPad._staticMaterial[0] = new BABYLON.StandardMaterial("", scene); // NA
+        MeshNumberPillarPad._staticMaterial[0].diffuseColor = new BABYLON.Color3(0.95, 1, 0.98);
+        MeshNumberPillarPad._staticMaterial[0].emissiveColor = new BABYLON.Color3(0.18, 0.2, 0.19);
+        MeshNumberPillarPad._staticMaterial[0].alpha = 0.5;
+
+    }
+
+    constructor(block) {
+        super({ mesh: MeshNumberPillarPad._staticMesh.map(item => item.clone()) }, block);
+       // console.log("MeshOperator._staticMesh[operator]" + MeshOperator._staticMesh[operator])
+      //  super({ mesh: [MeshOperator._staticMesh[operator]] }, block);
+
+    }
+
+    _updateColor() {
+        if(this._block.color[0] == 0){
+        this._mesh[0].material = MeshNumberPillarPad._staticMaterial[this._block.color[0]];  
+        }else{
+            super._updateColor();
+        }
+    
+        /*  this._mesh.forEach(function(item, index){
+              item.material = Mesh2x2Trans._staticMaterial[this._block.color[index]];
+       
+          }.bind(this));*/
+
+
+    }
+
+
+}

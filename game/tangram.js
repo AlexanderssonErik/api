@@ -1,11 +1,12 @@
 class Tangram extends Game {
   constructor() {
+
     let level = [];
 
     level.push({ difficulty: [], image: null });
 
     tangramLevel.buildLevel(level)
-    super({ level: level });
+    super({ level: level,  userCreatedLevel : true});
 
 
     this._showAllSides = false;
@@ -19,6 +20,7 @@ class Tangram extends Game {
     this._shadowPixelWrong = 0;
     this._shadowPixelMaxCorrect = 0;
 
+    this._setLevel ({level: 1, difficulty: 0 }); 
 
     // this.update(); //Remove?
 
@@ -31,6 +33,10 @@ class Tangram extends Game {
   }
 
   _setLevel({ level = 0, difficulty = 0 }) {
+    /*if(level == 0){
+      level = 1;
+      difficulty = 0;
+    }*/
     super._setLevel({ level: level, difficulty: difficulty, update: false });
 
     this._activeStageShadow = BlockShadow.convert({ block: this.activeStage });
@@ -39,10 +45,13 @@ class Tangram extends Game {
 
 
 
-
-
-
     switch (level) {
+      case 0:
+        this._showAllSides = true;
+        this._careColor = false;
+        this._careGap = false;
+        this._showNoHints = false;
+        break;
       case 1:
         this._showAllSides = false;
         this._careColor = false;
@@ -53,8 +62,7 @@ class Tangram extends Game {
         this._showAllSides = true;
         this._careColor = false;
         this._careGap = false;
-        this._showNoHints = false;
-        colorWheel.colorSection();
+        this._showNoHints = false;        
         break;
       case 3:
         this._showAllSides = true;
@@ -68,15 +76,19 @@ class Tangram extends Game {
         this._careColor = false;
         this._careGap = true;
         this._showNoHints = false;
-        colorWheel.colorComplete();
+        
         break;
       case 5:
         this._showAllSides = true;
         this._careColor = false;
         this._careGap = true;
         this._showNoHints = true;
-        colorWheel.colorComplete();
+        
         break;
+    }
+
+    if(level > 0){
+      this.showDifficultyButton();
     }
 
     this.update();
@@ -92,24 +104,39 @@ class Tangram extends Game {
       this._sidesCorrect++;
     }
 
-    this._shadowPixelCorrect += set.intersectionLeft.length;
-    this._shadowPixelWrong += set.diffLeft.length;
+    
+   // this._shadowPixelWrong += set.diffLeft.length;
 
     if(this._showNoHints){
       this.showShadow({ block: gameShadow, careColor: this._careColor, careGap: this._careGap, add: true });
     }else{
+      this._shadowPixelCorrect += set.intersectionLeft.length;
 
     //what about clearing shadow
     this.showShadow({ block: set.diffRight, careColor: this._careColor, careGap: this._careGap, add: true });
 
     //if(!this._careColor){
+    if(!this._careColor){  
     BlockShadow.setColor({ block: set.intersectionLeft, color: meshColor.green });
     this.showShadow({ block: set.intersectionLeft, add: true });
+    }
     //}
 
-    BlockShadow.setColor({ block: set.diffLeft, color: meshColor.red })
-    BlockShadow.setBlockColor({ block: set.diffLeft, color: meshColor.red, blink: true })
-    this.showShadow({ block: set.diffLeft, add: true });
+    if(this._careColor ||  this._careGap){
+
+      set = BlockShadow.calcSet({ left: worldShadow, right: gameShadow, careColor: false, careGap: false });
+      this._shadowPixelWrong += set.diffLeft.length;
+      BlockShadow.setColor({ block: set.diffLeft, color: meshColor.red })
+      BlockShadow.setBlockColor({ block: set.diffLeft, color: meshColor.red, blink: true })
+
+    
+    }else{
+      this._shadowPixelWrong += set.diffLeft.length;
+      BlockShadow.setColor({ block: set.diffLeft, color: meshColor.red })
+      BlockShadow.setBlockColor({ block: set.diffLeft, color: meshColor.red, blink: true })
+      this.showShadow({ block: set.diffLeft, add: true });
+
+    }
     }
 
     
@@ -118,6 +145,11 @@ class Tangram extends Game {
   update() {
 
     super.update();
+
+    if(this.state == this.enumState.busyCreatingShape){
+      return;
+    }
+
     this._sidesCorrect = 0;
     this._shadowPixelCorrect = 0;
     this._shadowPixelWrong = 0;
@@ -138,16 +170,15 @@ class Tangram extends Game {
     /*if (this._showNoHints) {
 
     } else {*/
+      
 
-      this.updateSide({ worldShadow: shadow.left, gameShadow: this._activeStageShadow.left });
+      this.updateSide({ worldShadow: shadow.back, gameShadow: this._activeStageShadow.back });
 
       if (this._showAllSides) {
-        this.updateSide({ worldShadow: shadow.right, gameShadow: this._activeStageShadow.right });
-        this.updateSide({ worldShadow: shadow.back, gameShadow: this._activeStageShadow.back });
-     
+        this.updateSide({ worldShadow: shadow.right, gameShadow: this._activeStageShadow.right });        
         this.updateSide({ worldShadow: shadow.front, gameShadow: this._activeStageShadow.front });
+        this.updateSide({ worldShadow: shadow.left, gameShadow: this._activeStageShadow.left });        
         this.updateSide({ worldShadow: shadow.bottom, gameShadow: this._activeStageShadow.bottom });
-
         if(   this._sidesCorrect == 5){
           this.win({});
         }
