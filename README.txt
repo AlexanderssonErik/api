@@ -1,8 +1,14 @@
+<<<<<<< HEAD
 20191101
 
 running at bilo.online
+=======
+20190519
+>>>>>>> db1380c0653a539e51ea95e7bbd76e0ecce4ec4e
 
-#/Game/guidedBuild.js…
+running at: https://bilo.online/api
+
+#/Game/guidedBuild.jsâ€¦
 	Example code for games
 #Ble.js
 	BLE code and the protocol for the base
@@ -17,7 +23,7 @@ running at bilo.online
 #Meshes.js
 	Generation of the meshes used in Mesh.js
 #Game.js
-	General functions for games (show transparent blocks, show shadows, level menu, win animation…)
+	General functions for games (show transparent blocks, show shadows, level menu, win animationâ€¦)
 #Camera.js
 	Functions to manipulate the camera
 #Gui.js
