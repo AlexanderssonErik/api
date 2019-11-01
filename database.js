@@ -1,5 +1,5 @@
 let database = {
-    //add your firebase account here
+    //add firebase account here
     _config: {
         apiKey: "AIzaSyAYJgJb07yCtFdoQKEcxuNHH7qe_aX2hq4",
         authDomain: "bilo-d71d2.firebaseapp.com",
@@ -10,10 +10,9 @@ let database = {
     _signInMailButton: null,
     createSignInMailButton: null,
     
-    //_signedIn: false, 
     _emailInput: null,
     _passwordInput: null,
-    //advancedTextureDB: 0,
+ 
     _pendingSettingOfScore: false,
     _user: {
       loggedIn: false,
@@ -24,7 +23,7 @@ let database = {
 
     _showGui: function(){
         if(this._signInGoogleButton == null){
-            this._emailInput = new GuiInput("not using Google/top button: email");
+            this._emailInput = new GuiInput("when not useing Google/top button: email");
             this._passwordInput  = new GuiInput("password");
             this._signInGoogleButton = new GuiButtonImg("./icon/signIn/googleGSignIn.svg", this._signInGoolge);
             this._createSignInMailButton = new GuiButtonImg("./icon/signIn/createAccount.svg", this._createSignInMail);

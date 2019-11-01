@@ -96,7 +96,7 @@ let cameraAlpha= {
       this._baseDown = true;
       if(orientation != cameraAlpha.top){  
         this._arcRotateCamera.setTarget(new BABYLON.Vector3(4.5, 9,4.5));
-        this._arcRotateCamera.radius = 35;
+        this._arcRotateCamera.radius = 35;      
         this._arcRotateCamera.upperBetaLimit  = Math.PI; 
         this._arcRotateCamera.lowerBetaLimit =0;
         this._arcRotateCamera.beta =  Math.PI/1.75; //1.8 
@@ -105,7 +105,8 @@ let cameraAlpha= {
       }else{
         this._arcRotateCamera.setTarget(new BABYLON.Vector3(4.5, 0, 4.5));  
         this._arcRotateCamera.upperRadiusLimit = 65;
-        this._arcRotateCamera.radius = 40;
+        //this._arcRotateCamera.radius = 40;
+        this._arcRotateCamera.radius = 15;
         this._arcRotateCamera.lowerBetaLimit =0;
         this._arcRotateCamera.beta = 0;
         this.setAlpha(cameraAlpha.front, true, true);
@@ -183,15 +184,30 @@ let cameraAlpha= {
           frame: 15 + this._animateFrameTime* Math.abs(startAlpha - angle),
           value: angle                                 
         });
+        animateFrames.push({
+          frame: 20 + this._animateFrameTime* Math.abs(startAlpha - angle),
+          value: angle                                 
+        });
+
     
-        this._animate.setKeys(animateFrames);                                
-        this._animation = scene.beginDirectAnimation(this._arcRotateCamera, [this._animate], 0, 2 * this._animateFrameRate, false);
+        this._animate.setKeys(animateFrames);     
+       this._animation = scene.beginDirectAnimation(this._arcRotateCamera, [this._animate], 0, 2 * this._animateFrameRate, false);//,1, function () { this.animationEnd() }.bind(this));                           
+       // this._animation = scene.beginDirectAnimation(this._arcRotateCamera, [this._animate], 0, 2 * this._animateFrameRate, false,1, function () { this.animationEnd(angle) }.bind(this));
                     
         //this._arcRotateCamera.alpha = angle;
       }
       
       
     },
+
+/*    animationEnd: function(angle){
+
+      console.log("animation End: " + angle)
+     // this._arcRotateCamera.alpha = Math.PI/4;
+
+
+    },*/
+
     pointerDown: function(){
       this._pointerActive = true;
       this._arcRotateCamera.inertia = 0.9;

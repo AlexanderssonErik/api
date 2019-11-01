@@ -10,9 +10,7 @@ class FreeBuild extends Game {
 
 
         colorWheel.colorSection();
-      //  level[0]  = null;
-        
-       // guidedBuildLevel.buildLevel(level)       
+ 
         super(     {level : level}     );
 
         this._paintbrush = meshColor.black;
@@ -34,11 +32,6 @@ class FreeBuild extends Game {
         this._paintedBlocks = [];
         
         this._setLevel ({level: 0, difficulty: 0 }); 
-      //  this.update(); //Remove?
-    
-      //  this._level = [];
-      //  guidedBuildLevel.buildLevel(this._level);
-        //super({ x: 0, y: 0, z: 0 });
 
     }
 
@@ -63,7 +56,7 @@ class FreeBuild extends Game {
         break;
       }
   
-      this.update(); //Remove?
+      this.update(); 
 
     }
 

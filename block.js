@@ -4,9 +4,7 @@
 class Block {
 
     static init() {
-
-
-        Block._blinkTimer = setTimeout(Block._blinkTimerFunction, 500); //setInterval(Block._blinkTimerFunction, 500); // setTimeout(Block._blinkTimerFunction, 500);   
+        Block._blinkTimer = setTimeout(Block._blinkTimerFunction, 500);
         Block._blinkTimerRunning = true;
         Block._blink = false;
 
@@ -18,6 +16,49 @@ class Block {
         return returnBlock;
 
     }
+
+    static transform({ block = [], x = 0, y = 0, z = 0, r = 0 }) {
+        let returnBlock = Block.copy(block);
+
+        let zeroX = 0;
+        let zeroZ = 0;
+
+        returnBlock.forEach(function (item, index) {
+            item.r = (item.r + r) % 4;
+
+            let tmp = 0;
+            switch (r) {
+                case 1:
+                    tmp = item.z;
+                    item.z = -item.x;
+                    item.x = tmp;
+                    break;
+                case 2:
+                    item.z = -item.z;
+                    item.x = -item.x;
+                    break;
+                case 3:
+                    tmp = item.z;
+                    item.z = item.x;
+                    item.x = -tmp;
+                    break;
+            }
+
+            if (index == 0) {
+                zeroX = block[0].x - item.x;
+                zeroZ = block[0].z - item.z;
+            }
+
+            item.x += zeroX + x;
+            item.z += zeroZ + z;
+            item.y += y;
+
+        });
+
+        return returnBlock;
+    }
+
+
 
     static setColor({ block = [], color = 0, blink = false }) {
         if (!Array.isArray(block)) {
@@ -37,10 +78,9 @@ class Block {
     }
 
 
-    //syncronice timer with update rate of base -> run more slowly when many blocks
     static startBlinkTimer() {
         if (!Block._blinkTimerRunning) {
-            Block._blinkTimer = setTimeout(Block._blinkTimerFunction, 500); //setInterval(Block._blinkTimerFunction, 500); // setTimeout(Block._blinkTimerFunction, 500);   
+            Block._blinkTimer = setTimeout(Block._blinkTimerFunction, 500);
             Block._blinkTimerRunning = true;
         }
 
@@ -54,24 +94,15 @@ class Block {
 
 
 
-    static copyColor({ to = [], from = [], careRotation = true, blink = false }) {
+    static copyColor({ to = [], from = [], careRotation = true }) {
         to.forEach(function (item) {
             let fromWithColor = item._find({ block: from, careColor: false, careRotation: careRotation });
             if (fromWithColor != null) {
                 item.copyColor(fromWithColor);
-                if (blink) {
-                    item.blink();
-                } else {
-                    item.stopBlink();
-                }
-
             }
 
         });
-
     }
-
-    //care rotation 180deg
 
 
     static calcSet({ left = [], right = [], careColor = true, careRotation = true, careGap = true }) {
@@ -82,6 +113,7 @@ class Block {
         if (!Array.isArray(right)) {
             right = [right];
         }
+
         let set = {
             intersectionLeft: [],
             intersectionRight: [],
@@ -91,8 +123,10 @@ class Block {
                 return this.diffLeft.concat(this.intersectionLeft, this.diffRight);
             }
         }
+
+
         left.forEach(function (item) {
-            if (item._isIn({ block: right, careColor: careColor, careRotation: careRotation, careGap: careGap  })) {
+            if (item._isIn({ block: right, careColor: careColor, careRotation: careRotation, careGap: careGap })) {
 
                 set.intersectionLeft.push(item);
             } else {
@@ -111,7 +145,6 @@ class Block {
     }
 
 
-
     //blink individual colors?
     blink() {
         for (let i = 0; i < this._blink.length; i++) {
@@ -126,15 +159,17 @@ class Block {
 
     }
 
-
-
-    constructor({ x = 0, y = 0, z = 0, r = 0, color = [0, 0, 0, 0] }) {
+    constructor({ x = 0, y = 0, z = 0, r = 0, color = [0, 0, 0, 0], blink = null }) {
         this._x = x;
         this._y = y;
         this._z = z;
         this._r = r;
         this._color = color;
-        this._blink = new Array(color.length);
+        if (blink == null) {
+            this._blink = new Array(color.length);
+        } else {
+            this._blink = blink;
+        }
     }
     get x() {
         return this._x;
@@ -148,8 +183,20 @@ class Block {
     get r() {
         return this._r;
     }
+    set x(x) {
+        this._x = x;
+    }
+    set y(y) {
+        this._y = y;
+    }
+    set z(z) {
+        this._z = z;
+    }
+    set r(r) {
+        this._r = r;
+    }
+
     get color() {
-        //console.log("get Color")
         return this._color;
     }
 
@@ -161,24 +208,19 @@ class Block {
     }
 
 
-    //_isIn(block, careColor, careRotation) {
     _isIn({ block = [], careColor = true, careRotation = true, careGap = true }) {
-
-
         for (let i = 0; i < block.length; i++) {
             if (this.equal({ block: block[i], careColor: careColor, careRotation: careRotation, careGap: careGap })) {
-                // if (this._equal(block[i], careColor, careRotation)) {
                 return true;
             }
         }
         return false;
     }
 
-    //_find(block, careColor, careRotation){
+
     _find({ block = [], careColor = true, careRotation = true }) {
         for (let i = 0; i < block.length; i++) {
             if (this.equal({ block: block[i], careColor: careColor, careRotation: careRotation })) {
-                //if (this._equal(block[i], careColor, careRotation)) {
                 return block[i];
             }
         }
@@ -186,9 +228,9 @@ class Block {
     }
 
     copyColor(block) {
-
         for (let i = 0; i < this._color.length; i++) {
             this._color[i] = block._color[i]
+            this._blink[i] = block._blink[i]
         }
     }
 
@@ -204,9 +246,6 @@ class Block {
 }
 
 
-
-
-//good to have for checking intererance
 class BlockBase extends Block {
     constructor() {
         super({ x: 0, y: 0, z: 0 });
@@ -267,7 +306,6 @@ class Block2x2 extends Block {
     }
 
     equal({ block = null, careColor = true, careRotation = true }) {
-        // _equal(block, careColor, careRotation) {
         if (!(block instanceof Block2x2)) {
             return false;
         }
@@ -276,7 +314,6 @@ class Block2x2 extends Block {
             return false;
         } else if (this._x == block._x && this._z == block._z && this._r == block._r) {
             if (!careColor || (this._color[0] == block._color[0] && this._color[1] == block._color[1])) {
-                // console.log("A1")
                 return true;
             }
         } else if (!careRotation) {
@@ -329,13 +366,9 @@ class Block2x4 extends Block {
         return new Block2x4({ x: this.x, y: this.y, z: this.z, r: this.r, color: color })
     }
     equal({ block = null, careColor = true, careRotation = true }) {
-        //_equal(block, careColor, careRotation) {
-
         if (!(block instanceof Block2x4)) {
             return false;
         }
-
-
 
         if (this._y != block._y) {
             return false;
@@ -348,31 +381,70 @@ class Block2x4 extends Block {
             if (set.intersectionLeft.length == 8) {
                 return true;
             }
-            //pixel
+
         }
-
-
         return false;
-
     }
-
 }
 
 class BlockPixel extends Block {
 
-    
+    static calcSetNoCarePosition({ left = [], right = [], careColor = true, careRotation = true }) {
+
+        if (!Array.isArray(left)) {
+            left = [left];
+        }
+        if (!Array.isArray(right)) {
+            right = [right];
+        }
+
+        let set = {
+            intersectionLeft: [],
+            intersectionRight: [],
+            diffLeft: [],
+            diffRight: [],
+            get union() {
+                return this.diffLeft.concat(this.intersectionLeft, this.diffRight);
+            }
+        }
+
+        set.diffLeft = left;
+        set.diffRight = right;
+
+        left.forEach(function (item, index, array) {
+
+            let rotation = 0;
+            while (rotation < 4) {
+                let transformedBlock = Block.transform({ block: right, x: item.x - right[0].x, y: item.y - right[0].y, z: item.z - right[0].z, r: rotation });
+
+                let currentSet = Block.calcSet({ left: left, right: transformedBlock, careColor: careColor });
+
+                if (set.intersectionLeft.length <= currentSet.intersectionLeft.length) {
+                    set = currentSet;
+                }
+                rotation++;
+
+                if (careRotation) {
+                    rotation = 4;
+                }
+            }
+        });
+        return set;
+    }
+
     static setBlockColor({ block = [], color = 0, blink = false, colorComplete = true }) {
         if (!Array.isArray(block)) {
             block = [block];
         }
 
-        block.forEach(function (pixel) {          
-            pixel.setBlockColor({color: color, blink: blink, colorComplete: colorComplete });              
+        block.forEach(function (pixel) {
+            pixel.setBlockColor({ color: color, blink: blink, colorComplete: colorComplete });
         });
 
     }
 
     static convertBlock(block) {
+
         if (!Array.isArray(block)) {
             block = [block];
         }
@@ -399,6 +471,7 @@ class BlockPixel extends Block {
             }
             while (qtyPixels > 0) {
                 qtyPixels--;
+
                 pixels[index] = new BlockPixel({ x: item.x + xOffset[item.r][qtyPixels], y: item.y, z: item.z + zOffset[item.r][qtyPixels], color: [item.color[Math.floor(qtyPixels / 2)]], block: item });
                 index++;
             }
@@ -409,40 +482,6 @@ class BlockPixel extends Block {
     }
 
 
-    /*
-        static calcSetNoColor(left, right) {
-            return BlockPixel._calcSet(left, right, false);
-        }
-    
-        static calcSet(left, right) {
-            return BlockPixel._calcSet(left, right, true);
-    
-    
-        }
-    
-        static _calcSet(left, right, careColor) {
-            let set = {         
-                intersection: [],         
-                diffLeft: [],
-                diffRight: [],
-                get union() {
-                    return this.diffLeft.concat(this.intersection, this.diffRight);
-                }
-            }
-            left.forEach(function (item) {
-                if(item._isIn(right, careColor)){
-                    set.intersection.push(item);                
-                }else{
-                    set.diffLeft.push(item);  
-                }
-            } );
-            right.forEach(function (item) {
-                if(!item._isIn(left, careColor)){
-                    set.diffRight.push(item);                
-                }
-            } );
-            return set;
-        }*/
     constructor({ x = 0, y = 0, z = 0, color = [0], block = null }) {
         if (!Array.isArray(color)) {
             color = [color];
@@ -452,59 +491,42 @@ class BlockPixel extends Block {
         this.block = block;
     }
 
-    //super no?
-    /* _isIn(block, careColor, careRotation){
- 
-             for(let i = 0; i < block.length; i++){
-                 if(this._equal(block[i], careColor, careRotation)){
-                     return true;
-                 }
-             }
-             return false;
-     }*/
 
-    setBlockColor({color = 0, blink = false, colorComplete = true }) {
-        if(colorComplete){
+    setBlockColor({ color = 0, blink = false, colorComplete = true }) {
+        if (colorComplete) {
             this.block.color = color;
-        }else{
-            //rotation 
-            //distacne
+        } else {
             let distance = 0;
-
-            if(this.block.r == 0 || this.block.r == 2 ){
-                distance = this.x - this.block.x;               
-            }else{
+            if (this.block.r == 0 || this.block.r == 2) {
+                distance = this.x - this.block.x;
+            } else {
                 distance = this.z - this.block.z;
             }
-           
-            switch(Math.abs(distance)){
-                case 0:
-                this.block.ledA = color;
-                break;
-                case 1:
-                this.block.ledB = color;
-                break;
-                case 2:
-                this.block.ledC = color;
-                break;
-                case 3:
-                this.block.ledD = color;
-                break;
-            }
-           
 
+            switch (Math.abs(distance)) {
+                case 0:
+                    this.block.ledA = color;
+                    break;
+                case 1:
+                    this.block.ledB = color;
+                    break;
+                case 2:
+                    this.block.ledC = color;
+                    break;
+                case 3:
+                    this.block.ledD = color;
+                    break;
+            }
         }
-      
+
         if (blink) {
             this.block.blink();
         } else {
             this.block.stopBlink();
         }
-
     }
 
     equal({ block = null, careColor = true }) {
-        // _equal(block, careColor) {
         if (!(block instanceof BlockPixel)) {
             return false;
         }
@@ -516,6 +538,13 @@ class BlockPixel extends Block {
         }
         return false;
     }
+
+    _copy() {
+        let color = [];
+        this.color.forEach(item => color.push(item));
+        return new BlockPixel({ x: this.x, y: this.y, z: this.z, color: color, block: this.block });
+
+    }
 }
 
 class BlockShadow extends Block {
@@ -525,16 +554,13 @@ class BlockShadow extends Block {
             block = [block];
         }
 
-        block.forEach(function (shadow) {            
+        block.forEach(function (shadow) {
             shadow.block.forEach(function (pixelOfShadow) {
-                pixelOfShadow.setBlockColor({color: color, blink: true });              
+                pixelOfShadow.setBlockColor({ color: color, blink: true });
 
             });
-
         })
-
     }
-
 
     static convert({ block = [] }) {
 
@@ -543,7 +569,8 @@ class BlockShadow extends Block {
             right: [],
             back: [],
             front: [],
-            bottom: []
+            bottom: [],
+            top: [],
         }
 
         let pixel = BlockPixel.convertBlock(block);
@@ -551,14 +578,14 @@ class BlockShadow extends Block {
         pixel.forEach(function (item) {
 
             let left = new BlockShadowLeft({ x: item.x, y: item.y, block: item });
-            let find = left._find({block: shadow.left})
+            let find = left._find({ block: shadow.left })
             if (find == null) {
                 shadow.left.push(left);
             } else {
                 find.block.push(item);
             }
             let right = new BlockShadowRight({ x: item.x, y: item.y, block: item });
-            find = right._find({block: shadow.right})
+            find = right._find({ block: shadow.right })
             if (find == null) {
                 shadow.right.push(right);
             } else {
@@ -566,7 +593,7 @@ class BlockShadow extends Block {
             }
 
             let back = new BlockShadowBack({ z: item.z, y: item.y, block: item });
-            find = back._find({block: shadow.back})
+            find = back._find({ block: shadow.back })
             if (find == null) {
                 shadow.back.push(back);
             } else {
@@ -574,7 +601,7 @@ class BlockShadow extends Block {
             }
 
             let front = new BlockShadowFront({ z: item.z, y: item.y, block: item });
-            find = front._find({block: shadow.front})
+            find = front._find({ block: shadow.front })
             if (find == null) {
                 shadow.front.push(front);
             } else {
@@ -582,94 +609,76 @@ class BlockShadow extends Block {
             }
 
             let bottom = new BlockShadowBottom({ x: item.x, z: item.z, block: item });
-            find = bottom._find({block: shadow.bottom})
+            find = bottom._find({ block: shadow.bottom })
             if (find == null) {
                 shadow.bottom.push(bottom);
             } else {
                 find.block.push(item);
             }
 
-
-            //if in find next
-
+            let top = new BlockShadowTop({ x: item.x, z: item.z, block: item });
+            find = top._find({ block: shadow.top })
+            if (find == null) {
+                shadow.top.push(top);
+            } else {
+                find.block.push(item);
+            }
 
 
         });
-
         return shadow;
-
-
     }
-    constructor({ x = null, y = null, z = null, color = [null], block = null}) { // color = [null]?
+    constructor({ x = null, y = null, z = null, color = [null], block = null }) { // color = [null]?
         super({ x: x, y: y, z: z, color: color });
         this.block = [block];
-       // console.log("A this.block: " + this.block)
-
     }
 
 
 
     _find({ block = [], careColor = false, careGap = false }) {
-      
+
         for (let i = 0; i < block.length; i++) {
             if (this.equal({ block: block[i], careColor: careColor, careGap: careGap })) {
-                //if (this._equal(block[i], careColor, careRotation)) {
                 return block[i];
             }
         }
         return null;
     }
 
-    get color(){
-        if(this._color[0] != null){
-
+    get color() {
+        if (this._color[0] != null) {
             return this._color;
         }
-
-        return [this._calcColor()];
-
+        return [this.calcColor({})];
     }
 
-    set color(color){
+    set color(color) {
         this._color[0] = color;
     }
 
-    //makeColor
-
-    _calcColor({max = 0, min = 0, retColor = 0, careColor = true, careGap = true }) {
-
-        if(!careColor){
+    _calcColor({ max = 0, min = 0, retColor = 0, careColor = true, careGap = true }) {
+        if (!careColor) {
             retColor = 0;
         }
 
-        if(careGap){
-            //console.log("Max: " + max + "Min: " +min + "Block l : " + this.block.length)
-            /*console.log("max: " + max)
-            console.log("min: " + min)
-            console.log("this.block.length: " + this.block.length)*/
-
-            if(max - min >= this.block.length){
-              //  console.log("up")
+        if (careGap) {
+            if (max - min >= this.block.length) {
                 retColor += 8;
-            } 
+            }
         }
-
         return retColor;
     }
 
 
 }
 
-//care color
-//care gap
 
 class BlockShadowLeft extends BlockShadow {
 
     equal({ block = null, careColor = false, careGap = false }) {
-  
+
         if (this._x == block._x && this._y == block._y) {
-            ///care color!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            if ((!careColor && !careGap) || (this.calcColor({careColor: careColor,  careGap: careGap }) == block.calcColor({careColor: careColor, careGap: careGap }))) {
+            if ((!careColor && !careGap) || (this.calcColor({ careColor: careColor, careGap: careGap }) == block.calcColor({ careColor: careColor, careGap: careGap }))) {
                 return true;
             }
         }
@@ -677,38 +686,30 @@ class BlockShadowLeft extends BlockShadow {
     }
 
     _copy() {
-        return new BlockShadowLeft({ x: this.x, y: this.y})
+        return new BlockShadowLeft({ x: this.x, y: this.y })
     }
-    //do I want to use care color
-    // what about red?
-    //how do I flag NG?
-    //go trhought the process
 
-    //!!!!!!!!!!!!!!!
-    
-    // COLOR WHEN SET RED
-
-    calcColor({careColor = true, careGap = true }) {
-
-
-
+    calcColor({ careColor = true, careGap = true }) {
         let max = -999;
         let min = 999;
         let retColor = 0;
+
+        if (this._color[0] != null && careColor) {
+            return this._color[0];
+        }
+
         this.block.forEach(function (item) {
-            if(item.z < min){
+            if (item.z < min) {
                 min = item.z;
             }
 
-            if(item.z > max){
+            if (item.z > max) {
                 max = item.z;
-                retColor = item.color[0]; //pixel color
+                retColor = item.color[0]; 
             }
 
         });
-
-        return super._calcColor({max: max, min: min, retColor: retColor, careColor: careColor, careGap: careGap });
-
+        return super._calcColor({ max: max, min: min, retColor: retColor, careColor: careColor, careGap: careGap });
     }
 
 }
@@ -718,7 +719,7 @@ class BlockShadowRight extends BlockShadow {
     equal({ block = null, careColor = false, careGap = false }) {
 
         if (this._x == block._x && this._y == block._y) {
-            if ((!careColor && !careGap) || (this.calcColor({careColor: careColor,  careGap: careGap }) == block.calcColor({careColor: careColor, careGap: careGap }))) {
+            if ((!careColor && !careGap) || (this.calcColor({ careColor: careColor, careGap: careGap }) == block.calcColor({ careColor: careColor, careGap: careGap }))) {
                 return true;
             }
         }
@@ -726,40 +727,38 @@ class BlockShadowRight extends BlockShadow {
     }
 
     _copy() {
-        return new BlockShadowRight({ x: this.x, y: this.y})
+        return new BlockShadowRight({ x: this.x, y: this.y })
     }
 
-    calcColor({careColor = true, careGap = true }) {
+    calcColor({ careColor = true, careGap = true }) {
 
         let max = -999;
         let min = 999;
         let retColor = 0;
+
+        if (this._color[0] != null && careColor) {
+            return this._color[0];
+        }
+
         this.block.forEach(function (item) {
-            if(item.z < min){
+            if (item.z < min) {
                 min = item.z;
-                retColor = item.color[0]; //pixel color
+                retColor = item.color[0]; 
             }
 
-            if(item.z > max){
+            if (item.z > max) {
                 max = item.z;
-                
             }
-
         });
-        return super._calcColor({max: max, min: min, retColor: retColor, careColor: careColor, careGap: careGap });
-
-
+        return super._calcColor({ max: max, min: min, retColor: retColor, careColor: careColor, careGap: careGap });
     }
-
-
-
 }
 
 class BlockShadowBack extends BlockShadow {
     equal({ block = null, careColor = false, careGap = false }) {
 
         if (this._z == block._z && this._y == block._y) {
-            if ((!careColor && !careGap) || (this.calcColor({careColor: careColor,  careGap: careGap }) == block.calcColor({careColor: careColor, careGap: careGap }))) {
+            if ((!careColor && !careGap) || (this.calcColor({ careColor: careColor, careGap: careGap }) == block.calcColor({ careColor: careColor, careGap: careGap }))) {
                 return true;
             }
         }
@@ -767,40 +766,41 @@ class BlockShadowBack extends BlockShadow {
     }
 
     _copy() {
-        return new BlockShadowBack({  y: this.y, z: this.z})
+        return new BlockShadowBack({ y: this.y, z: this.z })
     }
 
 
 
-    calcColor({careColor = true, careGap = true }) {
+    calcColor({ careColor = true, careGap = true }) {
 
         let max = -999;
         let min = 999;
         let retColor = 0;
+        if (this._color[0] != null && careColor) {
+            return this._color[0];
+        }
+
         this.block.forEach(function (item) {
-            if(item.x < min){
+            if (item.x < min) {
                 min = item.x;
             }
 
-            if(item.x > max){
+            if (item.x > max) {
                 max = item.x;
-                retColor = item.color[0]; //pixel color
+                retColor = item.color[0]; 
             }
-
         });
-        return super._calcColor({max: max, min: min, retColor: retColor, careColor: careColor, careGap: careGap });
-
-
+        return super._calcColor({ max: max, min: min, retColor: retColor, careColor: careColor, careGap: careGap });
     }
 
-    
+
 
 }
 class BlockShadowFront extends BlockShadow {
     equal({ block = null, careColor = false, careGap = false }) {
 
         if (this._z == block._z && this._y == block._y) {
-            if ((!careColor && !careGap) || (this.calcColor({careColor: careColor,  careGap: careGap }) == block.calcColor({careColor: careColor, careGap: careGap }))) {
+            if ((!careColor && !careGap) || (this.calcColor({ careColor: careColor, careGap: careGap }) == block.calcColor({ careColor: careColor, careGap: careGap }))) {
                 return true;
             }
         }
@@ -808,32 +808,31 @@ class BlockShadowFront extends BlockShadow {
     }
 
     _copy() {
-        return new BlockShadowFront({  y: this.y, z: this.z})
+        return new BlockShadowFront({ y: this.y, z: this.z })
     }
 
-    
-    calcColor({careColor = true, careGap = true }) {
+
+    calcColor({ careColor = true, careGap = true }) {
 
         let max = -999;
         let min = 999;
         let retColor = 0;
+        if (this._color[0] != null && careColor) {
+            return this._color[0];
+        }
+
         this.block.forEach(function (item) {
-            if(item.x < min){
+            if (item.x < min) {
                 min = item.x;
-                retColor = item.color[0]; //pixel color
+                retColor = item.color[0]; 
             }
 
-            if(item.x > max){
+            if (item.x > max) {
                 max = item.x;
-                
             }
-
         });
-        return super._calcColor({max: max, min: min, retColor: retColor, careColor: careColor, careGap: careGap });
-
-
+        return super._calcColor({ max: max, min: min, retColor: retColor, careColor: careColor, careGap: careGap });
     }
-
 }
 
 class BlockShadowBottom extends BlockShadow {
@@ -841,7 +840,7 @@ class BlockShadowBottom extends BlockShadow {
     equal({ block = null, careColor = false, careGap = false }) {
 
         if (this._x == block._x && this._z == block._z) {
-            if ((!careColor && !careGap) || (this.calcColor({careColor: careColor,  careGap: careGap }) == block.calcColor({careColor: careColor, careGap: careGap }))) {
+            if ((!careColor && !careGap) || (this.calcColor({ careColor: careColor, careGap: careGap }) == block.calcColor({ careColor: careColor, careGap: careGap }))) {
                 return true;
             }
         }
@@ -849,45 +848,85 @@ class BlockShadowBottom extends BlockShadow {
     }
 
     _copy() {
-        return new BlockShadowBottom({  x: this.x, z: this.z})
+        return new BlockShadowBottom({ x: this.x, z: this.z })
     }
 
-    calcColor({careColor = true, careGap = true }) {
- 
+    calcColor({ careColor = true, careGap = true }) {
+
         let max = -999;
         let min = 999;
         let retColor = 0;
-     //   console.log("calc color bottom")
+
+        if (this._color[0] != null && careColor) {
+            return this._color[0];
+        }
+
         this.block.forEach(function (item) {
-           // console.log(" item.y: " +  item.y + "min: " + min) 
-            if(item.y < min){
+   
+            if (item.y < min) {
                 min = item.y;
-             //   console.log(" item.color[0]: " +  item.color[0])
-                retColor = item.color[0]; //pixel color
+                retColor = item.color[0];
             }
 
-            if(item.y > max){
+            if (item.y > max) {
                 max = item.y;
-                
             }
 
         });
-        return super._calcColor({max: max, min: min, retColor: retColor, careColor: careColor, careGap: careGap });
+
+        return super._calcColor({ max: max, min: min, retColor: retColor, careColor: careColor, careGap: careGap });
+    }
+}
 
 
+
+class BlockShadowTop extends BlockShadow {
+
+    equal({ block = null, careColor = false, careGap = false }) {
+
+        if (this._x == block._x && this._z == block._z) {
+            if ((!careColor && !careGap) || (this.calcColor({ careColor: careColor, careGap: careGap }) == block.calcColor({ careColor: careColor, careGap: careGap }))) {
+                return true;
+            }
+        }
+        return false;
     }
 
+    _copy() {
+        return new BlockShadowTop({ x: this.x, z: this.z })
+    }
 
-    
+    calcColor({ careColor = true, careGap = true }) {
 
+        let max = -999;
+        let min = 999;
+        let retColor = 0;
+
+        if (this._color[0] != null && careColor) {
+            return this._color[0];
+        }
+
+        this.block.forEach(function (item) {
+   
+            if (item.y < min) {
+                min = item.y;
+               // retColor = item.color[0];
+            }
+
+            if (item.y > max) {
+                max = item.y;
+                retColor = item.color[0];
+            }
+
+        });
+
+        return super._calcColor({ max: max, min: min, retColor: retColor, careColor: careColor, careGap: careGap });
+    }
 }
 
 class BlockNumber extends Block {
-    constructor({ x = null, y = null, z = null, color = [0,0,0]}) { // color = [null]?
+    constructor({ x = null, y = null, z = null, color = [0, 0, 0] }) { // color = [null]?
         super({ x: x, y: y, z: z, color: color });
-      
-    
-
     }
 }
 
@@ -901,113 +940,90 @@ class BlockPillar extends Block {
 
 
         block.forEach(function (item) {
-            //let pixel = 
-            //if(! (item instanceof Block2x2))
 
-            if(item.r == 0){
-                pillar.push(new BlockPillar({ x: item.x, y: 0, z: item.z, color: [item.color[0]]}) );
-                if(item instanceof Block2x4){
-                    pillar.push(new BlockPillar({ x: item.x+2, y: 0, z: item.z, color: [item.color[2]]}) );
+            if (item.r == 0) {
+                pillar.push(new BlockPillar({ x: item.x, y: 0, z: item.z, color: [item.color[0]] }));
+                if (item instanceof Block2x4) {
+                    pillar.push(new BlockPillar({ x: item.x + 2, y: 0, z: item.z, color: [item.color[2]] }));
                 }
-            }else if(item.r == 1){
-                pillar.push(new BlockPillar({ x: item.x , y: 0, z: item.z-1, color: [item.color[0]]}) );
-                if(item instanceof Block2x4){
-                    pillar.push(new BlockPillar({ x: item.x, y: 0, z: item.z-3, color: [item.color[2]]}) );
+            } else if (item.r == 1) {
+                pillar.push(new BlockPillar({ x: item.x, y: 0, z: item.z - 1, color: [item.color[0]] }));
+                if (item instanceof Block2x4) {
+                    pillar.push(new BlockPillar({ x: item.x, y: 0, z: item.z - 3, color: [item.color[2]] }));
                 }
-            }else if(item.r == 2){
-                pillar.push(new BlockPillar({ x: item.x -1, y: 0, z: item.z-1, color: [item.color[0]]}) );
-                if(item instanceof Block2x4){
-                    pillar.push(new BlockPillar({ x: item.x-3, y: 0, z: item.z-1, color: [item.color[2]]}) );
+            } else if (item.r == 2) {
+                pillar.push(new BlockPillar({ x: item.x - 1, y: 0, z: item.z - 1, color: [item.color[0]] }));
+                if (item instanceof Block2x4) {
+                    pillar.push(new BlockPillar({ x: item.x - 3, y: 0, z: item.z - 1, color: [item.color[2]] }));
                 }
-            }else if(item.r == 3){
-                pillar.push(new BlockPillar({ x: item.x-1, y: 0, z: item.z, color: [item.color[0]]}) );
-                if(item instanceof Block2x4){
-                    pillar.push(new BlockPillar({ x: item.x-1, y: 0, z: item.z+2, color: [item.color[2]]}) );
+            } else if (item.r == 3) {
+                pillar.push(new BlockPillar({ x: item.x - 1, y: 0, z: item.z, color: [item.color[0]] }));
+                if (item instanceof Block2x4) {
+                    pillar.push(new BlockPillar({ x: item.x - 1, y: 0, z: item.z + 2, color: [item.color[2]] }));
                 }
             }
 
         });
-
         return pillar;
-
-     
     }
 
 
-    static _isIn({isInItem = null, block = []}){
+    static _isIn({ isInItem = null, block = [] }) {
 
         let neededEqual = 1;
 
         let convertedItem = [isInItem];
         let convertedBlock = block;
 
-      
-        if(isInItem instanceof Block2x2 ){
-            convertedItem = BlockPillar.convertBlock(convertedItem);        
-        }else if(isInItem instanceof Block2x4){
+        if (isInItem instanceof Block2x2) {
+            convertedItem = BlockPillar.convertBlock(convertedItem);
+        } else if (isInItem instanceof Block2x4) {
             neededEqual = 2;
             convertedItem = BlockPillar.convertBlock(convertedItem);
-        }else if(block[0] instanceof Block2x2 || block[0] instanceof Block2x4){
-            convertedBlock =  BlockPillar.convertBlock(convertedBlock);
-        }else if(isInItem instanceof BlockPixel){
+        } else if (block[0] instanceof Block2x2 || block[0] instanceof Block2x4) {
+            convertedBlock = BlockPillar.convertBlock(convertedBlock);
+        } else if (isInItem instanceof BlockPixel) {
             for (let i = 0; i < block.length; i++) {
-                if(isInItem.x == block[i].x || isInItem.x == block[i].x+1){
-                    if(isInItem.z == block[i].z || isInItem.z == block[i].z+1){
+                if (isInItem.x == block[i].x || isInItem.x == block[i].x + 1) {
+                    if (isInItem.z == block[i].z || isInItem.z == block[i].z + 1) {
                         return true;
                     }
                 }
             }
             return false;
-        }else if(block[0] instanceof BlockPixel){
-            let found = 0;           
+        } else if (block[0] instanceof BlockPixel) {
+            let found = 0;
             for (let i = 0; i < block.length; i++) {
-                if(isInItem.x == block[i].x || isInItem.x+1 == block[i].x){
-                    if(isInItem.z == block[i].z || isInItem.z+1 == block[i].z){
+                if (isInItem.x == block[i].x || isInItem.x + 1 == block[i].x) {
+                    if (isInItem.z == block[i].z || isInItem.z + 1 == block[i].z) {
                         found++;
                     }
                 }
             }
-            if(found == 4){
+            if (found == 4) {
                 return true;
             }
             return false;
         }
 
-        
+
         let found = 0;
         convertedItem.forEach(function (item) {
             convertedBlock.forEach(function (itemBlock) {
-                if(item.x == itemBlock.x || item.z == itemBlock.z){
+                if (item.x == itemBlock.x || item.z == itemBlock.z) {
                     found++;
-                }          
+                }
             });
         });
 
-        if(neededEqual == found){
+        if (neededEqual == found) {
             return true;
         }
         return false;
 
-
-
-
-
-        /*
-        item        block       action1                                        comment
-       
-        2x2         pillar      convert equal 1 ok      
-        2x4         pillar      convert equal 2 ok
-        pillar      block       convert block to pillar(2x4 -> 2)              want pillar to is in if perfect match 2x4, but not if in middle
-        pillar      pixel       overlapfunction need 4 //convert pillar to pixel equal 1 ok
-        pixel       pillar      overlap function need 1   -- " --
-
-        */
-
-
-
     }
 
-    static calcSet({ left = [], right = []}) {
+    static calcSet({ left = [], right = [] }) {
 
         if (!Array.isArray(left)) {
             left = [left];
@@ -1025,17 +1041,15 @@ class BlockPillar extends Block {
             }
         }
 
-
-        left.forEach(function (item) {       
-            if (BlockPillar._isIn({isInItem: item, block: right})) {
-
+        left.forEach(function (item) {
+            if (BlockPillar._isIn({ isInItem: item, block: right })) {
                 set.intersectionLeft.push(item);
             } else {
                 set.diffLeft.push(item);
             }
         });
-        right.forEach(function (item) {        
-            if (BlockPillar._isIn({isInItem: item, block: left})) {
+        right.forEach(function (item) {
+            if (BlockPillar._isIn({ isInItem: item, block: left })) {
                 set.intersectionRight.push(item);
             } else {
                 set.diffRight.push(item);
@@ -1045,10 +1059,10 @@ class BlockPillar extends Block {
 
     }
 
-    constructor({ x = null, y = null, z = null, color = [0]}) { // color = [null]?
+    constructor({ x = null, y = null, z = null, color = [0] }) {
         super({ x: x, y: 0, z: z, color: color });
-      
-    
+
+
 
     }
 }

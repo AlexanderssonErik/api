@@ -24,17 +24,8 @@
 
     <script src="./ble.js"></script>
     <script src="./database.js"></script>
-    
-
-  <!--   <script src="./compass.js"></script>-->
-    
-
-
-    <!--   <script src="./material.js"></script>-->
-
 
     <script src="./world.js"></script>
-    <!--<script src="./screen.js"></script>-->
     <script src="./game.js"></script>
     <script src="./game/compassCalibration.js"></script>
 
@@ -47,7 +38,19 @@
     <script src="./game/tangram.js"></script>
     <script src="./game/tangramLevel.js"></script>
 
+    <script src="./game/tangram2D.js"></script>
+    <script src="./game/tangram2DLevel.js"></script>
+
     <script src="./game/algebra.js"></script>
+
+    <script src="./game/shapeHunter.js"></script>
+    <script src="./game/shapeHunterLevel.js"></script>
+
+    <script src="./game/memo.js"></script>
+    <script src="./game/colorMatch.js"></script>
+
+    <script src="./game/whack.js"></script>
+    <script src="./game/columns.js"></script>
 
 
 
@@ -61,7 +64,6 @@
             margin: 0;
             overflow: hidden;
             -webkit-user-select: none;
-
         }
 
         .text {
@@ -72,7 +74,6 @@
             width: 100%;
             height: 100%;
             touch-action: none;
-
         }
     </style>
 
@@ -85,19 +86,19 @@
     <script>
 
 
-
-
         /*
         
+        Base coordinates
+        -Power switch side
                 ^
                 X
                 |
         <Z------0
-        //front
+        -Front side
         
 
+        Block coordinates 
         Rotation clockwise
-
 
         2x2 r0 x0 z0
 
@@ -106,7 +107,6 @@
                 |
               B B
         <Z----B-0
-
 
         2x4 r0 x0 z0
 
@@ -118,11 +118,8 @@
               B B
         <Z----B-0
 
-
         */
 
-
- 
 
 
         var canvas = document.getElementById("renderCanvas");
@@ -161,10 +158,7 @@
 
         MeshNumber.init(meshesNumber());
         MeshNumberPillar.init(meshesNumberPillar());
-    //    MeshOperator.init(meshesOperator());
-        //let mx = meshesNumber();
-   //     console.log ("PPP: " + mx);
-      //  console.log ("PPP: " + mx.mesh.length);
+        MeshPad.init(meshesPad());
 
         Gui.init();
         GuiButton.init();
@@ -175,82 +169,31 @@
 
         world.init(meshesBase());
 
+        world.base.ledFront = meshColor.black;
+        world.base.ledLeft = meshColor.magenta;
+        world.base.ledRight = meshColor.cyan;
+        world.base.ledBack = meshColor.black;
+
         settings.init();
         ble.init();
 
-        database.init({enabled: true}); //first create your own firebase account and configure database.js before enabling the database (still need to call database.init)
-      
-
-      
-       //  compass.init();
-
-     
-
-        //--
+        database.init({ enabled: true }); //first create your own firebase account and configure database.js before enabling the database (still need to call database.init)
 
         let colorWheel = new GuiColorWheel();
 
         window.onload = function () {
             engine.hideLoadingUI();
-/*
-
-            let x = BlockPillar.convertBlock([new Block2x4({ x : 0, y : 0, z : 8, r : 0, color : [0,0,0,0]}),new Block2x4({ x : 0, y : 0, z : 6, r : 0, color : [0,0,0,0]}),new Block2x4({ x : 4, y : 0, z : 9, r : 1, color : [0,0,0,0]}),new Block2x2({ x : 8, y : 0, z : 8, r : 0, color : [0,0]}),new Block2x2({ x : 9, y : 0, z : 7, r : 2, color : [0,0]}),new Block2x4({ x : 7, y : 0, z : 6, r : 3, color : [0,0,0,0]}),new Block2x4({ x : 0, y : 0, z : 4, r : 0, color : [0,0,0,0]}),new Block2x4({ x : 4, y : 0, z : 5, r : 1, color : [0,0,0,0]}),new Block2x2({ x : 8, y : 0, z : 5, r : 1, color : [0,0]}),new Block2x4({ x : 6, y : 0, z : 5, r : 1, color : [0,0,0,0]}),new Block2x4({ x : 0, y : 0, z : 2, r : 0, color : [0,0,0,0]}),new Block2x2({ x : 3, y : 0, z : 1, r : 2, color : [0,0]}),new Block2x2({ x : 1, y : 0, z : 0, r : 3, color : [0,0]}),new Block2x2({ x : 5, y : 0, z : 0, r : 3, color : [0,0]}),new Block2x2({ x : 8, y : 0, z : 3, r : 1, color : [0,0]}),new Block2x2({ x : 8, y : 0, z : 1, r : 1, color : [0,0]}),new Block2x2({ x : 7, y : 0, z : 1, r : 2, color : [0,0]}),]);
-
-            console.log("x.lenght: " + x.length)
-
-            x.forEach(function (item) {
-                new MeshNumberPillar(item)
-            });*/
-
-           /* let b = new BlockNumber({ x: 0, y: 0, z: 0, color: [0]});
-
-            let x = new MeshNumberLeft(b, 0);*/
-
-
-  
-
-          /*  meshesShadowLeft();
-
-            let z = new GuiInput("erik.alexandersson@gmail.com");
-            z.setVisible(0,0 , guiOptions.center, guiOptions.center);*/
-
-          /*  let f = new Block2x2({ x : 4, y : 0, z : 7, r : 0, color : [1,0]});
-           // let x = new Mesh2x2(f);
-            let p = BlockPixel.convertBlock(f);
-            new MeshPixel(p[0]);
-            new MeshPixel(p[1]);
-            new MeshPixel(p[2]);
-            new MeshPixel(p[3]);*/
-                // let sta = new MeshStar({height : world.maxHeight+1.5});
-           // meshesStar();
-           //let s = new MeshStar({height : 1.5});
-/*
-           s.dispose();
-            s = null;
-
-             s = new MeshStar({height : 2});*/
-              /* let b = new Block2x2({ x: 0, y: 0, z: 0, r: 0 });
-             let xxx = new MeshShadowBottom(b);*/
-                         
         };
 
 
         window.addEventListener('DOMContentLoaded', function () {
             scene.onPointerDown = function (evt, pickResult) {
-              //  console.log("mx.mesh.length: "+ mx.mesh.length);
-               // console.log("mx.mesh[0].length: "+ mx.mesh[0].length);
-
-                
-
 
                 if (Gui.pointerDown(evt)) {
 
                 } else if (pickResult.hit) {
 
-
-
-                   colorWheel.pointerDown(evt, pickResult.pickedMesh.name)
-   
+                    colorWheel.pointerDown(evt, pickResult.pickedMesh.name)
 
                 } else {
                     camera.pointerDown();
@@ -260,9 +203,7 @@
 
 
 
-
             engine.runRenderLoop(function () {
-              //  console.log("mx.mesh.length: "+ mx.mesh.length);
                 scene.render();
             });
             window.addEventListener("resize", function () {

@@ -1,8 +1,3 @@
-//color wheel triggered by index
-
-//onther buttons triggered directeley
-
-//move and button up handled by index
 
 let guiOptions = {
     left: 0,
@@ -31,31 +26,28 @@ class Gui {
             }
         });
 
-        if (hitElement != undefined) {      
-           
+        if (hitElement != undefined) {
             hitElement.guiElement.pointerDown(evt);
-           
             return true;
-        }else{
+        } else {
             return false;
         }
 
     }
 
-    static resize(){
+    static resize() {
         let oldVisibleStack = Gui._VisibleStack;
-        Gui._VisibleStack =[];
+        Gui._VisibleStack = [];
 
-        oldVisibleStack.forEach(item => item.guiElement.setVisible(item.guiElement._horPos, item.guiElement._verPos, item.guiElement._horAlign, item.guiElement._verAlign ));
+        oldVisibleStack.forEach(item => item.guiElement.setVisible(item.guiElement._horPos, item.guiElement._verPos, item.guiElement._horAlign, item.guiElement._verAlign));
 
     }
 
-    static changeSize(){
-        Gui._SizeSetting = (Gui._SizeSetting+1)%3;
+    static changeSize() {
+        Gui._SizeSetting = (Gui._SizeSetting + 1) % 3;
         Gui.resize();
 
     }
-
 
     constructor(element) {
         this._element = element;
@@ -77,27 +69,30 @@ class Gui {
         this._margin = [0.5, 1, 2];
 
         this._cameraAlreadLocked = false;
+        this._blockAlreadyHidden = false;
 
     }
 
-    pointerUp(){
-        if(!this._cameraAlreadLocked){
-        camera.unlock();
+    pointerUp() {
+        if (!this._cameraAlreadLocked) {
+            camera.unlock();
+        }
+
+        if (!this._blockAlreadyHidden) {
+            world.showBlock();
         }
     }
-    pointerDown(){
-        if(camera.locked){
+    pointerDown() {
+        if (camera.locked) {
             this._cameraAlreadLocked = true;
-        }else{
+        } else {
             this._cameraAlreadLocked = false;
             camera.lock();
         }
-        //sound.button(); 
-        
+        this._blockAlreadyHidden = world.blockHidden;
     }
 
-
-    _setPos({hor = 0, ver = 0, horAlign = 0, verAlign = 0}) {
+    _setPos({ hor = 0, ver = 0, horAlign = 0, verAlign = 0 }) {
 
         this._horPos = hor;
         this._verPos = ver;
@@ -132,9 +127,7 @@ class Gui {
         }
 
         this._element.style.background = this._background;
-
         document.body.appendChild(this._element);
-
 
     }
 
@@ -143,12 +136,9 @@ class Gui {
     }
 
 
-
     setVisible(hor, ver, horAlign, verAlign) {
 
-        //remove if already visisble???
-
-        this._setPos({hor: hor, ver: ver, horAlign: horAlign, verAlign: verAlign});
+        this._setPos({ hor: hor, ver: ver, horAlign: horAlign, verAlign: verAlign });
 
         let buttonPosition = {
             xMin: Math.round(window.innerWidth * Number(this._element.style.left.slice(0, this._element.style.left.length - 1)) / 100),
@@ -161,7 +151,7 @@ class Gui {
 
     }
 
-    setNotVisible(){
+    setNotVisible() {
 
         let index = Gui._VisibleStack.length - 1;
         while (index >= 0) {
@@ -172,12 +162,8 @@ class Gui {
             }
             index--;
         }
-
     }
-
-
 }
-
 
 class GuiColorWheel extends Gui {
     constructor() {
@@ -201,11 +187,11 @@ class GuiColorWheel extends Gui {
     }
 
     pointerDown(evt, meshFunction) {
-        
-        if(!this._enabled){
+
+        if (!this._enabled) {
             return;
         }
-        
+
         this._currentMeshFunction = meshFunction;
         scene.onPointerMove = this.pointerMove.bind(this);
         scene.onPointerUp = this.pointerUp.bind(this);
@@ -213,12 +199,11 @@ class GuiColorWheel extends Gui {
         this._downPageX = evt.pageX;
         this._downPageY = evt.pageY;
 
-        this._setPos({hor: ((100 * evt.pageX / window.innerWidth) - this._size[Gui._SizeSetting] / 2) / this._size[Gui._SizeSetting], ver: ((window.innerHeight / window.innerWidth * (100 * evt.pageY / window.innerHeight) - this._size[Gui._SizeSetting] / 2) / this._size[Gui._SizeSetting]), horAlign: this._horAlign, verAlign: this._verAlign});
+        this._setPos({ hor: ((100 * evt.pageX / window.innerWidth) - this._size[Gui._SizeSetting] / 2) / this._size[Gui._SizeSetting], ver: ((window.innerHeight / window.innerWidth * (100 * evt.pageY / window.innerHeight) - this._size[Gui._SizeSetting] / 2) / this._size[Gui._SizeSetting]), horAlign: this._horAlign, verAlign: this._verAlign });
 
-
-        if(this._colorComplete){
+        if (this._colorComplete) {
             this._element.src = "./icon/colorWheel/rgb.svg";
-        }else{
+        } else {
             this._element.src = "./icon/colorWheel/twoRow.svg";
         }
         super.pointerDown();
@@ -251,49 +236,39 @@ class GuiColorWheel extends Gui {
             }
         }
 
-      
         if (this._colorComplete) {
             if (radius > 0.25 * this._size[Gui._SizeSetting] && radius < 0.475 * this._size[Gui._SizeSetting]) {
-                this._currentMeshFunction({color : color, colorComplete : true});         
+                this._currentMeshFunction({ color: color, colorComplete: true });
             }
         } else {
             if (radius > 0.165 * 2 * this._size[Gui._SizeSetting] && radius < 0.165 * 3 * this._size[Gui._SizeSetting]) {
-                this._currentMeshFunction({color : color, section : 1});
+                this._currentMeshFunction({ color: color, section: 1 });
             } else if (radius > 0.165 * this._size[Gui._SizeSetting] && radius < 0.165 * 2 * this._size[Gui._SizeSetting]) {
-                this._currentMeshFunction({color : color, section : 0});   
+                this._currentMeshFunction({ color: color, section: 0 });
             }
         }
-
-
     }
     pointerUp() {
         super.pointerUp();
         scene.onPointerMove = null;
         scene.onPointerUp = null;
-      
-        
 
         this._hide();
     }
 
-
-    disenable(){
+    disenable() {
         this._enabled = false;
     }
 
-
-    colorComplete(){
+    colorComplete() {
         this._enabled = true;
         this._colorComplete = true;
 
     }
-    colorSection(){
+    colorSection() {
         this._enabled = true;
         this._colorComplete = false;
     }
-
-
-
 }
 
 
@@ -302,7 +277,6 @@ class GuiButton extends Gui {
         this._ActiveStack = [];
         this._ActiveElement = null;
     }
-
 
     static _HideChildren() {
         GuiButton._ActiveStack.forEach(function (item, index) {
@@ -313,9 +287,10 @@ class GuiButton extends Gui {
         GuiButton._ActiveStack.splice(1, GuiButton._ActiveStack.length - 1);
     }
 
-    constructor(element, pointerUp) {
+    constructor(element, pointerUp, pointerMove = null) {
         super(element);
         this._pointerUpFunction = pointerUp;
+        this._pointerMoveFunction = pointerMove;
 
         this._background = 'rgba(96, 96, 96, 0.3)';
         this._backgroundDown = 'rgba(96, 96, 96, 0.5)';
@@ -323,9 +298,7 @@ class GuiButton extends Gui {
         this._direction = null;
         this._parent = null;
 
-
     }
-
 
     addChild(guiElment, direction) {
 
@@ -335,19 +308,12 @@ class GuiButton extends Gui {
 
 
     pointerDown(evt) {
-        
-       
-       // sound.button();
 
         scene.onPointerMove = this.pointerMove.bind(this);
         scene.onPointerUp = this.pointerUp.bind(this);
 
-
-
         GuiButton._ActiveStack = [];
 
-
-        // func?
         let buttonPosition = {
             xMin: Math.round(window.innerWidth * Number(this._element.style.left.slice(0, this._element.style.left.length - 1)) / 100),
             xMax: Math.round(window.innerWidth * (Number(this._element.style.left.slice(0, this._element.style.left.length - 1)) + this._size[Gui._SizeSetting] - this._margin[Gui._SizeSetting]) / 100),
@@ -378,16 +344,16 @@ class GuiButton extends Gui {
                 if (onlyShowDirection == null || direction == onlyShowDirection) {
                     switch (direction) {
                         case guiOptions.childRight:
-                            button._setPos({hor: this._horPos + index + 1, ver: this._verPos, horAlign: this._horAlign, verAlign: this._verAlign});
+                            button._setPos({ hor: this._horPos + index + 1, ver: this._verPos, horAlign: this._horAlign, verAlign: this._verAlign });
                             break;
                         case guiOptions.childBottom:
-                            button._setPos({ hor: this._horPos, ver: this._verPos + index + 1, horAlign: this._horAlign, verAlign: this._verAlign});
+                            button._setPos({ hor: this._horPos, ver: this._verPos + index + 1, horAlign: this._horAlign, verAlign: this._verAlign });
                             break;
                         case guiOptions.childLeft:
-                            button._setPos({hor: this._horPos - (index + 1), ver: this._verPos, horAlign: this._horAlign, verAlign: this._verAlign});
+                            button._setPos({ hor: this._horPos - (index + 1), ver: this._verPos, horAlign: this._horAlign, verAlign: this._verAlign });
                             break;
                         case guiOptions.childTop:
-                            button._setPos({hor: this._horPos, ver: this._verPos - (index + 1), horAlign: this._horAlign, verAlign: this._verAlign});
+                            button._setPos({ hor: this._horPos, ver: this._verPos - (index + 1), horAlign: this._horAlign, verAlign: this._verAlign });
                             break;
 
                     }
@@ -406,10 +372,7 @@ class GuiButton extends Gui {
                 }
             }.bind(this));
         }.bind(this));
-
-
     }
-
 
     _setBackground() {
         this._element.style.background = this._background;  //needed?
@@ -428,6 +391,12 @@ class GuiButton extends Gui {
                 GuiButton._ActiveElement._element.style.background = this._background;
                 GuiButton._ActiveElement = hitElement.guiElement;
                 GuiButton._ActiveElement._showChildren();
+
+                if (hitElement.guiElement._pointerMoveFunction != null) {
+                    sound.button();
+                    hitElement.guiElement._pointerMoveFunction();
+                }
+
             }
             GuiButton._ActiveElement._element.style.background = this._backgroundDown;
         } else {
@@ -435,22 +404,13 @@ class GuiButton extends Gui {
         }
     }
 
-
-
     pointerUp(evt) {
-       /* console.log("pointer up")
-        //double events on pointer up
-        if(scene.onPointerUp == null){
-            return; 
-        }*/
 
         super.pointerUp();
         scene.onPointerMove = null;
         scene.onPointerUp = null;
 
-
         this._element.style.background = this._background;
-
 
         let hitElement = GuiButton._ActiveStack.find(function (item, index) {
             if (evt.pageX >= item.xMin && evt.pageX <= item.xMax && evt.pageY >= item.yMin && evt.pageY <= item.yMax) {
@@ -458,39 +418,20 @@ class GuiButton extends Gui {
             }
         });
 
-        if (hitElement != undefined && hitElement.guiElement._pointerUpFunction != null) {   
+        if (hitElement != undefined && hitElement.guiElement._pointerUpFunction != null) {
             sound.button();
             hitElement.guiElement._pointerUpFunction();
         }
         GuiButton._HideChildren();
-
-
     }
-    /*setNotVisible(){
-
-        let index = Gui._VisibleStack.length - 1;
-        while (index >= 0) {
-            if (Gui._VisibleStack[index].guiElement == this) {
-                Gui._VisibleStack[index].guiElement._hide();
-                Gui._VisibleStack.splice(index, 1);
-
-            }
-            index--;
-        }
-
-    }*/
-
-
 }
 
 class GuiButtonImg extends GuiButton {
 
-    constructor(img, pointerUp) {
-        super(document.createElement('IMG'), pointerUp);
+    constructor(img, pointerUp, pointerMove) {
+        super(document.createElement('IMG'), pointerUp, pointerMove);
         this._element.src = img;
-
     }
-
 }
 
 class GuiBattery extends Gui {
@@ -498,97 +439,79 @@ class GuiBattery extends Gui {
     constructor() {
         super(document.createElement('IMG'), null);
         this._element.src = "./icon/battery/" + 0 + "bar.svg"
-        
-
     }
-    set numberOfBars(numberOfBars){     
+    set numberOfBars(numberOfBars) {
         this._element.src = "./icon/battery/" + numberOfBars + "bar.svg"
     }
 
     pointerDown(evt) {
         return;
     }
-
-
 }
 
 
 class GuiInput extends Gui {
     constructor(text) {
-        super(document.createElement('input'), null );
-       
+        super(document.createElement('input'), null);
+
         this._element.style.pointerEvents = 'auto';
         this._element.type = 'text';
-       // this._element.type = 'text';
 
         this._element.value = text;
         this._background = 'rgba(96, 96, 96, 0.3)',
-        
-        this._element.style.textAlign = "center";
+
+            this._element.style.textAlign = "center";
         this._element.style.border = '0';
         this._element.style.outline = '0';
         this._element.style.color = 'white';
 
         this._element.style.borderRadius = "10px";
-        //this._element.src = img;
 
-      //  this._element.style.borderRadius = "0%";
-      //  this._background = 'rgba(96, 96, 96, 0.6)';
         this._sizeWidthMulti = 9;
-      /*  this._size = [, 8, 5];
-        this._margin = [0.1, 0.1, 0.1];*/
-
 
     }
-    _setPos({hor = 0, ver = 0, horAlign = 0, verAlign = 0}) {
-        
-        this._element.style.lineHeight = window.innerWidth  * (this._size[Gui._SizeSetting] - this._margin[Gui._SizeSetting]) / 100 + 'px';
-        this._element.style.fontSize = window.innerHeight*window.innerWidth  / window.innerHeight * this._size[Gui._SizeSetting]/200 +'px'
-/*
-        this._element.style.width = this._sizeWidthMulti * (this._size[Gui._SizeSetting] - this._margin[Gui._SizeSetting]) + '%';
-        this._element.style.height = window.innerWidth / window.innerHeight * (this._size[Gui._SizeSetting] - this._margin[Gui._SizeSetting]) + '%'; //  window.innerWidth  * (guiElement.size[this.style][guiElement.sizeSetting]- guiElement.margin[this.style][guiElement.sizeSetting])/100 + 'px';
-*/
- 
+    _setPos({ hor = 0, ver = 0, horAlign = 0, verAlign = 0 }) {
 
-        super._setPos({hor: hor, ver: ver, horAlign: horAlign, verAlign: verAlign})
+        this._element.style.lineHeight = window.innerWidth * (this._size[Gui._SizeSetting] - this._margin[Gui._SizeSetting]) / 100 + 'px';
+        this._element.style.fontSize = window.innerHeight * window.innerWidth / window.innerHeight * this._size[Gui._SizeSetting] / 200 + 'px'
+
+        super._setPos({ hor: hor, ver: ver, horAlign: horAlign, verAlign: verAlign })
 
     }
 
     pointerDown(evt) {
         return;
     }
-
-    get text(){
+    get text() {
         return this._element.value;
     }
-
-
-
-
 }
 
 
 class GuiButtonPaint extends Gui {
     static init() {
-        // this._initialized = false;
+
         this._hidden = true;
         this._ActiveElement = null;
         this._paintBrush = 0;
-        this._paintBrushColors = ['rgba(96, 96, 96, 0.6)',
-            'rgba(120, 0, 0, 0.7)',
-            'rgba(0, 120, 0, 0.7)',
-            'rgba(0, 0, 120, 0.7)'
-        ];
-        this._paintBrushColorsSelected = ['rgba(60, 60, 60, 1)',
-            'rgba(220, 0, 0, 1)',
-            'rgba(0, 220, 0, 1)',
+        this._paintBrushColors = ['rgba(96, 96, 96, 1)',
+            'rgba(255, 0, 0, 1)',
+            'rgba(0, 255, 0, 1)',
             'rgba(0, 0, 255, 1)'
+        ];
+
+        this._paintBrushColorsSelected = ['rgba(96, 96, 96, 0.3)',
+            'rgba(255, 0, 0, 0.3)',
+            'rgba(0, 255, 0, 0.3)',
+            'rgba(0, 0, 255, 0.3)'
         ];
         this._picturePixels = [[], [], [], [], [], [], [], [], [], []];
         this._paintBrushButtons = [];
         this._paintBrushButtons = [];
 
     }
+
+
     static reset() {
 
         GuiButtonPaint._picturePixels = [[], [], [], [], [], [], [], [], [], []];
@@ -596,28 +519,28 @@ class GuiButtonPaint extends Gui {
 
     }
 
-
-
     static hide() {
+        if (!GuiButtonPaint._hidden) {
 
-        GuiButtonPaint._hidden = true;
-        GuiButtonPaint._paintBrushButtons = [];
+            GuiButtonPaint._hidden = true;
+            GuiButtonPaint._paintBrushButtons = [];
 
-        let index = Gui._VisibleStack.length - 1;
-        while (index >= 0) {
-            if (Gui._VisibleStack[index].guiElement instanceof GuiButtonPaint) {
-                Gui._VisibleStack[index].guiElement._hide();
-                Gui._VisibleStack.splice(index, 1);
+            let index = Gui._VisibleStack.length - 1;
+            while (index >= 0) {
+                if (Gui._VisibleStack[index].guiElement instanceof GuiButtonPaint) {
+                    Gui._VisibleStack[index].guiElement._hide();
+                    Gui._VisibleStack.splice(index, 1);
 
+                }
+                index--;
             }
-            index--;
         }
 
     }
     static show() {
-        console.log("show use colors")//!!
+
         if (GuiButtonPaint._hidden) {
-            //GuiButtonPaint._initialized = true;
+
             GuiButtonPaint._hidden = false;
             for (let x = 0; x < 10; x++) {
                 for (let y = 0; y < 10; y++) {
@@ -626,7 +549,7 @@ class GuiButtonPaint extends Gui {
                         button._background = GuiButtonPaint._paintBrushColors[this._picturePixels[9 - y][9 - x]];
                     }
 
-                    button._setPos({hor: x - 4.5, ver: y - 4.5, horAlign: guiOptions.center, verAlign: guiOptions.center});
+                    button._setPos({ hor: x - 4.5, ver: y - 4.5, horAlign: guiOptions.center, verAlign: guiOptions.center });
 
                     let buttonPosition = {
                         xMin: Math.round(window.innerWidth * Number(button._element.style.left.slice(0, button._element.style.left.length - 1)) / 100),
@@ -643,7 +566,7 @@ class GuiButtonPaint extends Gui {
 
                 let button = new GuiButtonPaint(0, 0); //3D coordinates ,looking from above 
                 button._background = this._paintBrushColors[x];
-                button._setPos({hor: x - 4.5, ver: -5.5, horAlign: guiOptions.center, verAlign: guiOptions.center});
+                button._setPos({ hor: x - 4.5, ver: -5.5, horAlign: guiOptions.center, verAlign: guiOptions.center });
 
                 let buttonPosition = {
                     xMin: Math.round(window.innerWidth * Number(button._element.style.left.slice(0, button._element.style.left.length - 1)) / 100),
@@ -662,28 +585,17 @@ class GuiButtonPaint extends Gui {
             }
 
             GuiButtonPaint._paintBrush = 0;
-        }/*else if(GuiButtonPaint._hidden){
-            Gui._VisibleStack.forEach(function (item){
-                if(item.guiElement instanceof GuiButtonPaint){
-                    document.body.appendChild(item.guiElement._element);
-                }
-            });
-
-            GuiButtonPaint._hidden = false;
-        }*/
-
-
+        }
     }
-
-
 
     constructor(x, z) {
         super(document.createElement('p'));
-        // this._element.borderRadius = "0%"; 
+
         this._element.style.borderRadius = "0%";
-        this._background = 'rgba(96, 96, 96, 0.6)';
-        this._size = [2, 8, 5];
-        this._margin = [0.1, 0.1, 0.1];
+        //this._background = 'rgba(96, 96, 96, 0.6)';
+        this._background = 'rgba(96, 96, 96, 1)';
+        this._size = [3, 4, 5];
+        this._margin = [0.1, 0.2, 0.2];
         this._color = 0;
         this._x = x;
         this._z = z;
@@ -713,14 +625,7 @@ class GuiButtonPaint extends Gui {
         scene.onPointerMove = this.pointerMove.bind(this);
         scene.onPointerUp = this.pointerUp.bind(this);
 
-    /*    Gui.onPointerMove = this.pointerMove.bind(this);
-        Gui.onPointerUp = this.pointerUp.bind(this);*/
-        
         this._applyColor();
-        /* this._background = GuiButtonPaint._paintBrushColors[GuiButtonPaint._paintBrush];
-         this._element.style.background = this._background;*/
-
-
     }
 
     pointerMove(evt) {
@@ -741,8 +646,65 @@ class GuiButtonPaint extends Gui {
         scene.onPointerMove = null;
         scene.onPointerUp = null;
 
-        /*Gui.onPointerMove = null;
-        Gui.onPointerUp = null;*/
+    }
+
+
+}
+
+class GuiText extends Gui {
+    constructor(text) {
+        super(document.createElement('p'), null);
+
+        this._element.textContent = text;
+        this._background = 'rgba(0, 0, 0, 0)';
+        this._element.style.textAlign = "center";
+        this._element.style.color = 'white';
+        this._sizeWidthMulti = 7;
+
+    }
+    _setPos({ hor = 0, ver = 0, horAlign = 0, verAlign = 0 }) {
+
+        this._element.style.lineHeight = window.innerWidth * (this._size[Gui._SizeSetting] - this._margin[Gui._SizeSetting]) / 100 + 'px';
+        this._element.style.fontSize = window.innerHeight * window.innerWidth / window.innerHeight * this._size[Gui._SizeSetting] / 200 + 'px'
+
+        super._setPos({ hor: hor, ver: ver, horAlign: horAlign, verAlign: verAlign })
+    }
+
+    pointerDown(evt) {
+        return;
+    }
+
+    set text(text) {
+        this._element.textContent = text;
+    }
+
+    set color(color) {
+        switch (color) {
+            case meshColor.black:
+                this._element.style.color = 'black';
+                break;
+            case meshColor.red:
+                this._element.style.color = 'red';
+                break;
+            case meshColor.green:
+                this._element.style.color = 'green';
+                break;
+            case meshColor.yellow:
+                this._element.style.color = 'yellow';
+                break;
+            case meshColor.blue:
+                this._element.style.color = 'blue';
+                break;
+            case meshColor.magenta:
+                this._element.style.color = 'magenta';
+                break;
+            case meshColor.cyan:
+                this._element.style.color = 'cyan';
+                break;
+            case meshColor.black:
+                this._element.style.white = 'white';
+                break;
+        }
     }
 
 
