@@ -456,6 +456,11 @@ class GuiInput extends Gui {
 
         this._element.style.pointerEvents = 'auto';
         this._element.type = 'text';
+     
+        this._dontResize = false;
+
+        this._element.onfocus = function () {this._dontResize = true}.bind(this);
+        this._element.onblur = function () {this._dontResize = false}.bind(this);
 
         this._element.value = text;
         this._background = 'rgba(96, 96, 96, 0.3)',
@@ -472,6 +477,10 @@ class GuiInput extends Gui {
     }
     _setPos({ hor = 0, ver = 0, horAlign = 0, verAlign = 0 }) {
 
+        if(this._dontResize){
+            return; //touch keyboard issues if resize
+        }
+ 
         this._element.style.lineHeight = window.innerWidth * (this._size[Gui._SizeSetting] - this._margin[Gui._SizeSetting]) / 100 + 'px';
         this._element.style.fontSize = window.innerHeight * window.innerWidth / window.innerHeight * this._size[Gui._SizeSetting] / 200 + 'px'
 
@@ -479,7 +488,7 @@ class GuiInput extends Gui {
 
     }
 
-    pointerDown(evt) {
+    pointerDown(evt) {        
         return;
     }
     get text() {
@@ -670,7 +679,7 @@ class GuiText extends Gui {
         super._setPos({ hor: hor, ver: ver, horAlign: horAlign, verAlign: verAlign })
     }
 
-    pointerDown(evt) {
+    pointerDown(evt) {        
         return;
     }
 

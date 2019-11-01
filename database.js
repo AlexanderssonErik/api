@@ -23,7 +23,7 @@ let database = {
 
     _showGui: function(){
         if(this._signInGoogleButton == null){
-            this._emailInput = new GuiInput("when not useing Google/top button: email");
+            this._emailInput = new GuiInput("not using Google/top button: email");
             this._passwordInput  = new GuiInput("password");
             this._signInGoogleButton = new GuiButtonImg("./icon/signIn/googleGSignIn.svg", this._signInGoolge);
             this._createSignInMailButton = new GuiButtonImg("./icon/signIn/createAccount.svg", this._createSignInMail);
@@ -94,14 +94,14 @@ let database = {
     },
 
     _createSignInMail: function () {
-        // console.log("db.emailInput.value " + db.emailInput.getText())
+  
          firebase.auth().createUserWithEmailAndPassword(database._emailInput.text, database._passwordInput.text).catch(function (error) {
            alert(error.message);
          });
        },
      
        _signInMail: function () {
-         console.log("email:"+ db.emailInput.imgOrTxt.value);
+  
          firebase.auth().signInWithEmailAndPassword(database._emailInput.text, database._passwordInput.text).catch(function (error) {
            alert(error.message);
          });
