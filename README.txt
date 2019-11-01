@@ -1,12 +1,7 @@
-<<<<<<< HEAD
+
 20191101
 
 running at bilo.online
-=======
-20190519
->>>>>>> db1380c0653a539e51ea95e7bbd76e0ecce4ec4e
-
-running at: https://bilo.online/api
 
 #/Game/guidedBuild.js…
 	Example code for games
