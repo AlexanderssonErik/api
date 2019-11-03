@@ -186,6 +186,14 @@
         };
 
 
+        let timeOutResizeDeBounce = null;//iOS, bad behaviour
+        let timeOutResizeDeBounceFunction = function (){
+            let timeOutResizeDeBounce = null;
+            engine.resize();
+            Gui.resize();
+        }
+
+
         window.addEventListener('DOMContentLoaded', function () {
             scene.onPointerDown = function (evt, pickResult) {
 
@@ -207,8 +215,8 @@
                 scene.render();
             });
             window.addEventListener("resize", function () {
-                engine.resize();
-                Gui.resize();
+                clearTimeout(timeOutResizeDeBounce);                  
+                timeOutResizeDeBounce = setTimeout(timeOutResizeDeBounceFunction, 500);                        
             });
         });
 

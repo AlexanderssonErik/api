@@ -16,6 +16,8 @@ class Gui {
     static init(scene) {
         Gui._SizeSetting = 1;
         Gui._VisibleStack = [];
+        Gui._dontResizeGuiInput = false;
+
     }
 
     static pointerDown(evt) {
@@ -456,11 +458,9 @@ class GuiInput extends Gui {
 
         this._element.style.pointerEvents = 'auto';
         this._element.type = 'text';
-     
-        this._dontResize = false;
-
-        this._element.onfocus = function () {this._dontResize = true}.bind(this);
-        this._element.onblur = function () {this._dontResize = false}.bind(this);
+ 
+        this._element.onfocus = function () {Gui._dontResizeGuiInput = true}.bind(this);
+        this._element.onblur = function () {Gui._dontResizeGuiInput = false}.bind(this);
 
         this._element.value = text;
         this._background = 'rgba(96, 96, 96, 0.3)',
@@ -477,7 +477,7 @@ class GuiInput extends Gui {
     }
     _setPos({ hor = 0, ver = 0, horAlign = 0, verAlign = 0 }) {
 
-        if(this._dontResize){
+        if(Gui._dontResizeGuiInput){
             return; //touch keyboard issues if resize
         }
  
