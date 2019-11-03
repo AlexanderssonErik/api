@@ -28,8 +28,6 @@ class Memo extends Game {
 
         this._playerColor = [meshColor.magenta, meshColor.cyan];
 
-
-
         this._playerScoreText[0].color = this._playerColor[0];
         this._playerScoreText[1].color = this._playerColor[1];
 
@@ -44,7 +42,6 @@ class Memo extends Game {
 
         this._giveUpContinueClick = false;
 
-      //  this._setLevel ({level: 1, difficulty: 0 }); 
         this.update(); //Remove?
 
 
@@ -52,22 +49,16 @@ class Memo extends Game {
 
     reset() {
       super.reset();
-
     }
 
-    //block turn one way doesn't work
-    //color is blinking while correct
     _giveUpContinue(){
       this._giveUpContinueButton.setNotVisible();
       this._giveUpContinueButtonVisible = false;
       this._giveUpContinueClick = true;
-      
     }
 
 
     update(){
-
-
 
         super.update();    
 
@@ -82,24 +73,19 @@ class Memo extends Game {
           world.base.ledRight = meshColor.black;
           world.base.ledBack = meshColor.black;
 
-          
           if(this._giveUpContinueClick){
             this._builtBlock = world.block;
             this._colorMatchState = this._enumMemoState.remove;
             break;
-
           }
 
           if(world.block.length > 0 && !this._giveUpContinueButtonVisible){
-          
             this._giveUpContinueButtonVisible = true;
             this._giveUpContinueButton.setVisible(0,0 , guiOptions.center, guiOptions.bottom);
           }else if(world.block.length == 0 && this._giveUpContinueButtonVisible) {
-          
             this._giveUpContinueButtonVisible = false;
             this._giveUpContinueButton.setNotVisible();
           }
-
 
           break;
           case this._enumMemoState.remove:
@@ -109,12 +95,10 @@ class Memo extends Game {
           world.base.ledRight = meshColor.yellow;
           world.base.ledBack = meshColor.yellow;
 
-
           if(world.block.length == 0){
             this._giveUpContinueClick = false;
             this._colorMatchState = this._enumMemoState.reproduce;
           }
-
 
           break;
           case this._enumMemoState.reproduce:
@@ -124,17 +108,13 @@ class Memo extends Game {
           world.base.ledRight = meshColor.black;
           world.base.ledBack = meshColor.black;
 
-         
-
           if(!this._giveUpContinueButtonVisible){
             
             this._giveUpContinueButtonVisible = true;
             this._giveUpContinueButton.setVisible(0,0 , guiOptions.center, guiOptions.bottom);
           }
          
-
           set = Block.calcSet({left: world.block, right: this._builtBlock, careColor: false, careRotation: false});
-
 
           if(set.diffLeft.length == 0 && set.diffRight.length == 0){
             sound.win();            
@@ -143,7 +123,6 @@ class Memo extends Game {
             this._colorMatchState = this._enumMemoState.win;
             this._giveUpContinueClick = false;
             return;
-
           }
 
           if(this._giveUpContinueClick){
@@ -167,7 +146,6 @@ class Memo extends Game {
 
           set = Block.calcSet({left: world.block, right: this._builtBlock, careColor: false, careRotation: false});
 
-
           if(set.diffLeft.length == 0 && set.diffRight.length == 0){
             sound.win();
             Block.setColor({block: world.block, color: meshColor.green});
@@ -179,8 +157,6 @@ class Memo extends Game {
           if(this._giveUpContinueClick){
             sound.fail();
             this._giveUpContinueClick = false;
-
-            
             this._playerScore[ this._currentPlayer] -= 5;
              this._colorMatchState = this._enumMemoState.showCorrect;
 
@@ -194,14 +170,11 @@ class Memo extends Game {
           world.base.ledRight = meshColor.red;
           world.base.ledBack = meshColor.red;
 
-
           if(this._giveUpContinueButtonVisible) {
-
             this._giveUpContinueButtonVisible = false;
             this._giveUpContinueButton.setNotVisible();
           }
       
-
           set = Block.calcSet({left: world.block, right: this._builtBlock, careColor: false, careRotation: false});
           this.show({block : set.diffRight, careColor : false});     
 
@@ -225,12 +198,10 @@ class Memo extends Game {
           world.base.ledBack = meshColor.green;
 
           if(this._giveUpContinueButtonVisible) {
-      
             this._giveUpContinueButtonVisible = false;
             this._giveUpContinueButton.setNotVisible();
           }
       
-          
           this._playerScoreText[0].text = "Player 1: " + this._playerScore[0];
           this._playerScoreText[1].text = "Player 2: " + this._playerScore[1];
 
@@ -241,26 +212,7 @@ class Memo extends Game {
             this._currentPlayer%=2;
           }
           break;
-
         }
-
-/*        if(this.state == this.enumState.busyCreatingShape){
-          return;
-        }
-
-
-        let set = Block.calcSet({left: world.block, right: this.activeStage, careColor: false, careRotation: false});
-
-        Block.setColor({block: set.diffLeft, color: meshColor.red, blink: true})
-
-       this.show({block : set.diffRight, careColor : false});        
-        Block.copyColor({to: world.block, from: this.activeStage, careRotation: false});
-        this.soundProgression({correct: set.intersectionLeft.length, wrong: set.diffLeft.length });
-
-        if(set.diffLeft.length == 0 && set.diffRight.length == 0){
-          this.win({});
-        }*/
-
     }
 
     close(){
@@ -271,12 +223,9 @@ class Memo extends Game {
       if(this._giveUpContinueButtonVisible) {        
         this._giveUpContinueButtonVisible = false;
         this._giveUpContinueButton.setNotVisible();
-      }
-  
-      
+      }    
       super.close();
     }
-
 
 
 }
