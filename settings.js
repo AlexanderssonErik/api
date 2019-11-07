@@ -80,11 +80,11 @@ let settings = {
         button.addChild(new GuiButtonImg("./icon/games/memory.svg", function () { new Memo() }), guiOptions.childRight);
         button.addChild(new GuiButtonImg("./icon/games/colorMatch.svg", function () { new ColorMatch() }), guiOptions.childRight);
 
-/*
+
         button = new GuiButtonImg("./icon/games/columns.svg");
         startButton.addChild(button, guiOptions.childBottom)
         button.addChild(new GuiButtonImg("./icon/games/whack.svg", function () { new Whack() }), guiOptions.childRight);
-        button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { new MasterMind() }), guiOptions.childRight);
+    /*    button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { new MasterMind() }), guiOptions.childRight);
         button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { new Columns() }), guiOptions.childRight);*/
 
 

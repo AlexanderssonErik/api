@@ -1010,8 +1010,8 @@ class BlockPillar extends Block {
         let found = 0;
         convertedItem.forEach(function (item) {
             convertedBlock.forEach(function (itemBlock) {
-                if (item.x == itemBlock.x || item.z == itemBlock.z) {
-                    found++;
+                if (item.x == itemBlock.x && item.z == itemBlock.z) {
+                    found++;                   
                 }
             });
         });
@@ -1048,6 +1048,7 @@ class BlockPillar extends Block {
                 set.diffLeft.push(item);
             }
         });
+
         right.forEach(function (item) {
             if (BlockPillar._isIn({ isInItem: item, block: left })) {
                 set.intersectionRight.push(item);
