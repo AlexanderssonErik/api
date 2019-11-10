@@ -728,15 +728,17 @@ class GuiVideo extends Gui {
 
     constructor(src) {
         super(document.createElement('iframe'), null);
-        this._element.setAttribute("src", src + "?autoplay=1" );
-        this._element.setAttribute("allow", "autoplay" );
+        this._element.src = src + "?autoplay=1";
+        
+        this._element.allow = "autoplay"
+        this._element.style.border = "none";
         
         this._element.style.borderRadius = "0%";
 
         this._horAlign = guiOptions.center;
         this._verAlign = guiOptions.center;
 
-        this._size = [42, 42, 36];
+        this._size = [44, 44, 38];
         this._sizeWidthMulti = 1.85;
         this._margin = [1, 1, 1];
 

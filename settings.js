@@ -44,10 +44,21 @@ let settings = {
         button.addChild(new GuiButtonImg("./icon/settings/soundOff.svg", sound.off), guiOptions.childRight)
         button.addChild(new GuiButtonImg("./icon/settings/soundOn.svg", sound.on), guiOptions.childRight)
 
-     /*   button = new GuiButtonImg("./icon/settings/sound.svg")
+        button = new GuiButtonImg("./icon/settings/sound.svg")
         startButton.addChild(button, guiOptions.childTop)
-        button.addChild(new GuiButtonImg("./icon/settings/soundOff.svg", world.printBlock), guiOptions.childRight);
-        button.addChild(new GuiButtonImg("./icon/settings/soundOff.svg", function () { let x = new BABYLON.STLExport.CreateSTL([]) }), guiOptions.childRight);*/
+        button.addChild(new GuiButtonImg("./icon/settings/soundOff.svg", function () {
+            let meshWorldBlock = [];
+            world._meshBlock2x2.forEach(item => item._mesh.forEach(mesh => meshWorldBlock.push(mesh.clone())));
+            world._meshBlock2x4.forEach(item => item._mesh.forEach(mesh => meshWorldBlock.push(mesh.clone())));
+            if (meshWorldBlock.length == 0) {
+                return
+            }
+            let mergedMeshes = BABYLON.Mesh.MergeMeshes(meshWorldBlock);
+            scene.meshes.pop();
+            mergedMeshes.rotation.x = Math.PI / 2;
+            new BABYLON.STLExport.CreateSTL([mergedMeshes]);
+        }), guiOptions.childRight);
+        //button.addChild(new GuiButtonImg("./icon/settings/soundOff.svg", world.printBlock), guiOptions.childRight);
 
 
         this._confirmFullScreenOffButton = new GuiButtonImg("./icon/settings/fullscreenOff.svg", this.fullscreenOff.bind(this));
@@ -94,7 +105,7 @@ let settings = {
 
         //Right corner (help menu)
 
-        startButton = new GuiButtonImg("./icon/help/help.svg", null, null, function () {            
+        startButton = new GuiButtonImg("./icon/help/help.svg", null, null, function () {
             if (this._helpVideo != null) {
                 this._helpVideo.setNotVisible();
                 this._helpVideo = null;
@@ -178,9 +189,9 @@ let settings = {
         }
 
         this._helpVideo = new GuiVideo(src);
-        this._helpVideo.setVisible(0, 0, guiOptions.center, guiOptions.top);
+        this._helpVideo.setVisible(0, 0, guiOptions.center, guiOptions.center);
 
-        this._helpCloseButton.setVisible(0, 0, guiOptions.center, guiOptions.bottom);
+        this._helpCloseButton.setVisible(0, -2, guiOptions.right, guiOptions.bottom);
 
 
     },

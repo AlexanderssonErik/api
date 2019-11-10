@@ -9,6 +9,7 @@
 
     <script src="./babylon/earcut.js"></script>
     <script src="./babylon/babylon.js"></script>
+    <script src="./babylon/babylonjs.serializers.js"></script>
     <script src="./babylon/pep.js"></script>
 
     <script src="./camera.js"></script>
@@ -126,7 +127,6 @@
 
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true);//, {}, true);
-        //engine.setHardwareScalingLevel(0.5)
 
         if (engine.getGlInfo().renderer == "Adreno (TM) 308") {
             engine.getCaps().highPrecisionShaderSupported = false;
@@ -185,7 +185,11 @@
         let colorWheel = new GuiColorWheel();
 
         window.onload = function () {
-            engine.hideLoadingUI();           
+            engine.hideLoadingUI();     
+            if( canvas.height * canvas.width < 2000000){
+                setTimeout(function () { optimizer.start();}, 1000);      
+            }
+
         };
 
 
@@ -222,17 +226,15 @@
 
         let timeOutStartSceneOptimize = null
 
-        var options = new BABYLON.SceneOptimizerOptions(45, 1000);
+        var options = new BABYLON.SceneOptimizerOptions(40, 1000);
         options.addOptimization(new BABYLON.HardwareScalingOptimization(0, 0.5));
         var optimizer = new BABYLON.SceneOptimizer(scene, options, true, true);
 
        optimizer.onSuccessObservable.add(function () {
-            MeshNumber.init(meshesNumber());
-          
-            console.log("State: Done: " + engine.getHardwareScalingLevel());
-           // if(engine.getHardwareScalingLevel())
-            engine.setHardwareScalingLevel(1);
-            console.log("State: finished: " + engine.getHardwareScalingLevel());
+            MeshNumber.init(meshesNumber());          
+            console.log("State: Done: " + engine.getHardwareScalingLevel() + " fps: " + optimizer.currentFrameRate);           
+            engine.setHardwareScalingLevel(engine.getHardwareScalingLevel() + 0.25);
+            console.log("State: finished: " + engine.getHardwareScalingLevel() + " fps: " + optimizer.currentFrameRate);
         });
         optimizer.onNewOptimizationAppliedObservable.add(function (optim) {
             console.log("new: " + optim.getDescription())
@@ -242,6 +244,15 @@
             console.log("State: Failed. Frame rate was " + optimizer.currentFrameRate + "scaling " + engine.getHardwareScalingLevel());
         });
 
+        /*console.log("canvas.width: " + canvas.width);
+        console.log("canvas.height: " + canvas.height);
+        console.log("pixel count: " + canvas.height * canvas.width);*/
+
+        
+        //setTimeout(function () { optimizer.start();}, 1000);
+
+       
+
        /* setTimeout(function () {            
             console.log("setHardwareScalingLevel(0.5);");
             engine.setHardwareScalingLevel(0.5)
@@ -249,9 +260,8 @@
 
         }, 10000);*/
 
-        optimizer.start();
+        //optimizer.start();
 
-   // BABYLON.STLExport.CreateSTL([]);
 
     </script>
 </body>
