@@ -13,7 +13,7 @@ let settings = {
         let startButton = new GuiButtonImg("./icon/settings/settings.svg");
         startButton.setVisible(0, 0, guiOptions.left, guiOptions.bottom);
 
-        startButton.addChild(new GuiButtonImg("./icon/settings/hideBlocks.svg", null, function () { world.hideBlock()}), guiOptions.childRight)
+        startButton.addChild(new GuiButtonImg("./icon/settings/hideBlocks.svg", null, function () { world.hideBlock() }), guiOptions.childRight)
         startButton.addChild(new GuiButtonImg("./icon/settings/zoomOut.svg", function () { camera.zoomToStartPos() }), guiOptions.childRight)
 
         let button = new GuiButtonImg("./icon/settings/snap.svg")
@@ -44,9 +44,10 @@ let settings = {
         button.addChild(new GuiButtonImg("./icon/settings/soundOff.svg", sound.off), guiOptions.childRight)
         button.addChild(new GuiButtonImg("./icon/settings/soundOn.svg", sound.on), guiOptions.childRight)
 
-        button = new GuiButtonImg("./icon/settings/sound.svg")
+     /*   button = new GuiButtonImg("./icon/settings/sound.svg")
         startButton.addChild(button, guiOptions.childTop)
         button.addChild(new GuiButtonImg("./icon/settings/soundOff.svg", world.printBlock), guiOptions.childRight);
+        button.addChild(new GuiButtonImg("./icon/settings/soundOff.svg", function () { let x = new BABYLON.STLExport.CreateSTL([]) }), guiOptions.childRight);*/
 
 
         this._confirmFullScreenOffButton = new GuiButtonImg("./icon/settings/fullscreenOff.svg", this.fullscreenOff.bind(this));
@@ -81,12 +82,58 @@ let settings = {
         button.addChild(new GuiButtonImg("./icon/games/colorMatch.svg", function () { new ColorMatch() }), guiOptions.childRight);
 
 
-        button = new GuiButtonImg("./icon/games/columns.svg");
+        button = new GuiButtonImg("./icon/games/categoryStackGames.svg");
         startButton.addChild(button, guiOptions.childBottom)
         button.addChild(new GuiButtonImg("./icon/games/whack.svg", function () { new Whack() }), guiOptions.childRight);
-    /*    button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { new MasterMind() }), guiOptions.childRight);
-        button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { new Columns() }), guiOptions.childRight);*/
+        /*    button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { new MasterMind() }), guiOptions.childRight);
+            button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { new Columns() }), guiOptions.childRight);*/
 
+
+
+        //--------------------------------------------
+
+        //Right corner (help menu)
+
+        startButton = new GuiButtonImg("./icon/help/help.svg", null, null, function () {            
+            if (this._helpVideo != null) {
+                this._helpVideo.setNotVisible();
+                this._helpVideo = null;
+                this._helpCloseButton.setNotVisible();
+            }
+        }.bind(this));
+        startButton.setVisible(0, -1, guiOptions.right, guiOptions.bottom);
+        startButton.addChild(new GuiButtonImg("./icon/games/guidedBuild.svg", function () { this.help("https://www.youtube.com/embed/DKaHmufR4Bk") }.bind(this)), guiOptions.childLeft);
+        startButton.addChild(new GuiButtonImg("./icon/games/freeBuild.svg", function () { this.help("https://www.youtube.com/embed/QC_pxsuDvm4") }.bind(this)), guiOptions.childLeft);
+        startButton.addChild(new GuiButtonImg("./icon/settings/compass.svg", function () { this.help("https://www.youtube.com/embed/wG9-cGm1N08") }.bind(this)), guiOptions.childLeft);
+        startButton.addChild(new GuiButtonImg("./icon/level/lvl1Diy.svg", function () { this.help("https://www.youtube.com/embed/2Jn9MmeOorY") }.bind(this)), guiOptions.childLeft);
+
+        button = new GuiButtonImg("./icon/games/categoryProjection.svg");
+        startButton.addChild(button, guiOptions.childTop)
+        button.addChild(new GuiButtonImg("./icon/games/tangram.svg", function () { this.help("https://www.youtube.com/embed/s8N8TuYAMHo") }.bind(this)), guiOptions.childLeft);
+        button.addChild(new GuiButtonImg("./icon/games/tangram2D.svg", function () { this.help("https://www.youtube.com/embed/i6vMuhG-HiY") }.bind(this)), guiOptions.childLeft);
+
+        button = new GuiButtonImg("./icon/games/categoryMath.svg");
+        startButton.addChild(button, guiOptions.childTop)
+        button.addChild(new GuiButtonImg("./icon/games/algebra.svg", function () { this.help("https://www.youtube.com/embed/gr-0V6hi6H4") }.bind(this)), guiOptions.childLeft);
+
+        /*button = new GuiButtonImg("./icon/games/categoryMemory.svg");
+        startButton.addChild(button, guiOptions.childTop)
+        button.addChild(new GuiButtonImg("./icon/games/shapeHunter.svg", function () { this.help("https://www.youtube.com/embed/") }.bind(this)), guiOptions.childLeft);*/
+        // button.addChild(new GuiButtonImg("./icon/games/memory.svg", function () { this.help("https://www.youtube.com/embed/")}.bind(this)), guiOptions.childLeft);
+        //  button.addChild(new GuiButtonImg("./icon/games/colorMatch.svg", function () {this.help("https://www.youtube.com/embed/") }.bind(this)), guiOptions.childLeft);
+
+
+        //   button = new GuiButtonImg("./icon/games/categoryStackGames.svg");
+        //  startButton.addChild(button, guiOptions.childTop)
+        //  button.addChild(new GuiButtonImg("./icon/games/whack.svg", function () { this.help("https://www.youtube.com/embed/") }.bind(this)), guiOptions.childLeft);
+
+
+        this._helpVideo = null;
+        this._helpCloseButton = new GuiButtonImg("./icon/games/ok.svg", function () {
+            this._helpVideo.setNotVisible();
+            this._helpVideo = null;
+            this._helpCloseButton.setNotVisible();
+        }.bind(this));
 
     },
     fullscreenOff: function () {
@@ -102,12 +149,11 @@ let settings = {
 
     },
     fullscreenOn: function () {
-
         this._confirmFullScreenOnButton.setVisible(-1, 0, guiOptions.center, guiOptions.center);
         this._confirmFullScreenOffButton.setVisible(1, 0, guiOptions.center, guiOptions.center);
 
-
     },
+
 
     confirmFullscreenOn: function () {
         if (document.documentElement.requestFullScreen) {
@@ -120,6 +166,23 @@ let settings = {
         }
         this._confirmFullScreenOffButton.setNotVisible();
         this._confirmFullScreenOnButton.setNotVisible();
+    },
+
+    help: function (src) {
+        Game.close();
+
+        if (this._helpVideo != null) {
+            this._helpVideo.setNotVisible();
+            this._helpVideo = null;
+            this._helpCloseButton.setNotVisible();
+        }
+
+        this._helpVideo = new GuiVideo(src);
+        this._helpVideo.setVisible(0, 0, guiOptions.center, guiOptions.top);
+
+        this._helpCloseButton.setVisible(0, 0, guiOptions.center, guiOptions.bottom);
+
+
     },
 
 

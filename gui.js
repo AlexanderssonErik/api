@@ -289,10 +289,11 @@ class GuiButton extends Gui {
         GuiButton._ActiveStack.splice(1, GuiButton._ActiveStack.length - 1);
     }
 
-    constructor(element, pointerUp, pointerMove = null) {
+    constructor(element, pointerUp, pointerMove = null, pointerDown = null) {
         super(element);
         this._pointerUpFunction = pointerUp;
         this._pointerMoveFunction = pointerMove;
+        this._pointerDownFunction = pointerDown;
 
         this._background = 'rgba(96, 96, 96, 0.3)';
         this._backgroundDown = 'rgba(96, 96, 96, 0.5)';
@@ -328,9 +329,12 @@ class GuiButton extends Gui {
         this._element.style.background = this._backgroundDown;
         this._direction = null;
         this._parent = null;
-
+            
+        if (this._pointerDownFunction != null) {           
+            this._pointerDownFunction();
+        }
+        
         this._showChildren();
-
         super.pointerDown();
 
     }
@@ -430,8 +434,8 @@ class GuiButton extends Gui {
 
 class GuiButtonImg extends GuiButton {
 
-    constructor(img, pointerUp, pointerMove) {
-        super(document.createElement('IMG'), pointerUp, pointerMove);
+    constructor(img, pointerUp, pointerMove, pointerDown) {
+        super(document.createElement('IMG'), pointerUp, pointerMove, pointerDown);
         this._element.src = img;
     }
 }
@@ -716,5 +720,31 @@ class GuiText extends Gui {
         }
     }
 
+
+}
+
+
+class GuiVideo extends Gui {
+
+    constructor(src) {
+        super(document.createElement('iframe'), null);
+        this._element.setAttribute("src", src + "?autoplay=1" );
+        this._element.setAttribute("allow", "autoplay" );
+        
+        this._element.style.borderRadius = "0%";
+
+        this._horAlign = guiOptions.center;
+        this._verAlign = guiOptions.center;
+
+        this._size = [42, 42, 36];
+        this._sizeWidthMulti = 1.85;
+        this._margin = [1, 1, 1];
+
+        this._element.style.pointerEvents = 'auto';
+    }
+
+    pointerDown(evt) {        
+        return;
+    }
 
 }

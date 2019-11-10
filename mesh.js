@@ -305,6 +305,7 @@ class MeshStar extends Mesh {
         MeshStar._staticMaterial[1].emissiveColor = new BABYLON.Color3(0.5, 0.5, 0.2);
 
         MeshStar._staticParticle = particle;
+        MeshStar._staticParticle.emitter = MeshStar._staticMesh[0];
 
 
     }

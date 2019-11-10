@@ -8,7 +8,7 @@
     <script src="./firebase/firebase-firestore.js"></script>
 
     <script src="./babylon/earcut.js"></script>
-   <script src="./babylon/babylon.js"></script> 
+    <script src="./babylon/babylon.js"></script>
     <script src="./babylon/pep.js"></script>
 
     <script src="./camera.js"></script>
@@ -51,6 +51,8 @@
 
     <script src="./game/whack.js"></script>
     <script src="./game/columns.js"></script>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
 
 
 
@@ -124,6 +126,7 @@
 
         var canvas = document.getElementById("renderCanvas");
         var engine = new BABYLON.Engine(canvas, true);//, {}, true);
+        //engine.setHardwareScalingLevel(0.5)
 
         if (engine.getGlInfo().renderer == "Adreno (TM) 308") {
             engine.getCaps().highPrecisionShaderSupported = false;
@@ -156,7 +159,7 @@
         MeshShadowFront.init(meshesShadowFront());
         MeshShadowBottom.init(meshesShadowBottom());
 
-        MeshNumber.init(meshesNumber());
+        //MeshNumber.init(meshesNumber());
         MeshNumberPillar.init(meshesNumberPillar());
         MeshPad.init(meshesPad());
 
@@ -182,12 +185,12 @@
         let colorWheel = new GuiColorWheel();
 
         window.onload = function () {
-            engine.hideLoadingUI();
+            engine.hideLoadingUI();           
         };
 
 
         let timeOutResizeDeBounce = null;//iOS, bad behaviour
-        let timeOutResizeDeBounceFunction = function (){
+        let timeOutResizeDeBounceFunction = function () {
             let timeOutResizeDeBounce = null;
             engine.resize();
             Gui.resize();
@@ -200,26 +203,55 @@
                 if (Gui.pointerDown(evt)) {
 
                 } else if (pickResult.hit) {
-
                     colorWheel.pointerDown(evt, pickResult.pickedMesh.name)
-
                 } else {
                     camera.pointerDown();
                 }
-
             };
-
-
 
             engine.runRenderLoop(function () {
                 scene.render();
             });
             window.addEventListener("resize", function () {
-                clearTimeout(timeOutResizeDeBounce);                  
-                timeOutResizeDeBounce = setTimeout(timeOutResizeDeBounceFunction, 500);                        
+                clearTimeout(timeOutResizeDeBounce);
+                timeOutResizeDeBounce = setTimeout(timeOutResizeDeBounceFunction, 500);
             });
+     
+            
         });
 
+        let timeOutStartSceneOptimize = null
+
+        var options = new BABYLON.SceneOptimizerOptions(45, 1000);
+        options.addOptimization(new BABYLON.HardwareScalingOptimization(0, 0.5));
+        var optimizer = new BABYLON.SceneOptimizer(scene, options, true, true);
+
+       optimizer.onSuccessObservable.add(function () {
+            MeshNumber.init(meshesNumber());
+          
+            console.log("State: Done: " + engine.getHardwareScalingLevel());
+           // if(engine.getHardwareScalingLevel())
+            engine.setHardwareScalingLevel(1);
+            console.log("State: finished: " + engine.getHardwareScalingLevel());
+        });
+        optimizer.onNewOptimizationAppliedObservable.add(function (optim) {
+            console.log("new: " + optim.getDescription())
+        });
+        optimizer.onFailureObservable.add(function () {
+            MeshNumber.init(meshesNumber());
+            console.log("State: Failed. Frame rate was " + optimizer.currentFrameRate + "scaling " + engine.getHardwareScalingLevel());
+        });
+
+       /* setTimeout(function () {            
+            console.log("setHardwareScalingLevel(0.5);");
+            engine.setHardwareScalingLevel(0.5)
+            setTimeout(function () { optimizer.start();}, 10000);
+
+        }, 10000);*/
+
+        optimizer.start();
+
+   // BABYLON.STLExport.CreateSTL([]);
 
     </script>
 </body>
