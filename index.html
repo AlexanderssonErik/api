@@ -177,7 +177,8 @@
         world.base.ledRight = meshColor.cyan;
         world.base.ledBack = meshColor.black;
 
-        settings.init();
+
+        settings.init(meshes2x2Stl(), meshes2x4Stl());
         ble.init();
 
         database.init({ enabled: true }); //first create your own firebase account and configure database.js before enabling the database (still need to call database.init)
@@ -188,8 +189,9 @@
             engine.hideLoadingUI();     
             if( canvas.height * canvas.width < 2000000){
                 setTimeout(function () { optimizer.start();}, 1000);      
+            }else{
+                MeshNumber.init(meshesNumber());
             }
-
         };
 
 

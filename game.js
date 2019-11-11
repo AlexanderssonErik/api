@@ -139,8 +139,11 @@ class Game {
                 }
 
             } else {
-                this._levelMenu.push(this._levelMenu[0].addChild(new GuiButtonImg("./icon/level/lvl" + iL + ".svg", function () { this._setLevelByMenu({ level: iL, difficulty: 0 }) }.bind(this)), guiOptions.childBottom));
-
+                if(l.image != null){
+                    this._levelMenu.push(this._levelMenu[0].addChild(new GuiButtonImg(l.image, function () { this._setLevelByMenu({ level: iL, difficulty: 0 }) }.bind(this)), guiOptions.childBottom));
+                }else{
+                    this._levelMenu.push(this._levelMenu[0].addChild(new GuiButtonImg("./icon/level/lvl" + iL + ".svg", function () { this._setLevelByMenu({ level: iL, difficulty: 0 }) }.bind(this)), guiOptions.childBottom));
+                }
             }
 
             l.difficulty.forEach(function (d, iD) {

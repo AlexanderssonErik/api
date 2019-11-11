@@ -15,7 +15,7 @@ let world = {
         this._blockBase = new BlockBase();
         this._meshBase = new MeshBase(baseMesh, this._blockBase);
         this._batteryIndicator = new GuiBattery();
-        this._batteryIndicator.setVisible(0, 0, guiOptions.right, guiOptions.center);
+        this._batteryIndicator.setVisible(0, 0, guiOptions.center, guiOptions.top);
 
     },
     get meshBase() {

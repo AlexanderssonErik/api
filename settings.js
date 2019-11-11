@@ -2,9 +2,12 @@ let settings = {
 
     _confirmFullScreenOffButton: null,
     _confirmFullScreenOnButton: null,
+    _meshStl2x2: null,
+    _meshStl2x4: null,
 
-    init: function () {
-
+    init: function (meshStl2x2, meshStl2x4) {
+        this._meshStl2x2 = meshStl2x2;
+        this._meshStl2x4 = meshStl2x4;
 
         let sizeButton = new GuiButtonImg("./icon/settings/size.svg", Gui.changeSize);
         sizeButton.setVisible(0, 0, guiOptions.right, guiOptions.bottom);
@@ -46,18 +49,7 @@ let settings = {
 
         button = new GuiButtonImg("./icon/settings/sound.svg")
         startButton.addChild(button, guiOptions.childTop)
-        button.addChild(new GuiButtonImg("./icon/settings/soundOff.svg", function () {
-            let meshWorldBlock = [];
-            world._meshBlock2x2.forEach(item => item._mesh.forEach(mesh => meshWorldBlock.push(mesh.clone())));
-            world._meshBlock2x4.forEach(item => item._mesh.forEach(mesh => meshWorldBlock.push(mesh.clone())));
-            if (meshWorldBlock.length == 0) {
-                return
-            }
-            let mergedMeshes = BABYLON.Mesh.MergeMeshes(meshWorldBlock);
-            scene.meshes.pop();
-            mergedMeshes.rotation.x = Math.PI / 2;
-            new BABYLON.STLExport.CreateSTL([mergedMeshes]);
-        }), guiOptions.childRight);
+        button.addChild(new GuiButtonImg("./icon/settings/soundOff.svg", this.exportSTL.bind(this)), guiOptions.childRight);
         //button.addChild(new GuiButtonImg("./icon/settings/soundOff.svg", world.printBlock), guiOptions.childRight);
 
 
@@ -164,6 +156,36 @@ let settings = {
         this._confirmFullScreenOffButton.setVisible(1, 0, guiOptions.center, guiOptions.center);
 
     },
+
+    exportSTL: function () {
+        let meshWorldBlock = [];
+       world.block.forEach(item =>  meshWorldBlock.push(this.createSTLMesh(item)));
+        if (meshWorldBlock.length == 0) {
+            return
+        }
+        let mergedMeshes = BABYLON.Mesh.MergeMeshes(meshWorldBlock);
+        scene.meshes.pop();
+        mergedMeshes.rotation.x = Math.PI / 2;
+        new BABYLON.STLExport.CreateSTL([mergedMeshes]);
+    },
+
+    createSTLMesh: function (block){
+        let mesh;
+        if(block instanceof Block2x2){
+            mesh = this._meshStl2x2.clone();
+        }else{
+            mesh = this._meshStl2x4.clone();
+        }
+
+        mesh.position.x = block.x;
+        mesh.position.y = block.y * Mesh._staticPitch;
+        mesh.position.z = block.z;
+        mesh.rotation.y = Math.PI * block.r / 2;
+
+        return mesh;
+    },
+
+
 
 
     confirmFullscreenOn: function () {

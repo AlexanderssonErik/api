@@ -1,6 +1,9 @@
 
 
 //support functions
+
+
+
 function createNipple() {
 
     let nippleShape = [new BABYLON.Vector3(-0.21, 0, -0.29),
@@ -1020,7 +1023,41 @@ function meshesPad() {
 }
 
 
+function meshes2x2Stl() {
 
+    let stl2x2BlockShape = [
+        new BABYLON.Vector3(1.5, 0, -0.5),
+        new BABYLON.Vector3(1.5, 0, 1.5),
+        new BABYLON.Vector3(-0.5, 0, 1.5),
+        new BABYLON.Vector3(-0.5, 0, -0.5)
+    ];
+
+    let blockSTL2x2 = BABYLON.MeshBuilder.ExtrudePolygon("polygonx", { shape: stl2x2BlockShape, depth: 1.19, sideOrientation: BABYLON.Mesh.FRONTSIDE }, this.scene);
+    blockSTL2x2.rotation.z = Math.PI;
+    blockSTL2x2.rotation.y = Math.PI / 2;
+    let mesh = BABYLON.Mesh.MergeMeshes([blockSTL2x2]);
+ 
+    scene.meshes.pop();
+    return mesh;
+}
+
+function meshes2x4Stl() {
+
+    let stl2x4BlockShape = [
+        new BABYLON.Vector3(1.5, 0, -0.5),
+        new BABYLON.Vector3(1.5, 0, 3.5),
+        new BABYLON.Vector3(-0.5, 0, 3.5),
+        new BABYLON.Vector3(-0.5, 0, -0.5)
+    ];
+
+    let blockSTL2x4 = BABYLON.MeshBuilder.ExtrudePolygon("polygonx", { shape: stl2x4BlockShape, depth: 1.19, sideOrientation: BABYLON.Mesh.FRONTSIDE }, this.scene);
+    blockSTL2x4.rotation.z = Math.PI;
+    blockSTL2x4.rotation.y = Math.PI / 2;
+    let mesh = BABYLON.Mesh.MergeMeshes([blockSTL2x4]);
+    
+    scene.meshes.pop();
+    return mesh;
+}
 
 
 
