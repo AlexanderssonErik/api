@@ -88,8 +88,8 @@ let settings = {
         button = new GuiButtonImg("./icon/games/categoryStackGames.svg");
         startButton.addChild(button, guiOptions.childBottom)
         button.addChild(new GuiButtonImg("./icon/games/whack.svg", function () { new Whack() }), guiOptions.childRight);
-        /*    button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { new MasterMind() }), guiOptions.childRight);
-            button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { new Columns() }), guiOptions.childRight);*/
+        /*    button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { new MasterMind() }), guiOptions.childRight);*/
+            button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { new Columns() }), guiOptions.childRight);
 
 
 

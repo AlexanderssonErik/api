@@ -2,129 +2,139 @@ class Columns extends Game {
   constructor() {
     let level = [];
 
-
-
-
-
     super({ level: level, userCreatedLevel: false });
 
     this._enumColumnsState = {
       displayColor: 0,
       setColor: 1,
-     // fail: 5,
+      checkThree: 2,
+      colorDown: 3,
     }
     this._columnsState = 0;
 
-
-
-
-    
-    this._colorCount = 2;
+    this._colorCount = 3;
+    this._displayColors = [];
+    this._displayColorsIndex = 0;
     this._currentColor = 0;
     this._timeoutDelay = null;
-    this._columnsCurrentLevel = 0;
+
+
+    this._columnsCurrentLevel = 1;
+    this._score = 0
+    this._levelScoreProgression = [0, 30, 80, 140, 210, 280, 990];
+
 
     this._speedColorSelect = 3;
+    this._speedColorSelectIndex = 0;
 
-
-    this._colorSelector = new BlockPillar({ x: 1, y: 0, z: 1, color: [meshColor.blue]});
+    this._colorSelector = new BlockPillar({ x: 1, y: 0, z: 1, color: [meshColor.blue] });
+    this._colorSelectorBlock = new Block2x2({ x: 1, y: 0, z: 1, r: 0, color: [0, 0] });
     this._playFieldBlocks = [];
-    
 
-    this._playfield = [new BlockPillar({ x: 7, y: 0, z: 7, color: [meshColor.blue]}), new BlockPillar({ x: 7, y: 0, z: 5, color: [meshColor.blue]}), new BlockPillar({ x: 7, y: 0, z: 3, color: [meshColor.blue]}), new BlockPillar({ x: 5, y: 0, z: 7, color: [meshColor.blue]}), new BlockPillar({ x: 5, y: 0, z: 5, color: [meshColor.blue]}), new BlockPillar({ x: 3, y: 0, z: 7, color: [meshColor.blue]}),];
+
+    this._playfield = [new BlockPillar({ x: 7, y: 0, z: 7, color: [meshColor.blue] }), new BlockPillar({ x: 7, y: 0, z: 5, color: [meshColor.blue] }), new BlockPillar({ x: 7, y: 0, z: 3, color: [meshColor.blue] }), new BlockPillar({ x: 5, y: 0, z: 7, color: [meshColor.blue] }), new BlockPillar({ x: 5, y: 0, z: 5, color: [meshColor.blue] }), new BlockPillar({ x: 3, y: 0, z: 7, color: [meshColor.blue] }),];
     this._meshPlayfield = [];
-    //this._meshPlayfield[0] = new MeshPad(this._playfield[0]);
 
-    this._playfield.forEach( item => this._meshPlayfield.push(new MeshPad(item)) );
-   // this._meshPlayfield = new MeshPad(this._playfield);
-  /*   this._redPad.mesh = new MeshPad(new BlockPillar({ x: 0, y: 0, z: 0, color: [meshColor.red] }));
-    this._greenPad.mesh = new MeshPad(this._greenPad.block);
-    this._bluePad.mesh = new MeshPad(this._bluePad.block);*/
+    this._playfield.forEach(item => this._meshPlayfield.push(new MeshPad(item)));
 
-//ALL ON GRID or on 
-//blocks on color select one color select
-//all playfield blocks
-//all color select blocks
-
-  
-  this._setLevel({ level: 1, difficulty: 0 });
-
-//   this._activeDisplayBlocks = [];
-
-}
-
-_setLevel({ level = 0, difficulty = 0 }) {
-
-  super._setLevel({ level: level, difficulty: difficulty });
-
-  this._playFieldBlocks = [];
-  this._columnsState = this._enumColumnsState.displayColor;
-  this._currentColor = 0;
+    this._setLevel({ level: 1, difficulty: 0 });
 
 
-  switch(level){
-    case 1:
-    this._colorCount = 2;
+  }
 
-    this._speedColorSelect = 3;
-    break;
-    case 2:
-    this._colorCount = 3;
-    this._speedColorSelect = 2;
+  _setLevel({ level = 0, difficulty = 0 }) {
 
+    super._setLevel({ level: level, difficulty: difficulty });
 
-    break;
-    case 3:
-    this._colorCount = 4;
-    this._speedColorSelect = 2;
+     colorWheel.colorComplete();
+
+    this._playFieldBlocks = [];
+    this._columnsState = this._enumColumnsState.displayColor;
+    this._currentColor = 0;
 
 
-    break;
-    case 4:
-    this._colorCount = 4;
-    this._speedColorSelect = 1;
+    switch (level) {
+      case 1:
+        this._colorCount = 4;
+
+        this._speedColorSelect = 4;
+        break;
+      case 2:
+        this._colorCount = 4;
+        this._speedColorSelect = 3;
 
 
-      break;
+        break;
+      case 3:
+        this._colorCount = 5;
+        this._speedColorSelect = 2;
+
+
+        break;
+      case 4:
+        this._colorCount = 5;
+        this._speedColorSelect = 1;
+
+
+        break;
       default:
-      this._colorCount = 5;
-      this._speedColorSelect = 1;
+        this._colorCount = 6;
+        this._speedColorSelect = 1;
 
-      break;
+        break;
 
     }
 
-  //  this._activeDisplayBlocks = [new Block2x2({ x: 8, y: 0, z: 4, r: 0, color: [0, 0] }), new Block2x2({ x: 8, y: 1, z: 4, r: 0, color: [0, 0] })];
     this.update();
-    /*if (level > 0) {
-     // this.showDifficultyButton();
-    }*/
 
+  }
 
+  close() {
 
+    this._meshPlayfield.forEach(item => item.dispose());
+    this._meshPlayfield = [];
+    super.close();
   }
 
   reset() {
     super.reset();
-    if (this._redPad.mesh != null) {
-      this._redPad.mesh.dispose();
-      this._greenPad.mesh.dispose();
-      this._bluePad.mesh.dispose();
-      this._redPad.mesh = null;
-
-    }
+    Block.setColor({ block: world.block, color: 0, blink: false });
+    this._playFieldBlocks = [];
+    this._columnsCurrentLevel = 0;
+    this._score = 0
 
   }
 
-  //block turn one way doesn't work
-  //color is blinking while correct
 
   _timeoutDelayFunction() {
 
     clearTimeout(this._timeoutDelay);
-    this._timeoutDelay = null;
-    console.log("timeout")
+    this._speedColorSelectIndex--;
+    if (this._speedColorSelectIndex == 0) {
+      this._timeoutDelay = null;
+    } else {
+      this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 100);
+    }
 
+  }
+
+  _threeInARow(x, y, z, blocks, forRemoval) {
+
+    blocks.forEach(function (item) {
+      let previous;
+      let next;
+
+      previous = blocks.find(itemFind => itemFind.color[0] == item.color[0] && itemFind.y == item.y - y && itemFind.z == item.z - z && itemFind.x == item.x - x);
+      next = blocks.find(itemFind => itemFind.color[0] == item.color[0] && itemFind.y == item.y + y && itemFind.z == item.z + z && itemFind.x == item.x + x);
+
+      if (previous !== undefined && next !== undefined) {
+        forRemoval.push(previous);
+        forRemoval.push(item);
+        forRemoval.push(next);
+      }
+
+
+    });
 
   }
 
@@ -132,289 +142,206 @@ _setLevel({ level = 0, difficulty = 0 }) {
 
     super.update();
 
-    /* if(this.state == this.enumState.busyCreatingShape){
-       return;
-     }*/
-     
+    let currentColorSelectorBlocks = [];
 
-    
-     //this._playFieldBlocks = [];
+    let currentPlayFieldBlocks = []
 
-     let currentColorSelectorBlocks = [];
-     //let currentPlayFieldBlocks = [];
+    let setWorldColorSelector = BlockPillar.calcSet({ left: BlockPixel.convertBlock(world.block), right: this._colorSelector, careColor: false, careRotation: false });
 
-     let currentPlayFieldBlocks =  [] //world.block;//= Block.calcSet({ left: world.block, right: this._colorSelector, careColor: false, careRotation: false });
- 
-     //let set = 
-     //check all on Field
-     //show 
+    setWorldColorSelector.intersectionLeft.forEach(function (item) {
 
-     
-
-     let setWorldColorSelector = BlockPillar.calcSet({ left: BlockPixel.convertBlock(world.block), right: this._colorSelector, careColor: false, careRotation: false });
- 
-     setWorldColorSelector.intersectionLeft.forEach( function (item, index) {    
-    
-      if( currentColorSelectorBlocks.find( findItem => item == findItem) === undefined){
+      if (currentColorSelectorBlocks.find(findItem => item.block == findItem) === undefined) {
         currentColorSelectorBlocks.push(item.block);
       }
 
-     });
-
-    setWorldColorSelector = Block.calcSet({ left: world.block, right: currentColorSelectorBlocks, careColor: false, careRotation: false });
-     
-    let setCurrentPlayFieldBlocks = BlockPillar.calcSet({ left: setWorldColorSelector.diffLeft, right: this._playfield , careColor: false, careRotation: false });
-     
-    currentPlayFieldBlocks = setCurrentPlayFieldBlocks.intersectionLeft;
-
-
-    setCurrentPlayFieldBlocks.diffLeft //set REEEED
-    //set red 
-//--
-     //!! HERE !!
-     //world convert pixels
-     //world all overlap with this._colorSelector in currentColorSelectorBlocks
-     //set world and  currentColorSelectorBlocks
-     //set this._playfield 
-
-     //check pillar
-     //if no pillar show block
-  
-
-     //state select color
-        //check pillar
-          //if no pillar show block
-          //if pillar cycle colors on second
-    //state color
-  
-
-    console.log("columns")
-    return;
-
-
-
-
-    let set = Block.calcSet({ left: world.block, right: this._activeDisplayBlocks, careColor: false, careRotation: false });
-    //Block.setColor({block: set.diffLeft, color: meshColor.red, blink: true})
-    this.show({ block: set.diffRight, careColor: false });
-
-
-    let setWorldAndDisplayBlocks;
-
-    
-
-    switch (this._colorMatchState) {
-      case this._enumColorMatchState.build:
-        Block.setColor({ block: set.intersectionLeft, color: meshColor.black });
-
-        if (set.diffRight.length == 0) {
-          this._colorMatchState = this._enumColorMatchState.delayShowColor;
-          this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 1500);
-
-
-        }
-
-        break;
-      case this._enumColorMatchState.delayShowColor:
-
-        if (set.diffRight.length != 0) {
-          this._colorMatchState = this._enumColorMatchState.build;
-          clearTimeout(this._timeoutDelay);
-          this._timeoutDelay = null;
-          return;
-
-        }
-
-        if (this._timeoutDelay == null) {
-          this._shownColorCount = 0;
-          this._paintBrush = 0;
-          //this._shownColor = [];
-          this._colorMatchState = this._enumColorMatchState.showColor;
-        }
-
-
-
-        break;
-
-      case this._enumColorMatchState.showColor:
-
-        if (this._timeoutDelay == null) {
-
-          if (this._shownColorCount == this._activeDisplayBlocks.length) {
-            this._colorMatchState = this._enumColorMatchState.reproduce;
-            this._shownColorCount++;//NEW!!!
-            this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 6000 +  2500 * this._activeDisplayBlocks.length );
-        
-          } else {
-            this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 800);
-            this._shownColorCount++;
-            let randColor = Math.floor(Math.random() * 3);
-
-            switch (randColor) {
-              case 0:
-              this._activeDisplayBlocks[this._shownColorCount-1].color = meshColor.red;
-                //this._shownColor.push(meshColor.red);
-                break;
-              case 1:
-              this._activeDisplayBlocks[this._shownColorCount-1].color = meshColor.green;
-                //this._shownColor.push(meshColor.green);
-                break;
-              case 2:
-                //this._shownColor.push(meshColor.blue);
-                this._activeDisplayBlocks[this._shownColorCount-1].color = meshColor.blue;
-                break;
-
-            }
-          }
-
-        }
-
-        let setBlockToColor = Block.calcSet({ left: world.block, right: this._activeDisplayBlocks, careColor: false, careRotation: false });
-        Block.setColor({ block: setBlockToColor.intersectionLeft, color: meshColor.black });
-
-        if(this._shownColorCount <= this._activeDisplayBlocks.length){
-        setBlockToColor = Block.calcSet({ left: world.block, right: this._activeDisplayBlocks[this._shownColorCount - 1], careColor: false, careRotation: false });
-        Block.setColor({ block: setBlockToColor.intersectionLeft, color:  this._activeDisplayBlocks[this._shownColorCount-1].color[0]});
-        }
-
-        break;
-
-      case this._enumColorMatchState.reproduce:
-
-        if (this._redPad.mesh == null) {
-          this._redPad.mesh = new MeshPad(this._redPad.block);
-          this._greenPad.mesh = new MeshPad(this._greenPad.block);
-          this._bluePad.mesh = new MeshPad(this._bluePad.block);
-        }
-
-        let worldPixel = BlockPixel.convertBlock(world.block);
-        let setColorPilar = BlockPillar.calcSet({ left: worldPixel, right: this._redPad.block });
-        if (setColorPilar.intersectionLeft.length != 0) {
-          this._paintBrush = meshColor.red;
-        }
-        setColorPilar = BlockPillar.calcSet({ left: worldPixel, right: this._greenPad.block });
-        if (setColorPilar.intersectionLeft.length != 0) {
-          this._paintBrush = meshColor.green;
-        }
-        setColorPilar = BlockPillar.calcSet({ left: worldPixel, right: this._bluePad.block });
-        if (setColorPilar.intersectionLeft.length != 0) {
-          this._paintBrush = meshColor.blue;
-        }
-
-
-        //filter out playing field
-        setWorldAndDisplayBlocks = Block.calcSet({ left: world.block, right: this._activeDisplayBlocks, careColor: false, careRotation: false });
-      
-
-          //PAINTBRUSH
-
-        let paintBlocks = Block.calcSet({ left: setWorldAndDisplayBlocks.diffLeft, right: this._placedBlocks, careColor: false, careRotation: false });
-      
-        
-        Block.setColor({ block: paintBlocks.diffLeft, color: this._paintBrush}) ;
-
-        this._placedBlocks = world.block;
-      
-        let playPixels = BlockPixel.convertBlock(setWorldAndDisplayBlocks.diffLeft);
-        let activeDisplayPixels = BlockPixel.convertBlock(this._activeDisplayBlocks);
-       // console.log("playPixels.length: " + playPixels.length)
-       // console.log("activeDisplayPixels.length: " + activeDisplayPixels.length)
-        //PROBLEM!!
-        let setPlayPixelAndDisplayBlocks = BlockPixel.calcSetNoCarePosition({left: playPixels, right: activeDisplayPixels,  careColor: true, careRotation: true  })
-
-        if (setPlayPixelAndDisplayBlocks.diffLeft.length == 0 && setPlayPixelAndDisplayBlocks.diffRight.length == 0){
-          this._colorMatchState = this._enumColorMatchState.win;
-        }else if(this._timeoutDelay == null){
-          this._colorMatchState = this._enumColorMatchState.fail;
-        }
-
-
-        if(this._colorMatchCurrentLevel == 0 && this._winCount == 0){
-
-        //  setPlayPixelAndDisplayBlocks.diffRight
-        //  let showCorrect = Block.transform({block: setPlayPixelAndDisplayBlocks.diffRight, x: -4});
-        let showCorrect = Block.transform({block:  this._activeDisplayBlocks, x: -4});
-       
-         // console.log("showCorrect.length: " + showCorrect.length);
-         // console.log("setPlayPixelAndDisplayBlocks.diffRight.length: " + setPlayPixelAndDisplayBlocks.diffRight.length);
-         // if (set.diffRight.length == 0) {
-            this.show({ block: showCorrect, careColor: true });
-           //this.show({ block: setPlayPixelAndDisplayBlocks.diffRight, careColor: true });
-           
-        //  }
-
-        }
-
-        break;
-
-
-      case this._enumColorMatchState.win:
-      //timeout function
-        if (this._redPad.mesh != null) {
-          sound.win();  
-          this._redPad.mesh.dispose();
-          this._greenPad.mesh.dispose();
-          this._bluePad.mesh.dispose();
-          this._redPad.mesh = null;
-
-          
-   
-        }
-
-        Block.copyColor({ to: world.block, from: this._activeDisplayBlocks, careRotation: false}) 
-
-          //filter out playing field
-        setWorldAndDisplayBlocks = Block.calcSet({ left: world.block, right: this._activeDisplayBlocks, careColor: false, careRotation: false });
-        Block.setColor({block: setWorldAndDisplayBlocks.diffLeft, color: meshColor.green, blink: true});
-
-        if(setWorldAndDisplayBlocks.diffLeft.length == 0){    
-          clearTimeout(this._timeoutDelay);
-          this._colorMatchState = this._enumColorMatchState.build;
-          this._winCount++;
-          if(this._winCount > 1){
-            this._winCount = 0;
-            this._colorMatchCurrentLevel++;
-            if(this._colorMatchLevel.length > this._colorMatchCurrentLevel){
-              this._activeDisplayBlocks = this._colorMatchLevel[this._colorMatchCurrentLevel];
-            }          
-          }
-        }
-
-
-        break;
-
-      case this._enumColorMatchState.fail:
-        if (this._redPad.mesh != null) {
-          sound.fail();
-          this._redPad.mesh.dispose();
-          this._greenPad.mesh.dispose();
-          this._bluePad.mesh.dispose();
-          this._redPad.mesh = null;
-
-          this._winCount = 0;
-        }
-
-        Block.copyColor({ to: world.block, from: this._activeDisplayBlocks, careRotation: false}) 
-
-        setWorldAndDisplayBlocks = Block.calcSet({ left: world.block, right: this._activeDisplayBlocks, careColor: false, careRotation: false });
-        Block.setColor({block: setWorldAndDisplayBlocks.diffLeft, color: meshColor.red, blink: true});
-
-        if(setWorldAndDisplayBlocks.diffLeft.length == 0){    
-          this._colorMatchState = this._enumColorMatchState.build;
-        }
-
-
-        break;
-
-
+    });
+
+    if (currentColorSelectorBlocks.length == 0) {
+      this.show({ block: [this._colorSelectorBlock], careColor: false });
+      return;
+    } else {
+      this.show([]);
     }
 
 
 
+    setWorldColorSelector = Block.calcSet({ left: world.block, right: currentColorSelectorBlocks, careColor: false, careRotation: false });
 
+    let setCurrentPlayFieldBlocks = BlockPillar.calcSet({ left: world.block, right: this._playfield, careColor: false, careRotation: false });
+    currentPlayFieldBlocks = setCurrentPlayFieldBlocks.intersectionLeft;
+
+
+    let setFalselyRemovedBlocks = Block.calcSet({ left: currentPlayFieldBlocks, right: this._playFieldBlocks, careColor: false, careRotation: false });
+    if (setFalselyRemovedBlocks.diffRight.length > 0) {
+      this.show({ block: setFalselyRemovedBlocks.diffRight, careColor: false });
+      return;
+    }
+
+    Block.copyColor({ to: currentPlayFieldBlocks, from: this._playFieldBlocks, careRotation: false });
+
+
+    switch (this._columnsState) {
+
+      case this._enumColumnsState.displayColor:
+        if (this._timeoutDelay == null) {
+
+          while (this._displayColors.length < 3) {
+            let randColor = Math.floor(1 + Math.random() * this._colorCount);
+            if (this._displayColors.find(item => item == randColor) === undefined) {
+              this._displayColors.push(randColor);
+            }
+          }
+
+
+          if (currentColorSelectorBlocks.length > 1) {
+
+            currentColorSelectorBlocks.forEach(item => item.color = this._displayColors[this._displayColorsIndex])
+
+            this._currentColor = this._displayColors[this._displayColorsIndex];
+            this._columnsState = this._enumColumnsState.setColor;
+            this._displayColors = [];
+            break; 
+          }
+
+          this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 100);
+          this._speedColorSelectIndex = this._speedColorSelect;
+
+          this._displayColorsIndex++;
+          this._displayColorsIndex %= 3;
+
+          currentColorSelectorBlocks.forEach(item => item.color = this._displayColors[this._displayColorsIndex])
+
+        }
+        break;
+      case this._enumColumnsState.setColor:
+
+        this._displayColors = [];
+
+        currentPlayFieldBlocks.some(function (item) {
+          if (!item.color.some( itemFind => itemFind != 0) ) {
+            item.color = this._currentColor;
+            this._columnsState = this._enumColumnsState.checkThree;
+            this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 100);
+            this._speedColorSelectIndex = this._speedColorSelect;
+            return true;
+          }
+        }.bind(this))
+
+        break;
+
+      case this._enumColumnsState.checkThree:
+        if (this._timeoutDelay == null) {
+
+          let forRemoval = [];
+          let currentPlayFieldBlocksPixels = BlockPixel.convertBlock(currentPlayFieldBlocks);
+
+          this._threeInARow(2, 0, 0, currentPlayFieldBlocksPixels, forRemoval);
+          this._threeInARow(0, 1, 0, currentPlayFieldBlocksPixels, forRemoval);
+          this._threeInARow(0, 0, 2, currentPlayFieldBlocksPixels, forRemoval);
+          this._threeInARow(0, 1, 2, currentPlayFieldBlocksPixels, forRemoval);
+          this._threeInARow(0, -1, 2, currentPlayFieldBlocksPixels, forRemoval);
+          this._threeInARow(2, 0, 2, currentPlayFieldBlocksPixels, forRemoval);
+          this._threeInARow(-2, 0, 2, currentPlayFieldBlocksPixels, forRemoval);
+          this._threeInARow(2, 1, 0, currentPlayFieldBlocksPixels, forRemoval);
+          this._threeInARow(-2, 1, 0, currentPlayFieldBlocksPixels, forRemoval);
+          this._threeInARow(2, 1, 2, currentPlayFieldBlocksPixels, forRemoval);
+          this._threeInARow(2, -1, 2, currentPlayFieldBlocksPixels, forRemoval);
+          this._threeInARow(-2, 1, 2, currentPlayFieldBlocksPixels, forRemoval);
+          this._threeInARow(-2, -1, 2, currentPlayFieldBlocksPixels, forRemoval);
+
+          this._score += forRemoval.length;
+
+          BlockPixel.setBlockColor({ block: forRemoval, color: 0, blink: false, colorComplete: false });
+
+          if (this._score >= this._levelScoreProgression[this._columnsCurrentLevel]) {         
+            sound.win();
+            this._columnsCurrentLevel++;
+            this._setLevel({ level: this._columnsCurrentLevel, difficulty: 0 });
+            return;
+          } else if(forRemoval.length > 0) {            
+            sound.correct((this._score - this._levelScoreProgression[this._columnsCurrentLevel - 1]) / (this._levelScoreProgression[this._columnsCurrentLevel] - this._levelScoreProgression[this._columnsCurrentLevel - 1]));
+          }
+
+
+          this._columnsState = this._enumColumnsState.colorDown;
+          this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 100);
+          this._speedColorSelectIndex = this._speedColorSelect;
+        }
+
+        break;
+
+      case this._enumColumnsState.colorDown:
+
+      if (this._timeoutDelay == null) {
+
+        let blockDropped = false;
+        let curretBlocksPixels = BlockPixel.convertBlock(currentPlayFieldBlocks);
+        this._playfield.forEach(function (item) {
+
+
+          
+          let set = BlockPillar.calcSet({ left: curretBlocksPixels, right: item, careColor: false, careRotation: false });
+          if (set.intersectionLeft.length > 1) {
+
+            let bottomBlock = [set.intersectionLeft[0]];
+            set.intersectionLeft.forEach(function (itemPillar) {
+              if (itemPillar.y < bottomBlock[0].y) {
+                bottomBlock = [itemPillar];
+              }else if (itemPillar.y == bottomBlock[0].y){
+                bottomBlock.push(itemPillar);
+              }
+            });
+
+            while (true) {
+              let topBlock = null;
+              set.intersectionLeft.forEach(function (itemPillar) {
+
+                if (itemPillar.y > bottomBlock[0].y) {
+                  if (topBlock == null) {
+                    topBlock = [itemPillar];
+                  } else if (itemPillar.y < topBlock[0].y) {
+                    topBlock = [itemPillar];
+                  }else if (itemPillar.y == topBlock[0].y) {
+                    topBlock.push( itemPillar);
+                  }
+                }
+
+              });
+              if (topBlock == null) {
+                return;
+              }
+
+              if (bottomBlock[0].color[0] == 0) {
+                if (topBlock[0].color[0] != 0) {
+                  blockDropped = true;
+                }
+                BlockPixel.setBlockColor({ block: bottomBlock, color: topBlock[0].color[0], blink: false, colorComplete: false });
+                BlockPixel.setBlockColor({ block: topBlock, color: 0, blink: false, colorComplete: false });
+              }
+              bottomBlock = topBlock;
+            }
+          }
+        });
+        if (blockDropped) {
+          this._columnsState = this._enumColumnsState.checkThree;
+        } else {
+          this._columnsState = this._enumColumnsState.displayColor;
+        }
+        this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 100);
+        this._speedColorSelectIndex = this._speedColorSelect;
+      }
+      
+        break;
+    }
+    this._playFieldBlocks = [];
+    currentPlayFieldBlocks.forEach(function (item) {
+      if (item.color.some(itemFind => itemFind != 0)) {
+        this._playFieldBlocks.push(item);
+      }
+    }.bind(this));
+
+    return;
 
   }
-
-
 
 }
