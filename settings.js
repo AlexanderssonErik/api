@@ -65,14 +65,11 @@ let settings = {
 
         startButton.addChild(new GuiButtonImg("./icon/games/guidedBuild.svg", function () { new GuidedBuild() }), guiOptions.childRight);
         startButton.addChild(new GuiButtonImg("./icon/games/freeBuild.svg", function () { new FreeBuild() }), guiOptions.childRight)
-
-
+        
         button = new GuiButtonImg("./icon/games/categoryProjection.svg");
         startButton.addChild(button, guiOptions.childBottom)
         button.addChild(new GuiButtonImg("./icon/games/tangram.svg", function () { new Tangram() }), guiOptions.childRight);
         button.addChild(new GuiButtonImg("./icon/games/tangram2D.svg", function () { new Tangram2D() }), guiOptions.childRight);
-
-
 
         button = new GuiButtonImg("./icon/games/categoryMath.svg");
         startButton.addChild(button, guiOptions.childBottom)
@@ -83,13 +80,14 @@ let settings = {
         button.addChild(new GuiButtonImg("./icon/games/shapeHunter.svg", function () { new ShapeHunter() }), guiOptions.childRight);
         button.addChild(new GuiButtonImg("./icon/games/memory.svg", function () { new Memo() }), guiOptions.childRight);
         button.addChild(new GuiButtonImg("./icon/games/colorMatch.svg", function () { new ColorMatch() }), guiOptions.childRight);
+        button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { new MasterMind() }), guiOptions.childRight);
 
 
         button = new GuiButtonImg("./icon/games/categoryStackGames.svg");
         startButton.addChild(button, guiOptions.childBottom)
         button.addChild(new GuiButtonImg("./icon/games/whack.svg", function () { new Whack() }), guiOptions.childRight);
-        /*    button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { new MasterMind() }), guiOptions.childRight);*/
-            button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { new Columns() }), guiOptions.childRight);
+
+        button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { new Columns() }), guiOptions.childRight);
 
 
 
@@ -104,11 +102,15 @@ let settings = {
                 this._helpCloseButton.setNotVisible();
             }
         }.bind(this));
-        startButton.setVisible(0, -1, guiOptions.right, guiOptions.bottom);
-        startButton.addChild(new GuiButtonImg("./icon/games/guidedBuild.svg", function () { this.help("https://www.youtube.com/embed/DKaHmufR4Bk") }.bind(this)), guiOptions.childLeft);
-        startButton.addChild(new GuiButtonImg("./icon/games/freeBuild.svg", function () { this.help("https://www.youtube.com/embed/QC_pxsuDvm4") }.bind(this)), guiOptions.childLeft);
-        startButton.addChild(new GuiButtonImg("./icon/settings/compass.svg", function () { this.help("https://www.youtube.com/embed/wG9-cGm1N08") }.bind(this)), guiOptions.childLeft);
+        startButton.setVisible(0, -1, guiOptions.right, guiOptions.bottom);     
         startButton.addChild(new GuiButtonImg("./icon/level/lvl1Diy.svg", function () { this.help("https://www.youtube.com/embed/2Jn9MmeOorY") }.bind(this)), guiOptions.childLeft);
+        startButton.addChild(new GuiButtonImg("./icon/settings/compass.svg", function () { this.help("https://www.youtube.com/embed/wG9-cGm1N08") }.bind(this)), guiOptions.childLeft);
+        startButton.addChild(new GuiButtonImg("./icon/ble/bluetooth.svg", function () { this.help("https://www.youtube.com/embed/Ni5b-7ulv2o") }.bind(this)), guiOptions.childLeft);
+
+        button = new GuiButtonImg("./icon/games/start.svg");
+        startButton.addChild(button, guiOptions.childTop)
+        button.addChild(new GuiButtonImg("./icon/games/guidedBuild.svg", function () { this.help("https://www.youtube.com/embed/DKaHmufR4Bk") }.bind(this)), guiOptions.childLeft);
+        button.addChild(new GuiButtonImg("./icon/games/freeBuild.svg", function () { this.help("https://www.youtube.com/embed/QC_pxsuDvm4") }.bind(this)), guiOptions.childLeft);   
 
         button = new GuiButtonImg("./icon/games/categoryProjection.svg");
         startButton.addChild(button, guiOptions.childTop)
@@ -119,17 +121,16 @@ let settings = {
         startButton.addChild(button, guiOptions.childTop)
         button.addChild(new GuiButtonImg("./icon/games/algebra.svg", function () { this.help("https://www.youtube.com/embed/gr-0V6hi6H4") }.bind(this)), guiOptions.childLeft);
 
-        /*button = new GuiButtonImg("./icon/games/categoryMemory.svg");
+        button = new GuiButtonImg("./icon/games/categoryMemory.svg");
         startButton.addChild(button, guiOptions.childTop)
-        button.addChild(new GuiButtonImg("./icon/games/shapeHunter.svg", function () { this.help("https://www.youtube.com/embed/") }.bind(this)), guiOptions.childLeft);*/
-        // button.addChild(new GuiButtonImg("./icon/games/memory.svg", function () { this.help("https://www.youtube.com/embed/")}.bind(this)), guiOptions.childLeft);
-        //  button.addChild(new GuiButtonImg("./icon/games/colorMatch.svg", function () {this.help("https://www.youtube.com/embed/") }.bind(this)), guiOptions.childLeft);
+        button.addChild(new GuiButtonImg("./icon/games/shapeHunter.svg", function () { this.help("https://www.youtube.com/embed/Ugq0ZZ2NI0Y") }.bind(this)), guiOptions.childLeft);
+        button.addChild(new GuiButtonImg("./icon/games/memory.svg", function () { this.help("https://www.youtube.com/embed/MV5AfA9PLyw")}.bind(this)), guiOptions.childLeft);
+        button.addChild(new GuiButtonImg("./icon/games/colorMatch.svg", function () {this.help("https://www.youtube.com/embed/yCwmG7zVtJA") }.bind(this)), guiOptions.childLeft);
 
-
-        //   button = new GuiButtonImg("./icon/games/categoryStackGames.svg");
-        //  startButton.addChild(button, guiOptions.childTop)
-        //  button.addChild(new GuiButtonImg("./icon/games/whack.svg", function () { this.help("https://www.youtube.com/embed/") }.bind(this)), guiOptions.childLeft);
-
+        button = new GuiButtonImg("./icon/games/categoryStackGames.svg");
+        startButton.addChild(button, guiOptions.childTop)
+        button.addChild(new GuiButtonImg("./icon/games/whack.svg", function () { this.help("https://www.youtube.com/embed/HbCW-IeRxhI") }.bind(this)), guiOptions.childLeft);
+        button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { this.help("https://www.youtube.com/embed/JUmKSpZL1qE") }.bind(this)), guiOptions.childLeft);
 
         this._helpVideo = null;
         this._helpCloseButton = new GuiButtonImg("./icon/games/ok.svg", function () {
@@ -159,7 +160,7 @@ let settings = {
 
     exportSTL: function () {
         let meshWorldBlock = [];
-       world.block.forEach(item =>  meshWorldBlock.push(this.createSTLMesh(item)));
+        world.block.forEach(item => meshWorldBlock.push(this.createSTLMesh(item)));
         if (meshWorldBlock.length == 0) {
             return
         }
@@ -169,11 +170,11 @@ let settings = {
         new BABYLON.STLExport.CreateSTL([mergedMeshes]);
     },
 
-    createSTLMesh: function (block){
+    createSTLMesh: function (block) {
         let mesh;
-        if(block instanceof Block2x2){
+        if (block instanceof Block2x2) {
             mesh = this._meshStl2x2.clone();
-        }else{
+        } else {
             mesh = this._meshStl2x4.clone();
         }
 

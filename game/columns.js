@@ -46,8 +46,6 @@ class Columns extends Game {
 
     super._setLevel({ level: level, difficulty: difficulty });
 
-     colorWheel.colorComplete();
-
     this._playFieldBlocks = [];
     this._columnsState = this._enumColumnsState.displayColor;
     this._currentColor = 0;

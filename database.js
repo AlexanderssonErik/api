@@ -23,34 +23,60 @@ let database = {
 
     _showGui: function(){
         if(this._signInGoogleButton == null){
-            this._emailInput = new GuiInput("not using Google/top button: email");
+            this._emailInput = new GuiInput("email");
             this._passwordInput  = new GuiInput("password");
             this._signInGoogleButton = new GuiButtonImg("./icon/signIn/googleGSignIn.svg", this._signInGoolge);
+            this._mailSignInMenu = new GuiButtonImg("./icon/signIn/googleSignIn.svg", this._signInMailMenu.bind(this));
             this._createSignInMailButton = new GuiButtonImg("./icon/signIn/createAccount.svg", this._createSignInMail);
             this._signInMailButton = new GuiButtonImg("./icon/signIn/signIn1.svg", this._signInMail);
         }
+         this._signInGoogleButton.setVisible(0,-1 , guiOptions.center, guiOptions.center);
+        this._mailSignInMenu.setVisible(0,1 , guiOptions.center, guiOptions.center);   
+      },
+
+      _signInMailMenu: function (){
+        if(this._signInGoogleButton != null){
+          this._signInGoogleButton.setNotVisible();          
+          this._signInGoogleButton = null;
+        }
+        if(this._mailSignInMenu != null){
+          this._mailSignInMenu.setNotVisible();          
+          this._mailSignInMenu = null;
+        }
         this._emailInput.setVisible(0,1 , guiOptions.center, guiOptions.center);
         this._passwordInput.setVisible(0,2 , guiOptions.center, guiOptions.center);
-        this._signInGoogleButton.setVisible(0,-1 , guiOptions.center, guiOptions.center);
         this._createSignInMailButton.setVisible(-1,0 , guiOptions.center, guiOptions.center);
         this._signInMailButton.setVisible(1,0 , guiOptions.center, guiOptions.center);
-    
+
       },
 
       _hideGui: function(){
         if(this._signInGoogleButton != null){
-         
-            this._emailInput.setNotVisible();
-            this._passwordInput.setNotVisible();
-            this._signInGoogleButton.setNotVisible();
-            this._createSignInMailButton.setNotVisible();
-            this._signInMailButton.setNotVisible();
-            this._emailInput = null;
-            this._passwordInput = null;
-            this._signInGoogleButton = null;
-            this._createSignInMailButton = null;
-            this._signInMailButton = null;
+          this._signInGoogleButton.setNotVisible();          
+          this._signInGoogleButton = null;
         }
+        if(this._mailSignInMenu != null){
+          this._mailSignInMenu.setNotVisible();          
+          this._mailSignInMenu = null;
+        }
+        if(this._emailInput != null){
+          this._emailInput.setNotVisible();          
+          this._emailInput = null;
+        }
+        if(this._passwordInput != null){
+          this._passwordInput.setNotVisible();          
+          this._passwordInput = null;
+        }
+
+        if(this._createSignInMailButton != null){
+          this._createSignInMailButton.setNotVisible();          
+          this._createSignInMailButton = null;
+        }
+        if(this._signInMailButton != null){
+          this._signInMailButton.setNotVisible();          
+          this._signInMailButton = null;
+        }
+
       },
 
     init: function ({enabled = false}) {
@@ -109,7 +135,7 @@ let database = {
      
        _signInGoolge: function () {
          let provider = new firebase.auth.GoogleAuthProvider();
-         alert("please allow popup. OBS: Google login doesn't work with iOS app WebBLE ")
+         alert("Please allow pop-ups! OBS: Google login doesn't work with iOS app WebBLE")
          firebase.auth().signInWithPopup(provider).then(function (result) {
          }).catch(function (error) {
            alert("Google login: " + error.message);
