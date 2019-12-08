@@ -630,7 +630,11 @@ class BlockShadow extends Block {
     }
     constructor({ x = null, y = null, z = null, color = [null], block = null }) { // color = [null]?
         super({ x: x, y: y, z: z, color: color });
-        this.block = [block];
+        if(block == null){ //20191120
+            this.block = [];
+        }else{
+            this.block = [block];
+        }
     }
 
 
@@ -923,6 +927,7 @@ class BlockShadowTop extends BlockShadow {
         return super._calcColor({ max: max, min: min, retColor: retColor, careColor: careColor, careGap: careGap });
     }
 }
+
 
 class BlockNumber extends Block {
     constructor({ x = null, y = null, z = null, color = [0, 0, 0] }) { // color = [null]?

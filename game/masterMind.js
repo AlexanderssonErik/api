@@ -56,7 +56,7 @@ class MasterMind extends Game {
   reset() {
     super.reset();
 
-    this._masterMindCurrentLevel = 0;
+    this._masterMindCurrentLevel = 1;
     this._score = 0
 
   }

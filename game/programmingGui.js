@@ -1,0 +1,2217 @@
+
+//hide all on close
+
+//shape - 
+//save button
+
+//procedure max count
+
+
+//comLabel only available
+
+class ProgrammingGui {
+  constructor(program) {
+
+    this._progColor = {
+      na: 'rgba(96, 96, 96, 0.8)',
+
+      bool: 'rgba(96, 200, 96, 0.8)',
+      int: 'rgba(96, 96, 200, 0.8)',
+      avatard: 'rgba(200, 96, 96, 0.8)',
+      shape: 'rgba(200, 96, 200, 0.8)',
+      label: 'rgba(96, 200, 200, 0.8)',
+
+      procedure: 'rgba(200, 200, 200, 0.8)',
+      world: 'rgba(200, 200, 200, 0.8)',
+
+
+      black: 'rgba(0, 0, 0, 0.8)',
+      red: 'rgba(255, 0, 0, 0.8)',
+      green: 'rgba(0, 255, 0, 0.8)',
+      blue: 'rgba(0, 0, 255, 0.8)',
+
+      game: 'rgba(0, 255, 0, 0.8)',
+      sleep: 'rgba(0, 0, 255, 0.8)',
+
+      jump: 'rgba(0, 0, 255, 0.8)',
+      call: 'rgba(0, 0, 255, 0.8)',
+      return: 'rgba(0, 0, 255, 0.8)',
+
+      if: 'rgba(0, 0, 255, 0.8)',
+
+      addDel: 'rgba(30, 30, 30, 0.8)',
+
+
+    }
+
+    this._program = program;
+
+
+    // #######################################################
+    //Registers ----------------------------------------------
+    // #######################################################
+
+    //BOOL
+    this._activeBoolReg = 0;
+    this._boolRegIndex = 0;
+    this._boolRegMinus = new GuiButtonTxt("-", function () { if (this._boolRegIndex > 0) { this._boolRegIndex-- }; this._updateReg() }.bind(this));
+    this._boolRegSetMenu = [new GuiButtonTxt("true", function () { this._setBoolReg(true) }.bind(this)), new GuiButtonTxt("false", function () { this._setBoolReg(false) }.bind(this))];
+    this._boolRegSetMenu.forEach(item => item.color = this._progColor.bool)
+    this._boolReg = [new GuiButtonTxt("B0", null, null, function () { this._setActveBoolReg(this._boolRegIndex) }.bind(this)), new GuiButtonTxt("B1", null, null, function () { this._setActveBoolReg(this._boolRegIndex + 1) }.bind(this)), new GuiButtonTxt("B2", null, null, function () { this._setActveBoolReg(this._boolRegIndex + 2) }.bind(this))];
+    this._boolReg.forEach(item => this._boolRegSetMenu.forEach(menu => item.addChild(menu, guiOptions.childTop)));
+    this._boolRegPlus = new GuiButtonTxt("+", function () { if (this._boolRegIndex < 97) { this._boolRegIndex++ }; this._updateReg() }.bind(this));
+
+    this._boolRegLine = [new GuiButtonTxt("B0", function () { this._lineBoolReg(this._boolRegIndex) }.bind(this)), new GuiButtonTxt("B1", function () { this._lineBoolReg(this._boolRegIndex + 1) }.bind(this)), new GuiButtonTxt("B2", function () { this._lineBoolReg(this._boolRegIndex + 2) }.bind(this))];
+    this._boolRegLine.forEach(item => item.color = this._progColor.bool);
+
+    //INT
+    this._activeIntReg = 0;
+    this._intRegIndex = 0;
+    this._intRegMinus = new GuiButtonTxt("-", function () { if (this._intRegIndex > 0) { this._intRegIndex-- }; this._updateReg() }.bind(this));
+    this._intRegSetMenu = [new GuiButtonTxt("0", function () { this._setIntReg(0) }.bind(this)), new GuiButtonTxt("1", function () { this._setIntReg(1) }.bind(this)), new GuiButtonTxt("2", function () { this._setIntReg(2) }.bind(this)), new GuiButtonTxt("3", function () { this._setIntReg(3) }.bind(this)), new GuiButtonTxt("4", function () { this._setIntReg(4) }.bind(this)), new GuiButtonTxt("5", function () { this._setIntReg(5) }.bind(this)), new GuiButtonTxt("6", function () { this._setIntReg(6) }.bind(this)), new GuiButtonTxt("7", function () { this._setIntReg(7) }.bind(this)), new GuiButtonTxt("8", function () { this._setIntReg(8) }.bind(this)), new GuiButtonTxt("9", function () { this._setIntReg(9) }.bind(this))];
+    this._intRegSetMenu.forEach(item => item.color = this._progColor.int)
+    this._intRegSetMenu[0].addChild(this._intRegSetMenu[1], guiOptions.childRight);
+    this._intRegSetMenu[0].addChild(this._intRegSetMenu[2], guiOptions.childRight);
+    this._intRegSetMenu[0].addChild(this._intRegSetMenu[3], guiOptions.childRight);
+    this._intRegSetMenu[0].addChild(this._intRegSetMenu[4], guiOptions.childRight);
+    this._intRegSetMenu[5].addChild(this._intRegSetMenu[6], guiOptions.childRight);
+    this._intRegSetMenu[5].addChild(this._intRegSetMenu[7], guiOptions.childRight);
+    this._intRegSetMenu[5].addChild(this._intRegSetMenu[8], guiOptions.childRight);
+    this._intRegSetMenu[5].addChild(this._intRegSetMenu[9], guiOptions.childRight);
+    this._intReg = [new GuiButtonTxt("I0", null, null, function () { this._setActveIntReg(this._intRegIndex) }.bind(this)), new GuiButtonTxt("I1", null, null, function () { this._setActveIntReg(this._intRegIndex + 1) }.bind(this)), new GuiButtonTxt("I2", null, null, function () { this._setActveIntReg(this._intRegIndex + 2) }.bind(this))];
+    this._intReg.forEach(item => item.addChild(this._intRegSetMenu[0], guiOptions.childTop));// this._intRegSetMenu.forEach(menu => item.addChild(menu, guiOptions.childTop)));
+    this._intReg.forEach(item => item.addChild(this._intRegSetMenu[5], guiOptions.childTop));
+    this._intRegPlus = new GuiButtonTxt("+", function () { if (this._intRegIndex < 97) { this._intRegIndex++ }; this._updateReg() }.bind(this));
+
+    this._intRegLine = [new GuiButtonTxt("I0", function () { this._lineIntReg(this._intRegIndex) }.bind(this)), new GuiButtonTxt("I1", function () { this._lineIntReg(this._intRegIndex + 1) }.bind(this)), new GuiButtonTxt("I2", function () { this._lineIntReg(this._intRegIndex + 2) }.bind(this))];
+    this._intRegLine.forEach(item => item.color = this._progColor.int);
+
+
+    //Label
+    this._activeLabelReg = 0;
+    this._labelRegIndex = 0;
+    this._labelRegMinus = new GuiButtonTxt("-", function () { if (this._labelRegIndex > 0) { this._labelRegIndex-- }; this._updateReg() }.bind(this));
+    this._labelRegSetMenu = [new GuiButtonTxt("view", function () { this._viewLabelReg() }.bind(this))];
+    this._labelRegSetMenu.forEach(item => item.color = this._progColor.label)
+    this._labelReg = [new GuiButtonTxt("L0", null, null, function () { this._setActveLabelReg(this._labelRegIndex) }.bind(this)), new GuiButtonTxt("L1", null, null, function () { this._setActveLabelReg(this._labelRegIndex + 1) }.bind(this)), new GuiButtonTxt("L2", null, null, function () { this._setActveLabelReg(this._labelRegIndex + 2) }.bind(this))];
+    this._labelReg.forEach(item => this._labelRegSetMenu.forEach(menu => item.addChild(menu, guiOptions.childTop)));
+    this._labelRegPlus = new GuiButtonTxt("+", function () { if (this._labelRegIndex < 97) { this._labelRegIndex++ }; this._updateReg() }.bind(this));
+
+    this._labelRegLine = [new GuiButtonTxt("L0", function () { this._lineLabelReg(this._labelRegIndex) }.bind(this)), new GuiButtonTxt("L1", function () { this._lineLabelReg(this._labelRegIndex + 1) }.bind(this)), new GuiButtonTxt("L2", function () { this._lineLabelReg(this._labelRegIndex + 2) }.bind(this))];
+    this._labelRegLine.forEach(item => item.color = this._progColor.label);
+
+    //Shape
+    this._activeShapeReg = 0;
+    this._shapeRegIndex = 0;
+    this._shapeRegMinus = new GuiButtonTxt("-", function () { if (this._shapeRegIndex > 0) { this._shapeRegIndex-- }; this._updateReg() }.bind(this));
+    this._shapeRegSetMenu = [new GuiButtonTxt("view", function () { this._viewShapeReg(true) }.bind(this)), new GuiButtonTxt("set", function () { this._setShapeReg() }.bind(this))];
+    this._shapeRegSetMenu.forEach(item => item.color = this._progColor.shape)
+    this._shapeReg = [new GuiButtonTxt("S0", null, null, function () { this._setActveShapeReg(this._shapeRegIndex) }.bind(this)), new GuiButtonTxt("S1", null, null, function () { this._setActveShapeReg(this._shapeRegIndex + 1) }.bind(this)), new GuiButtonTxt("S2", null, null, function () { this._setActveShapeReg(this._shapeRegIndex + 2) }.bind(this))];
+    this._shapeReg.forEach(item => this._shapeRegSetMenu.forEach(menu => item.addChild(menu, guiOptions.childTop)));
+    this._shapeRegPlus = new GuiButtonTxt("+", function () { if (this._shapeRegIndex < 97) { this._shapeRegIndex++ }; this._updateReg() }.bind(this));
+
+    this._shapeRegLine = [new GuiButtonTxt("S0", function () { this._lineShapeReg(this._shapeRegIndex) }.bind(this)), new GuiButtonTxt("S1", function () { this._lineShapeReg(this._shapeRegIndex + 1) }.bind(this)), new GuiButtonTxt("S2", function () { this._lineShapeReg(this._shapeRegIndex + 2) }.bind(this))];
+    this._shapeRegLine.forEach(item => item.color = this._progColor.shape);
+
+
+    //Avatard
+    this._activeAvatardReg = 0;
+    this._avatardRegIndex = 0;
+    this._avatardRegMinus = new GuiButtonTxt("-", function () { if (this._avatardRegIndex > 0) { this._avatardRegIndex-- }; this._updateReg() }.bind(this));
+    this._avatardRegSetMenu = [new GuiButtonTxt("view", function () { this._viewAvatardReg(true) }.bind(this)), new GuiButtonTxt("set", function () { this._setAvatardReg() }.bind(this))];
+    this._avatardRegSetMenu.forEach(item => item.color = this._progColor.avatard)
+    this._avatardReg = [new GuiButtonTxt("A0", null, null, function () { this._setActveAvatardReg(this._avatardRegIndex) }.bind(this)), new GuiButtonTxt("A1", null, null, function () { this._setActveAvatardReg(this._avatardRegIndex + 1) }.bind(this)), new GuiButtonTxt("A2", null, null, function () { this._setActveAvatardReg(this._avatardRegIndex + 2) }.bind(this))];
+    this._avatardReg.forEach(item => this._avatardRegSetMenu.forEach(menu => item.addChild(menu, guiOptions.childTop)));
+    this._avatardRegPlus = new GuiButtonTxt("+", function () { if (this._avatardRegIndex < 97) { this._avatardRegIndex++ }; this._updateReg() }.bind(this));
+
+    this._avatardRegLine = [new GuiButtonTxt("A0", function () { this._lineAvatardReg(this._avatardRegIndex) }.bind(this)), new GuiButtonTxt("A1", function () { this._lineAvatardReg(this._avatardRegIndex + 1) }.bind(this)), new GuiButtonTxt("A2", function () { this._lineAvatardReg(this._avatardRegIndex + 2) }.bind(this))];
+    this._avatardRegLine.forEach(item => item.color = this._progColor.avatard);
+
+    // #######################################################
+    //Program ----------------------------------------------
+    // #######################################################
+
+
+    this._programPlay = new GuiButtonTxt("Play", function () { this._play() }.bind(this));
+    this._programStep = new GuiButtonTxt("Step", function () { this._step() }.bind(this));
+    this._programReset = new GuiButtonTxt("Reset", function () { this._reset() }.bind(this));
+
+
+    this._activeProcedure = 0;
+
+    this._procedureIndex = 0;
+    this._procedureMinus = new GuiButtonTxt("-", function () { if (this._procedureIndex > 0) { this._procedureIndex-- }; this._updateReg() }.bind(this));
+    this._procedure = [new GuiButtonTxt("P0", function () { this._setActveProcedure(this._procedureIndex) }.bind(this)), new GuiButtonTxt("P1", function () { this._setActveProcedure(this._procedureIndex + 1) }.bind(this)), new GuiButtonTxt("P2", function () { this._setActveProcedure(this._procedureIndex + 2) }.bind(this))];
+    this._procedurePlus = new GuiButtonTxt("+", function () { if (this._procedureIndex < 97) { this._procedureIndex++ }; this._updateReg() }.bind(this));
+    this._procedureLine = [new GuiButtonTxt("P0", function () { this._lineProcedure(this._procedureIndex) }.bind(this)), new GuiButtonTxt("P1", function () { this._lineProcedure(this._procedureIndex + 1) }.bind(this)), new GuiButtonTxt("P2", function () { this._lineProcedure(this._procedureIndex + 2) }.bind(this))];
+    this._procedureLine.forEach(item => item.color = this._progColor.procedure);
+
+
+
+    this._activeColumn = 0;
+    this._activeLine = 0;
+    this._lineIndex = 0;
+    this._lineMinus = new GuiButtonTxt("-", function () { if (this._lineIndex > 0) { this._lineIndex -= 18 }; this._updateLine() }.bind(this));
+    this._linePlus = new GuiButtonTxt("+", function () { if (this._lineIndex < 97) { this._lineIndex += 18 }; this._updateLine() }.bind(this));
+
+    this._lineMenuBISA = [new GuiButtonTxt("B"), new GuiButtonTxt("I"), new GuiButtonTxt("S"), new GuiButtonTxt("A")];
+    this._lineMenuBISA[0].color = this._progColor.bool;
+    this._lineMenuBISA[1].color = this._progColor.int;
+    this._lineMenuBISA[2].color = this._progColor.shape;
+    this._lineMenuBISA[3].color = this._progColor.avatard;
+    this._boolRegLine.forEach(item => this._lineMenuBISA[0].addChild(item, guiOptions.childRight));
+    this._intRegLine.forEach(item => this._lineMenuBISA[1].addChild(item, guiOptions.childRight));
+    this._shapeRegLine.forEach(item => this._lineMenuBISA[2].addChild(item, guiOptions.childRight));
+    this._avatardRegLine.forEach(item => this._lineMenuBISA[3].addChild(item, guiOptions.childRight));
+
+    this._lineMenuGameSleep = [new GuiButtonTxt("World", function () { this._lineWorld() }.bind(this)), new GuiButtonTxt("Game", function () { this._lineGame() }.bind(this)), new GuiButtonTxt("Sleep", function () { this._lineSleep() }.bind(this))]
+    this._lineMenuGameSleep[0].color = this._progColor.world;
+    this._lineMenuGameSleep[1].color = this._progColor.game;
+    this._lineMenuGameSleep[2].color = this._progColor.sleep;
+
+    this._lineMenuGameSleep[0].addChild(this._lineMenuGameSleep[1], guiOptions.childBottom)
+
+
+    this._lineMenuJumpReturn = [new GuiButtonTxt("Jump", function () { this._lineJump() }.bind(this)), new GuiButtonTxt("Call", function () { this._lineCall() }.bind(this)), new GuiButtonTxt("Ret", function () { this._lineReturn() }.bind(this))]
+    this._lineMenuJumpReturn[0].color = this._progColor.jump;
+    this._lineMenuJumpReturn[1].color = this._progColor.call;
+    this._lineMenuJumpReturn[2].color = this._progColor.return;
+
+    this._lineMenuJumpReturn[0].addChild(this._lineMenuJumpReturn[1], guiOptions.childBottom);
+    this._lineMenuJumpReturn[0].addChild(this._lineMenuJumpReturn[2], guiOptions.childBottom);
+
+
+
+    this._lineMenuJumpReturn2 = [new GuiButtonTxt("Jump", function () { this._lineEqNotEq(this._program.opType.jump) }.bind(this)), new GuiButtonTxt("Call", function () { this._lineEqNotEq(this._program.opType.call) }.bind(this)), new GuiButtonTxt("Ret", function () { this._lineEqNotEq(this._program.opType.return) }.bind(this))]
+    this._lineMenuJumpReturn2[0].color = this._progColor.jump;
+    this._lineMenuJumpReturn2[1].color = this._progColor.call;
+    this._lineMenuJumpReturn2[2].color = this._progColor.return;
+
+
+
+    this._lineMenuAddDel = [new GuiButtonTxt("Add", function () { this._lineAdd() }.bind(this)), new GuiButtonTxt("", function () { this._lineEmpty(this._program.opType.call) }.bind(this)), new GuiButtonTxt("Del", function () { this._lineDel() }.bind(this))]
+    this._lineMenuAddDel[0].color = this._progColor.addDel;
+    this._lineMenuAddDel[1].color = this._progColor.addDel;
+    this._lineMenuAddDel[2].color = this._progColor.addDel;
+
+    this._lineMenuAddDel[0].addChild(this._lineMenuAddDel[1], guiOptions.childLeft);
+    this._lineMenuAddDel[0].addChild(this._lineMenuAddDel[2], guiOptions.childRight);
+
+
+    this._lineMenuIfLabel = [new GuiButtonTxt("If", function () { this._lineIf() }.bind(this)), new GuiButtonTxt("Label", function () { this._lineLabel() }.bind(this))]
+    this._lineMenuIfLabel[0].color = this._progColor.if;
+    this._lineMenuIfLabel[1].color = this._progColor.label;
+
+
+    this._line = [];
+    for (let row = 0; row < 18; row++) {
+      this._line[row] = { col: [] }
+      for (let col = 0; col < 4; col++) {
+        this._line[row].col.push(new GuiButtonTxt("", null, null, function () { this._setActveLine(this._lineIndex + row, col) }.bind(this)));
+
+      }
+      this._line[row].col[0].txt = row
+
+      this._line[row].col[0].addChild(this._lineMenuJumpReturn[0], guiOptions.childRight);
+      this._lineMenuIfLabel.forEach(item => this._line[row].col[0].addChild(item, guiOptions.childRight));
+
+      this._line[row].col[0].addChild(this._lineMenuAddDel[0], guiOptions.childTop);
+      this._line[row].col[0].addChild(this._lineMenuGameSleep[0], guiOptions.childLeft);
+      this._line[row].col[0].addChild(this._lineMenuGameSleep[2], guiOptions.childLeft);
+      this._lineMenuBISA.forEach(item => this._line[row].col[0].addChild(item, guiOptions.childBottom));
+
+    }
+
+    this._lineVisible = [];
+    for (let row = 0; row < 18; row++) {
+      this._lineVisible[row] = { col: [] }
+      this._lineVisible[row].col[0] = true;
+      this._lineVisible[row].col[1] = false;
+      this._lineVisible[row].col[2] = false;
+      this._lineVisible[row].col[3] = false;
+    }
+
+
+    this._lineMenuEqNotEq = [new GuiButtonTxt("==", function () { this._lineEqNotEq(this._program.opType.equal) }.bind(this)), new GuiButtonTxt("!=", function () { this._lineEqNotEq(this._program.opType.notEqual) }.bind(this))];
+    this._lineMenuEqNotEq[0].color = this._progColor.bool;
+    this._lineMenuEqNotEq[1].color = this._progColor.bool;
+
+    this._lineMenuEqSmaller = [];
+    this._lineMenuEqSmaller[0] = this._lineMenuEqNotEq[0];
+    this._lineMenuEqSmaller[1] = this._lineMenuEqNotEq[1];
+    this._lineMenuEqSmaller.push(new GuiButtonTxt(">", function () { this._lineEqNotEq(this._program.opType.greater) }.bind(this)));
+    this._lineMenuEqSmaller.push(new GuiButtonTxt("<", function () { this._lineEqNotEq(this._program.opType.smaller) }.bind(this)));
+    this._lineMenuEqSmaller[2].color = this._progColor.bool;
+    this._lineMenuEqSmaller[3].color = this._progColor.bool;
+
+    this._lineMenuBlockCan = [new GuiButtonTxt("Block", function () { this._lineEqNotEq(this._program.opType.block) }.bind(this)), new GuiButtonTxt("Can", function () { this._lineEqNotEq(this._program.opType.can) }.bind(this))];
+    this._lineMenuBlockCan[0].color = this._progColor.avatard;
+    this._lineMenuBlockCan[1].color = this._progColor.avatard;
+
+    this._lineMenuForwardDown = [new GuiButtonTxt("Forw", function () { this._lineEqNotEq(this._program.opType.forward) }.bind(this)), new GuiButtonTxt("Up", function () { this._lineEqNotEq(this._program.opType.up) }.bind(this)), new GuiButtonTxt("Down", function () { this._lineEqNotEq(this._program.opType.down) }.bind(this))];
+    this._lineMenuForwardDown[0].color = this._progColor.avatard;
+    this._lineMenuForwardDown[1].color = this._progColor.avatard;
+    this._lineMenuForwardDown[2].color = this._progColor.avatard;
+
+    this._lineMenuLeftRight = [new GuiButtonTxt("Right", function () { this._lineEqNotEq(this._program.opType.right) }.bind(this)), new GuiButtonTxt("Left", function () { this._lineEqNotEq(this._program.opType.left) }.bind(this))];
+    this._lineMenuLeftRight[0].color = this._progColor.avatard;
+    this._lineMenuLeftRight[1].color = this._progColor.avatard;
+
+    this._lineMenuNumber = [new GuiButtonTxt("0", function () { this._lineNumber(0) }.bind(this)), new GuiButtonTxt("1", function () { this._lineNumber(1) }.bind(this)), new GuiButtonTxt("2", function () { this._lineNumber(2) }.bind(this)), new GuiButtonTxt("3", function () { this._lineNumber(3) }.bind(this)), new GuiButtonTxt("4", function () { this._lineNumber(4) }.bind(this)), new GuiButtonTxt("5", function () { this._lineNumber(5) }.bind(this)), new GuiButtonTxt("6", function () { this._lineNumber(6) }.bind(this)), new GuiButtonTxt("7", function () { this._lineNumber(7) }.bind(this)), new GuiButtonTxt("8", function () { this._lineNumber(8) }.bind(this)), new GuiButtonTxt("9", function () { this._lineNumber(9) }.bind(this))];
+    this._lineMenuNumber.forEach(item => item.color = this._progColor.int)
+    this._lineMenuNumber[0].addChild(this._lineMenuNumber[1], guiOptions.childRight);
+    this._lineMenuNumber[0].addChild(this._lineMenuNumber[2], guiOptions.childRight);
+    this._lineMenuNumber[0].addChild(this._lineMenuNumber[3], guiOptions.childRight);
+    this._lineMenuNumber[0].addChild(this._lineMenuNumber[4], guiOptions.childRight);
+    this._lineMenuNumber[5].addChild(this._lineMenuNumber[6], guiOptions.childRight);
+    this._lineMenuNumber[5].addChild(this._lineMenuNumber[7], guiOptions.childRight);
+    this._lineMenuNumber[5].addChild(this._lineMenuNumber[8], guiOptions.childRight);
+    this._lineMenuNumber[5].addChild(this._lineMenuNumber[9], guiOptions.childRight);
+
+    this._lineMenuPlusMinus = [new GuiButtonTxt("+", function () { this._linePlusMinus(this._program.opType.plus) }.bind(this)), new GuiButtonTxt("-", function () { this._linePlusMinus(this._program.opType.minus) }.bind(this))];
+    this._lineMenuPlusMinus[0].color = this._progColor.int;
+    this._lineMenuPlusMinus[1].color = this._progColor.int;
+
+    this._lineMenuPlusUni = [];
+    this._lineMenuPlusUni[0] = this._lineMenuPlusMinus[0]
+    this._lineMenuPlusUni[1] = this._lineMenuPlusMinus[1]
+    this._lineMenuPlusUni[2] = new GuiButtonTxt("Uni", function () { this._linePlusMinus(this._program.opType.uni) }.bind(this)),
+      this._lineMenuPlusUni[2].color = this._progColor.int;
+
+    this._lineMenuWorld = [new GuiButtonTxt("World", function () { this._lineWorld(this._program.opType.world) }.bind(this))]
+    this._lineMenuWorld[0].color = this._progColor.world;
+
+    this._lineMenuPosRot = [new GuiButtonTxt("==Pos", function () { this._linePosRot(this._program._opType.equalPos) }.bind(this)), new GuiButtonTxt("!=Pos", function () { this._linePosRot(this._program._opType.notEqualPos) }.bind(this)), new GuiButtonTxt("!=Rot", function () { this._linePosRot(this._program._opType.notEqualRot) }.bind(this))]
+    this._lineMenuPosRot[0].color = this._progColor.shape;
+    this._lineMenuPosRot[1].color = this._progColor.shape;
+    this._lineMenuPosRot[2].color = this._progColor.shape;
+    this._lineMenuPosRot[0].addChild(this._lineMenuPosRot[1], guiOptions.childRight);
+    this._lineMenuPosRot[0].addChild(this._lineMenuPosRot[2], guiOptions.childRight);
+
+    this._lineMenuEqualColor = [new GuiButtonTxt("==Col", function () { this._lineEqualColor(this._program._opType.equalCol) }.bind(this)), new GuiButtonTxt("!=Col", function () { this._lineEqualColor(this._program._opType.notEqualCol) }.bind(this))]
+    this._lineMenuEqualColor[0].color = this._progColor.shape;
+    this._lineMenuEqualColor[1].color = this._progColor.shape;
+
+    this._lineMenuColor = [new GuiButtonTxt("Black", function () { this._lineColor(this._program._opType.black) }.bind(this)), new GuiButtonTxt("Red", function () { this._lineColor(this._program._opType.red) }.bind(this)), new GuiButtonTxt("Green", function () { this._lineColor(this._program._opType.green) }.bind(this)), new GuiButtonTxt("Blue", function () { this._lineColor(this._program._opType.blue) }.bind(this))]
+    this._lineMenuColor[0].color = this._progColor.black;
+    this._lineMenuColor[1].color = this._progColor.red;
+    this._lineMenuColor[2].color = this._progColor.green;
+    this._lineMenuColor[3].color = this._progColor.blue;
+
+    this._show();
+
+
+
+
+  }
+
+
+  _play() {
+
+  }
+  _step() {
+
+    this._program.step();
+
+    this._line[this._activeLine].col[0].hideBorder();
+
+    this._activeLine = this._program.activeLine % 18;
+
+    if( this._activeLine  < 0){
+      this._activeLine  = 0;
+    }
+
+    if (this._lineIndex != 18 * Math.floor(this._program.activeLine / 18)) {
+      this._lineIndex = 18 * Math.floor(this._program.activeLine / 18);
+      if(this._lineIndex < 0){
+        this._lineIndex = 0;
+      }
+      this._updateLine();
+    }
+
+    if (this._activeProcedure != this._program.activeProcedure) {
+      this._activeProcedure = this._program.activeProcedure;
+      this._updateLine();
+    }
+
+    this._updateReg();
+    this._line[this._activeLine].col[0].showBorder();
+
+  }
+  _reset() {
+    this._line[this._activeLine].col[0].hideBorder();
+    this._program.reset();
+    // this._updateLine();
+    this._updateReg();
+
+    /*  this._activeProcedure = this._program.activeProcedure;
+      this._activeLine = this._program.activeLine%18;
+  
+      this._lineIndex = 18 * Math.floor(this._program.activeLine / 18);
+  
+      this._updateLine();
+      this._updateReg();*/
+
+
+  }
+
+  _lineEmpty() {
+
+    this._program._procedure[this._activeProcedure].line[this._activeLine] = null;
+    this._updateLine();
+
+  }
+  _lineAdd() {
+    this._program._procedure[this._activeProcedure].line.splice(this._activeLine, 0, null);
+    this._updateLine();
+
+  }
+  _lineDel() {
+    this._program._procedure[this._activeProcedure].line.splice(this._activeLine, 1);
+
+    this._updateLine();
+
+  }
+
+
+  _lineLabel() {
+    switch (this._activeColumn) {
+      case 0:
+
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comLabel({});
+        break;
+
+      /*    case 1:
+            this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: no, leftType: this._program.opType.bool });
+            break;
+    
+          case 3:
+            this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, right: no, rightType: this._program.opType.bool });
+            break;*/
+    }
+    this._updateLine();
+
+
+
+  }
+
+
+  _lineIf() {
+    switch (this._activeColumn) {
+      case 0:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comIf({});
+        break;
+
+      /*    case 1:
+            this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: no, leftType: this._program.opType.bool });
+            break;
+    
+          case 3:
+            this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, right: no, rightType: this._program.opType.bool });
+            break;*/
+    }
+    this._updateLine();
+
+
+
+  }
+
+
+  _lineJump() {
+    switch (this._activeColumn) {
+      case 0:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comJump({});
+        break;
+
+      /*    case 1:
+            this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: no, leftType: this._program.opType.bool });
+            break;
+    
+          case 3:
+            this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, right: no, rightType: this._program.opType.bool });
+            break;*/
+    }
+    this._updateLine();
+
+
+
+  }
+
+  _lineCall() {
+    switch (this._activeColumn) {
+      case 0:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comCall({});
+        break;
+
+      /*    case 1:
+            this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: no, leftType: this._program.opType.bool });
+            break;
+    
+          case 3:
+            this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, right: no, rightType: this._program.opType.bool });
+            break;*/
+    }
+    this._updateLine();
+
+
+
+  }
+
+  _lineReturn() {
+    switch (this._activeColumn) {
+      case 0:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comReturn({});
+        break;
+
+      /*    case 1:
+            this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: no, leftType: this._program.opType.bool });
+            break;
+    
+          case 3:
+            this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, right: no, rightType: this._program.opType.bool });
+            break;*/
+    }
+    this._updateLine();
+
+
+
+  }
+
+  _lineGame(no) {
+
+
+    switch (this._activeColumn) {
+      case 0:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comGame({});
+        break;
+
+      /*    case 1:
+            this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: no, leftType: this._program.opType.bool });
+            break;
+    
+          case 3:
+            this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, right: no, rightType: this._program.opType.bool });
+            break;*/
+    }
+    this._updateLine();
+
+
+  }
+
+  _lineWorld(no) {
+    switch (this._activeColumn) {
+      case 0:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comWorld({});
+        break;
+
+      case 1:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comShape({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: no, leftType: this._program.opType.world });
+
+        break;
+
+
+    }
+    this._updateLine();
+
+  }
+
+
+  _lineSleep(no) {
+
+    switch (this._activeColumn) {
+      case 0:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comSleep({});
+        break;
+
+      /*    case 1:
+            this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: no, leftType: this._program.opType.bool });
+            break;
+    
+          case 3:
+            this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, right: no, rightType: this._program.opType.bool });
+            break;*/
+    }
+    this._updateLine();
+
+
+  }
+
+
+  _lineBoolReg(no) {
+
+    switch (this._activeColumn) {
+      case 0:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: no });
+        break;
+
+      case 1:
+        if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comIf) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comIf({ left: no });
+
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comBool) {
+
+
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: no, leftType: this._program.opType.bool });
+        }
+        break;
+
+      case 3:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, right: no, rightType: this._program.opType.bool });
+        break;
+    }
+    this._updateLine();
+
+  }
+
+  _lineEqNotEq(op) {
+
+
+
+    switch (this._activeColumn) {
+
+      case 1:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comAvatard({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: op, leftType: op });
+
+        break;
+      case 2:
+        if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comIf) {
+
+
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comIf({ left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, operator: op });
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comBool) {
+
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: op });
+        }
+        break;
+      case 3:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, right: op, rightType: op });
+
+        break;
+
+    }
+    this._updateLine();
+
+  }
+  /*
+    _lineWorld(op) {
+      console.log("line world")
+      this._program._procedure[this._activeProcedure].line[this._activeLine] = new comShape({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: op, leftType: this._program.opType.world });
+      this._updateLine();
+  
+    }*/
+
+  _linePosRot(op) {
+
+
+    this._program._procedure[this._activeProcedure].line[this._activeLine] = new comShape({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: op, leftType: op });
+    this._updateLine();
+
+  }
+
+
+  _lineEqualColor(op) {
+    this._program._procedure[this._activeProcedure].line[this._activeLine] = new comShape({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: op, operatorType: op });
+    this._updateLine();
+  }
+
+  _lineColor(op) {
+
+    console.log("_line color")
+    switch (this._activeColumn) {
+
+      case 1:
+        if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comWorld) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comWorld({ left: op, leftType: op });
+
+
+        }
+        else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comAvatard) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comAvatard({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: op, leftType: op });
+
+
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comShape) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comShape({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: op, leftType: op });
+
+        }
+        break;
+
+
+    }
+
+    //  this._program._procedure[this._activeProcedure].line[this._activeLine] = new comShape({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: op, leftType: op });
+    this._updateLine();
+  }
+
+
+  _linePlusMinus(op) {
+
+    switch (this._activeColumn) {
+
+      case 2:
+
+
+
+        if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comShape) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comShape({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: op, operatorType: op });
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comInt) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comInt({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: op });
+
+        }
+        break;
+
+
+    }
+    this._updateLine();
+
+  }
+
+  _lineNumber(no) {
+
+    switch (this._activeColumn) {
+
+
+
+      case 1:
+
+        if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comSleep) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comSleep({ left: no, leftType: this._program.opType.number });
+
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comAvatard) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comAvatard({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: no, leftType: this._program.opType.number });
+
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comShape) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comShape({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: no, leftType: this._program.opType.number });
+
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comInt) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comInt({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: no, leftType: this._program.opType.number });
+        }
+        break;
+
+      case 2:
+        if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comSleep) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comSleep({ left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: no, operatorType: this._program.opType.number });
+
+
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comAvatard) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comAvatard({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: no, operatorType: this._program.opType.number });
+
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comShape) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comShape({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: no, operatorType: this._program.opType.number });
+        }
+        break;
+
+      case 3:
+        if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comAvatard) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comAvatard({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, operatorType: this._program._procedure[this._activeProcedure].line[this._activeLine].operatorType, right: no, rightType: this._program.opType.number });
+
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comShape) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comShape({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, operatorType: this._program._procedure[this._activeProcedure].line[this._activeLine].operatorType, right: no, rightType: this._program.opType.number });
+
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comInt) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comInt({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, right: no, rightType: this._program.opType.number });
+        }
+        break;
+
+
+
+    }
+    this._updateLine();
+
+  }
+
+  _lineIntReg(no) {
+
+    switch (this._activeColumn) {
+
+      case 0:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comInt({ regNo: no });
+        break;
+
+
+
+      case 1:
+
+        if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comInt) {
+
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comInt({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: no, leftType: this._program.opType.int });
+
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comBool) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: no, leftType: this._program.opType.int });
+
+        }
+
+
+        break;
+
+      case 3:
+        if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comInt) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comInt({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, right: no, rightType: this._program.opType.int });
+
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comBool) {
+
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, right: no, rightType: this._program.opType.int });
+        }
+        break;
+
+    }
+    this._updateLine();
+
+  }
+
+  _lineLabelReg(no) {
+
+    switch (this._activeColumn) {
+
+      case 1:
+        if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comLabel) {
+
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comLabel({ left: no });
+
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comCall) {
+
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comCall({ left: no, leftType: this._program.opType.label });
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comJump) {
+
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comJump({ left: no, leftType: this._program.opType.label });
+
+        }
+        break;
+
+      case 3:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comIf({ left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, right: no, rightType: this._program.opType.label });
+
+        break;
+
+
+    }
+    this._updateLine();
+
+    //this._line[this._activeLine].col[0].txt = "I" + no;
+    //this._line[this._activeLine].col[0].color = this._progColor.int;
+
+  }
+
+  _lineShapeReg(no) {
+
+
+
+
+    switch (this._activeColumn) {
+      case 0:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comShape({ regNo: no });
+        break;
+
+      case 1:
+        if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comWorld) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comWorld({ left: no, leftType: this._program.opType.shape });
+
+
+        }
+        else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comGame) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comGame({ left: no, leftType: this._program.opType.shape });
+
+
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comShape) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comShape({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: no, leftType: this._program.opType.shape });
+
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comShape) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: no, leftType: this._program.opType.shape });
+        }
+        break;
+
+      case 3:
+
+        if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comShape) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comShape({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, operatorType: this._program._procedure[this._activeProcedure].line[this._activeLine].operatorType, right: no, rightType: this._program.opType.shape });
+
+
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comShape) {
+
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, right: no, rightType: this._program.opType.shape });
+
+        }
+        break;
+
+    }
+    this._updateLine();
+
+  }
+
+  _lineAvatardReg(no) {
+
+    switch (this._activeColumn) {
+
+      case 0:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comAvatard({ regNo: no });
+        break;
+      case 1:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: no, leftType: this._program.opType.avatard });
+        break;
+      case 3:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, right: no, rightType: this._program.opType.avatard });
+        break;
+
+    }
+    this._updateLine();
+
+
+  }
+
+  _lineProcedure(no) {
+
+
+    switch (this._activeColumn) {
+
+      case 1:
+        if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comCall) {
+
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comCall({ left: no, leftType: this._program.opType.procedure });
+        } else if (this._program._procedure[this._activeProcedure].line[this._activeLine] instanceof comJump) {
+          this._program._procedure[this._activeProcedure].line[this._activeLine] = new comJump({ left: no, leftType: this._program.opType.procedure });
+
+        }
+        break;
+
+      case 3:
+        this._program._procedure[this._activeProcedure].line[this._activeLine] = new comIf({ left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, right: no, rightType: this._program.opType.procedure });
+
+        break;
+
+    }
+    this._updateLine();
+    //  this._line[this._activeLine].col[0].txt = "A" + no;
+    //  this._line[this._activeLine].col[0].color = this._progColor.avatard;
+
+  }
+
+
+  _setActveProcedure(no) {
+
+
+    this._activeProcedure = no;
+    this._updateLine();
+    this._updateReg();
+    // console.log("down this._activeBoolReg: " + this._activeBoolReg)
+  }
+
+
+  _setActveBoolReg(no) {
+    this._activeBoolReg = no;
+
+  }
+  _setActveIntReg(no) {
+    this._activeIntReg = no;
+
+  }
+  _setActveLabelReg(no) {
+    this._activeLabelReg = no;
+
+  }
+  _setActveShapeReg(no) {    
+    this._activeShapeReg = no;
+    this.hide();
+
+    
+
+    //check make hide
+
+  }
+  _setActveAvatardReg(no) {
+    this._activeAvatardReg = no;
+
+  }
+
+
+
+  _setActveLine(no, col) {
+    this._activeLine = no;
+    this._activeColumn = col;
+
+
+  }
+
+
+  _setBoolReg(val) {
+    this._reset();
+    this._program.boolReg[this._activeBoolReg] = val;
+    this._updateReg();
+
+  }
+
+  _setIntReg(val) {
+    this._reset();
+    this._program.intReg[this._activeIntReg] = val;
+    this._updateReg();
+
+  }
+
+  _viewLabelReg() {
+
+    // this._program.intReg[this._activeIntReg] = val;
+    console.log("view label reg")
+    // this._updateReg();
+
+  }
+
+  _setShapeReg() {
+
+    // this._program.intReg[this._activeIntReg] = val;
+    console.log("set shape reg")
+    // this._updateReg();
+
+  }
+
+  _viewShapeReg() {
+
+    // this._program.intReg[this._activeIntReg] = val;
+    console.log("view shape reg")
+    // this._updateReg();
+
+  }
+
+  _setAvatardReg() {
+
+    // this._program.intReg[this._activeIntReg] = val;
+    console.log("set avatard reg")
+    // this._updateReg();
+
+  }
+
+  _viewAvatardReg() {
+
+    // this._program.intReg[this._activeIntReg] = val;
+    console.log("view avatard reg")
+    // this._updateReg();
+
+  }
+
+  _show() {
+
+
+    this._programPlay.setVisible(-9, -3, guiOptions.center, guiOptions.center);
+    this._programStep.setVisible(-9, -2, guiOptions.center, guiOptions.center);
+    this._programReset.setVisible(-9, -1, guiOptions.center, guiOptions.center);
+
+    this._boolRegMinus.setVisible(-8, 3, guiOptions.center, guiOptions.center);
+    this._boolRegPlus.setVisible(-4, 3, guiOptions.center, guiOptions.center);
+    this._boolReg.forEach(function (item, index) { item.txt = "B" + (index + this._boolRegIndex); item.setVisible(-7 + index, 3, guiOptions.center, guiOptions.center) }.bind(this));
+
+    this._intRegMinus.setVisible(-2, 3, guiOptions.center, guiOptions.center);
+    this._intRegPlus.setVisible(2, 3, guiOptions.center, guiOptions.center);
+    this._intReg.forEach(function (item, index) { item.txt = "I" + (index + this._intRegIndex); item.setVisible(-1 + index, 3, guiOptions.center, guiOptions.center) }.bind(this));
+
+    this._labelRegMinus.setVisible(4, 3, guiOptions.center, guiOptions.center);
+    this._labelRegPlus.setVisible(8, 3, guiOptions.center, guiOptions.center);
+    this._labelReg.forEach(function (item, index) { item.txt = "L" + (index + this._labelRegIndex); item.setVisible(5 + index, 3, guiOptions.center, guiOptions.center) }.bind(this));
+
+    this._shapeRegMinus.setVisible(-8, 4, guiOptions.center, guiOptions.center);
+    this._shapeRegPlus.setVisible(-4, 4, guiOptions.center, guiOptions.center);
+    this._shapeReg.forEach(function (item, index) { item.txt = "S" + (index + this._shapeRegIndex); item.setVisible(-7 + index, 4, guiOptions.center, guiOptions.center) }.bind(this));
+
+    this._avatardRegMinus.setVisible(-2, 4, guiOptions.center, guiOptions.center);
+    this._avatardRegPlus.setVisible(2, 4, guiOptions.center, guiOptions.center);
+    this._avatardReg.forEach(function (item, index) { item.txt = "A" + (index + this._avatardRegIndex); item.setVisible(-1 + index, 4, guiOptions.center, guiOptions.center) }.bind(this));
+
+    this._procedureMinus.setVisible(9, -3, guiOptions.center, guiOptions.center);
+    this._procedurePlus.setVisible(9, 1, guiOptions.center, guiOptions.center);
+    this._procedure.forEach(function (item, index) { item.txt = "P" + (index + this._avatardRegIndex); item.setVisible(9, -2 + index, guiOptions.center, guiOptions.center) }.bind(this));
+
+
+
+    this._lineMinus.setVisible(-9, 0, guiOptions.center, guiOptions.center);
+    this._linePlus.setVisible(-9, 1, guiOptions.center, guiOptions.center);
+    this._line.forEach(function (item, index) { item.col[0].setVisible(-7 + Math.floor(index / 6) * 6, -4 + (index % 6), guiOptions.center, guiOptions.center) }.bind(this));
+
+
+
+    this._updateReg();
+  }
+
+
+
+
+  //this._program.opType.equal)
+
+
+
+  _lineSetVisible(index, col) {
+
+    for (let i = 0; i <= col; i++) {
+
+      this._line[index].col[i].setVisible(-7 + i + Math.floor((index) / 6) * 6, -4 + (index % 6), guiOptions.center, guiOptions.center);
+
+
+    }
+
+    for (let i = col + 1; i < 4; i++) {
+
+      this._line[index].col[i].setNotVisible();
+
+    }
+
+  }
+
+  _updateLine() {
+
+
+    for (let i = this._lineIndex; i < this._lineIndex + 18; i++) {
+      let l = i - this._lineIndex;
+      this._line[l].col[0].hideBorder();
+
+      breakOut:
+      if (this._program._procedure[this._activeProcedure].line[i] == null) {
+
+        this._line[l].col[0].color = this._progColor.na;
+        this._line[l].col[0].txt = "" + i;
+        this._lineSetVisible(l, 0);
+
+      } else if (this._program._procedure[this._activeProcedure].line[i] instanceof comBool) {
+
+        this._line[l].col[0].color = this._progColor.bool;
+        this._line[l].col[0].txt = "B" + this._program._procedure[this._activeProcedure].line[i].regNo;
+        this._line[l].col[1].removeChildren();
+        this._lineMenuBISA.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childBottom))
+
+        //------------------- 1
+        if (this._program._procedure[this._activeProcedure].line[i].left == null) {
+          this._line[l].col[1].color = this._progColor.na;
+          this._line[l].col[1].txt = "";
+          console.log("DDSD")
+          this._lineSetVisible(l, 1);
+        } else {
+          this._line[l].col[2].removeChildren();
+          switch (this._program._procedure[this._activeProcedure].line[i].leftType) {
+            case this._program.opType.bool:
+              this._line[l].col[1].color = this._progColor.bool;
+              this._line[l].col[1].txt = "B" + this._program._procedure[this._activeProcedure].line[i].left;
+              this._lineMenuEqNotEq.forEach(item => this._line[l].col[2].addChild(item, guiOptions.childBottom))
+              break;
+            case this._program.opType.int:
+              this._line[l].col[1].color = this._progColor.int;
+              this._line[l].col[1].txt = "I" + this._program._procedure[this._activeProcedure].line[i].left;
+              this._lineMenuEqSmaller.forEach(item => this._line[l].col[2].addChild(item, guiOptions.childBottom))
+              break;
+            case this._program.opType.shape:
+              this._line[l].col[1].color = this._progColor.shape;
+              this._line[l].col[1].txt = "S" + this._program._procedure[this._activeProcedure].line[i].left;
+              this._lineMenuEqNotEq.forEach(item => this._line[l].col[2].addChild(item, guiOptions.childBottom))
+              break;
+            case this._program.opType.avatard:
+              this._line[l].col[1].color = this._progColor.avatard;
+              this._line[l].col[1].txt = "A" + this._program._procedure[this._activeProcedure].line[i].left;
+              this._lineMenuBlockCan.forEach(item => this._line[l].col[2].addChild(item, guiOptions.childBottom))
+              break;
+
+
+          }
+
+          //------------------- 2
+          if (this._program._procedure[this._activeProcedure].line[i].operator == null) {
+            this._line[l].col[2].color = this._progColor.na;
+            this._line[l].col[2].txt = "";
+            this._lineSetVisible(l, 2);
+
+          } else {
+
+            this._line[l].col[2].color = this._progColor.bool;
+            switch (this._program._procedure[this._activeProcedure].line[i].operator) {
+              case this._program.opType.equal:
+                this._line[l].col[2].txt = "==";
+                break;
+              case this._program.opType.notEqual:
+                this._line[l].col[2].txt = "!=";
+                break;
+              case this._program.opType.greater:
+                this._line[l].col[2].txt = ">";
+                break;
+              case this._program.opType.smaller:
+                this._line[l].col[2].txt = "<";
+                break;
+              case this._program.opType.block:
+                this._line[l].col[2].color = this._progColor.avatard;
+                this._line[l].col[2].txt = "Block";
+                break;
+              case this._program.opType.can:
+                this._line[l].col[2].color = this._progColor.avatard;
+                this._line[l].col[2].txt = "Can";
+                break;
+
+
+            }
+
+
+            this._line[l].col[3].removeChildren();
+            switch (this._program._procedure[this._activeProcedure].line[i].leftType) {
+              case this._program.opType.bool:
+                this._line[l].col[3].addChild(this._lineMenuBISA[0], guiOptions.childBottom)
+                break;
+              case this._program.opType.int:
+                this._line[l].col[3].addChild(this._lineMenuBISA[1], guiOptions.childBottom)
+                break;
+              case this._program.opType.shape:
+                this._line[l].col[3].addChild(this._lineMenuBISA[2], guiOptions.childBottom)
+                break;
+              case this._program.opType.avatard:
+                this._lineMenuForwardDown.forEach(item => this._line[l].col[3].addChild(item, guiOptions.childBottom))
+                break;
+
+            }
+
+
+            this._lineSetVisible(l, 3);
+            if (this._program._procedure[this._activeProcedure].line[i].right == null) {
+              this._line[l].col[3].color = this._progColor.na;
+              this._line[l].col[3].txt = "";
+              //console.log("X3")
+
+
+            } else {
+
+
+              //!!!!!!!!!!!!!
+              // next swtich with shape
+              // catch command _lineMenuForwardDown
+              //!!!
+
+              switch (this._program._procedure[this._activeProcedure].line[i].rightType) {
+                case this._program.opType.bool:
+                  this._line[l].col[3].color = this._progColor.bool;
+                  this._line[l].col[3].txt = "B" + this._program._procedure[this._activeProcedure].line[i].right;
+                  break;
+                case this._program.opType.int:
+                  this._line[l].col[3].color = this._progColor.int;
+                  this._line[l].col[3].txt = "I" + this._program._procedure[this._activeProcedure].line[i].right;
+                  break;
+                case this._program.opType.shape:
+                  this._line[l].col[3].color = this._progColor.shape;
+                  this._line[l].col[3].txt = "S" + this._program._procedure[this._activeProcedure].line[i].right;
+                  break;
+                case this._program.opType.forward:
+                  this._line[l].col[3].color = this._progColor.avatard;
+                  this._line[l].col[3].txt = "Forw";
+                  break;
+                case this._program.opType.up:
+                  this._line[l].col[3].color = this._progColor.avatard;
+                  this._line[l].col[3].txt = "Up";
+                  break;
+                case this._program.opType.down:
+                  this._line[l].col[3].color = this._progColor.avatard;
+                  this._line[l].col[3].txt = "Down";
+                  break;
+
+
+
+              }
+
+
+
+
+            }
+
+          }
+
+
+        }
+
+
+
+
+      } else if (this._program._procedure[this._activeProcedure].line[i] instanceof comInt) {
+
+        this._line[l].col[0].color = this._progColor.int;
+        this._line[l].col[0].txt = "I" + this._program._procedure[this._activeProcedure].line[i].regNo;
+        this._line[l].col[1].removeChildren();
+        this._line[l].col[1].addChild(this._lineMenuBISA[1], guiOptions.childBottom)
+        this._line[l].col[1].addChild(this._lineMenuNumber[0], guiOptions.childTop);
+        this._line[l].col[1].addChild(this._lineMenuNumber[5], guiOptions.childTop);
+
+
+
+        //------------------- 1
+        if (this._program._procedure[this._activeProcedure].line[i].left == null) {
+          this._line[l].col[1].color = this._progColor.na;
+          this._line[l].col[1].txt = "";
+
+          this._lineSetVisible(l, 1);
+        } else {
+
+          this._line[l].col[2].removeChildren();
+          switch (this._program._procedure[this._activeProcedure].line[i].leftType) {
+
+            case this._program.opType.int:
+              this._line[l].col[1].color = this._progColor.int;
+              this._line[l].col[1].txt = "I" + this._program._procedure[this._activeProcedure].line[i].left;
+              this._lineMenuPlusMinus.forEach(item => this._line[l].col[2].addChild(item, guiOptions.childBottom))
+
+              break;
+            case this._program.opType.number:
+              this._line[l].col[1].color = this._progColor.int;
+              this._line[l].col[1].txt = "" + this._program._procedure[this._activeProcedure].line[i].left;
+              this._lineSetVisible(l, 1);
+              break breakOut;
+            //this._lineMenuEqNotEq.forEach(item => this._line[l].col[2].addChild(item, guiOptions.childBottom))
+
+
+
+          }
+
+          //------------------- 2
+          if (this._program._procedure[this._activeProcedure].line[i].operator == null) {
+            this._line[l].col[2].color = this._progColor.na;
+            this._line[l].col[2].txt = "";
+            this._lineSetVisible(l, 2);
+
+          } else {
+
+            this._line[l].col[2].color = this._progColor.int;
+            switch (this._program._procedure[this._activeProcedure].line[i].operator) {
+              case this._program.opType.plus:
+                this._line[l].col[2].txt = "+";
+                break;
+              case this._program.opType.minus:
+                this._line[l].col[2].txt = "-";
+                break;
+
+
+
+            }
+
+            this._line[l].col[3].removeChildren();
+            this._line[l].col[3].addChild(this._lineMenuBISA[1], guiOptions.childBottom)
+            this._line[l].col[3].addChild(this._lineMenuNumber[0], guiOptions.childTop);
+            this._line[l].col[3].addChild(this._lineMenuNumber[5], guiOptions.childTop);
+
+
+            this._lineSetVisible(l, 3);
+            if (this._program._procedure[this._activeProcedure].line[i].right == null) {
+              this._line[l].col[3].color = this._progColor.na;
+              this._line[l].col[3].txt = "";
+              //console.log("X3")
+
+
+            } else {
+
+              switch (this._program._procedure[this._activeProcedure].line[i].rightType) {
+                case this._program.opType.int:
+                  this._line[l].col[3].color = this._progColor.int;
+                  this._line[l].col[3].txt = "I" + this._program._procedure[this._activeProcedure].line[i].right;
+                  break;
+                case this._program.opType.number:
+                  this._line[l].col[3].color = this._progColor.int;
+                  this._line[l].col[3].txt = "" + this._program._procedure[this._activeProcedure].line[i].right;
+                  break;
+
+
+              }
+
+
+            }
+
+          }
+        }
+
+
+      } else if (this._program._procedure[this._activeProcedure].line[i] instanceof comShape) {
+
+        this._line[l].col[0].color = this._progColor.shape;
+        this._line[l].col[0].txt = "S" + this._program._procedure[this._activeProcedure].line[i].regNo;
+        this._line[l].col[1].removeChildren();
+        this._line[l].col[1].addChild(this._lineMenuBISA[2], guiOptions.childBottom);
+        this._line[l].col[1].addChild(this._lineMenuPosRot[0], guiOptions.childBottom);
+        this._line[l].col[1].addChild(this._lineMenuNumber[0], guiOptions.childTop);
+        this._line[l].col[1].addChild(this._lineMenuNumber[5], guiOptions.childTop);
+        this._line[l].col[1].addChild(this._lineMenuWorld[0], guiOptions.childLeft);
+
+        this._lineMenuColor.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childRight))
+
+        //------------------- 1
+        if (this._program._procedure[this._activeProcedure].line[i].left == null) {
+
+          this._line[l].col[1].color = this._progColor.na;
+          this._line[l].col[1].txt = "";
+
+          this._lineSetVisible(l, 1);
+        } else {
+
+          this._line[l].col[2].removeChildren();
+
+
+          switch (this._program._procedure[this._activeProcedure].line[i].leftType) {
+
+            case this._program.opType.world:
+              this._line[l].col[1].color = this._progColor.world;
+              this._line[l].col[1].txt = "world"
+              this._lineSetVisible(l, 1);
+              break breakOut;
+
+            case this._program.opType.black:
+              this._line[l].col[1].color = this._progColor.black;
+              this._line[l].col[1].txt = "Black"
+              this._lineSetVisible(l, 1);
+              break breakOut;
+
+            case this._program.opType.red:
+              this._line[l].col[1].color = this._progColor.red;
+              this._line[l].col[1].txt = "Red"
+              this._lineSetVisible(l, 1);
+              break breakOut;
+
+            case this._program.opType.green:
+              this._line[l].col[1].color = this._progColor.green;
+              this._line[l].col[1].txt = "Green"
+              this._lineSetVisible(l, 1);
+              break breakOut;
+
+            case this._program.opType.blue:
+              this._line[l].col[1].color = this._progColor.blue;
+              this._line[l].col[1].txt = "Blue"
+              this._lineSetVisible(l, 1);
+              break breakOut;
+
+
+            case this._program.opType.equalPos:
+              this._line[l].col[1].color = this._progColor.shape;
+              this._line[l].col[1].txt = "==Pos";
+              this._lineMenuEqualColor.forEach(item => this._line[l].col[2].addChild(item, guiOptions.childBottom));
+              break;
+
+            case this._program.opType.notEqualPos:
+              this._line[l].col[1].color = this._progColor.shape;
+              this._line[l].col[1].txt = "!=Pos";
+              this._lineMenuEqualColor.forEach(item => this._line[l].col[2].addChild(item, guiOptions.childBottom));
+
+              break;
+
+            case this._program.opType.notEqualRot:
+              this._line[l].col[1].color = this._progColor.shape;
+              this._line[l].col[1].txt = "!=Rot";
+              this._lineMenuEqualColor.forEach(item => this._line[l].col[2].addChild(item, guiOptions.childBottom))
+
+
+              break;
+
+            case this._program.opType.shape:
+              this._line[l].col[1].color = this._progColor.shape;
+              this._line[l].col[1].txt = "S" + this._program._procedure[this._activeProcedure].line[i].left;
+              this._lineMenuPlusUni.forEach(item => this._line[l].col[2].addChild(item, guiOptions.childBottom))
+
+              break;
+            case this._program.opType.number:
+              this._line[l].col[1].color = this._progColor.int;
+              this._line[l].col[1].txt = "X:" + this._program._procedure[this._activeProcedure].line[i].left;
+              this._line[l].col[2].addChild(this._lineMenuNumber[0], guiOptions.childTop);
+              this._line[l].col[2].addChild(this._lineMenuNumber[5], guiOptions.childTop);
+
+              break;
+
+
+          }
+
+          //------------------- 2
+          if (this._program._procedure[this._activeProcedure].line[i].operator == null) {
+            this._line[l].col[2].color = this._progColor.na;
+            this._line[l].col[2].txt = "";
+            this._lineSetVisible(l, 2);
+
+          } else {
+
+
+            this._line[l].col[3].removeChildren();
+            switch (this._program._procedure[this._activeProcedure].line[i].operatorType) {
+              case this._program.opType.number:
+                this._line[l].col[2].color = this._progColor.int;
+                this._line[l].col[2].txt = "Y:" + this._program._procedure[this._activeProcedure].line[i].operator;
+                this._line[l].col[3].addChild(this._lineMenuNumber[0], guiOptions.childTop);
+                this._line[l].col[3].addChild(this._lineMenuNumber[5], guiOptions.childTop);
+                break;
+              case this._program.opType.minus:
+                this._line[l].col[2].color = this._progColor.int;
+                this._line[l].col[2].txt = "-"
+                this._line[l].col[3].addChild(this._lineMenuBISA[2], guiOptions.childBottom);
+
+                break;
+              case this._program.opType.plus:
+                this._line[l].col[2].color = this._progColor.int;
+                this._line[l].col[2].txt = "+"
+                this._line[l].col[3].addChild(this._lineMenuBISA[2], guiOptions.childBottom);
+
+                break;
+              case this._program.opType.uni:
+                this._line[l].col[2].color = this._progColor.int;
+                this._line[l].col[2].txt = "Uni"
+                this._line[l].col[3].addChild(this._lineMenuBISA[2], guiOptions.childBottom);
+
+                break;
+              case this._program.opType.equalCol:
+                this._line[l].col[2].color = this._progColor.shape;
+                this._line[l].col[2].txt = "==Col"
+
+                this._lineSetVisible(l, 2);
+                break breakOut;
+
+
+              case this._program.opType.notEqualCol:
+                this._line[l].col[2].color = this._progColor.shape;
+                this._line[l].col[2].txt = "!=Col"
+
+                this._lineSetVisible(l, 2);
+                break breakOut;
+
+
+
+
+            }
+
+
+            this._lineSetVisible(l, 3);
+            if (this._program._procedure[this._activeProcedure].line[i].right == null) {
+              this._line[l].col[3].color = this._progColor.na;
+              this._line[l].col[3].txt = "";
+              //console.log("X3")
+
+
+            } else {
+
+              switch (this._program._procedure[this._activeProcedure].line[i].rightType) {
+                case this._program.opType.number:
+                  this._line[l].col[3].color = this._progColor.int;
+                  this._line[l].col[3].txt = "Z:" + this._program._procedure[this._activeProcedure].line[i].right;
+                  break;
+                case this._program.opType.shape:
+                  this._line[l].col[3].color = this._progColor.shape;
+                  this._line[l].col[3].txt = "S" + this._program._procedure[this._activeProcedure].line[i].right;
+                  break;
+
+              }
+
+
+            }
+
+          }
+        }
+
+      } else if (this._program._procedure[this._activeProcedure].line[i] instanceof comAvatard) {
+
+        console.log("com av" + l)
+        this._line[l].col[0].color = this._progColor.avatard;
+        this._line[l].col[0].txt = "A" + this._program._procedure[this._activeProcedure].line[i].regNo;
+        this._line[l].col[1].removeChildren();
+        //this._line[l].col[1].addChild(this._lineMenuBISA[2], guiOptions.childBottom);
+        //  this._line[l].col[1].addChild(this._lineMenuPosRot[0], guiOptions.childBottom);
+
+        this._line[l].col[1].addChild(this._lineMenuNumber[0], guiOptions.childTop);
+        this._line[l].col[1].addChild(this._lineMenuNumber[5], guiOptions.childTop);
+
+        this._lineMenuForwardDown.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childBottom));
+        this._lineMenuLeftRight.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childLeft))
+        this._lineMenuColor.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childRight));
+
+        //------------------- 1
+        if (this._program._procedure[this._activeProcedure].line[i].left == null) {
+
+          this._line[l].col[1].color = this._progColor.na;
+          this._line[l].col[1].txt = "";
+
+          this._lineSetVisible(l, 1);
+        } else {
+
+          this._line[l].col[2].removeChildren();
+
+          console.log("swithc: " + this._program._procedure[this._activeProcedure].line[i].leftType)
+
+          switch (this._program._procedure[this._activeProcedure].line[i].leftType) {
+
+
+            case this._program.opType.black:
+              this._line[l].col[1].color = this._progColor.black;
+              this._line[l].col[1].txt = "Black"
+              this._lineSetVisible(l, 1);
+              break breakOut;
+
+            case this._program.opType.red:
+              this._line[l].col[1].color = this._progColor.red;
+              this._line[l].col[1].txt = "Red"
+              this._lineSetVisible(l, 1);
+              break breakOut;
+
+            case this._program.opType.green:
+              this._line[l].col[1].color = this._progColor.green;
+              this._line[l].col[1].txt = "Green"
+              this._lineSetVisible(l, 1);
+              break breakOut;
+
+            case this._program.opType.blue:
+              this._line[l].col[1].color = this._progColor.blue;
+              this._line[l].col[1].txt = "Blue"
+              this._lineSetVisible(l, 1);
+              break breakOut;
+
+
+            case this._program.opType.left:
+              this._line[l].col[1].color = this._progColor.avatard;
+              this._line[l].col[1].txt = "Left"
+              this._lineSetVisible(l, 1);
+              break breakOut;
+
+
+            case this._program.opType.right:
+              this._line[l].col[1].color = this._progColor.avatard;
+              this._line[l].col[1].txt = "Right"
+              this._lineSetVisible(l, 1);
+
+              break breakOut;
+
+            case this._program.opType.forward:
+              this._line[l].col[1].color = this._progColor.avatard;
+              this._line[l].col[1].txt = "Forw"
+              this._lineSetVisible(l, 1);
+
+              break breakOut;
+
+            case this._program.opType.up:
+              this._line[l].col[1].color = this._progColor.avatard;
+              this._line[l].col[1].txt = "Up"
+              this._lineSetVisible(l, 1);
+
+              break breakOut;
+            case this._program.opType.down:
+              this._line[l].col[1].color = this._progColor.avatard;
+              this._line[l].col[1].txt = "Down"
+              this._lineSetVisible(l, 1);
+
+              break breakOut;
+
+            case this._program.opType.number:
+              this._line[l].col[1].color = this._progColor.int;
+              this._line[l].col[1].txt = "X:" + this._program._procedure[this._activeProcedure].line[i].left;
+              this._line[l].col[2].addChild(this._lineMenuNumber[0], guiOptions.childTop);
+              this._line[l].col[2].addChild(this._lineMenuNumber[5], guiOptions.childTop);
+
+              break;
+
+
+          }
+
+          //------------------- 2
+          if (this._program._procedure[this._activeProcedure].line[i].operator == null) {
+            this._line[l].col[2].color = this._progColor.na;
+            this._line[l].col[2].txt = "";
+            this._lineSetVisible(l, 2);
+
+          } else {
+
+
+            this._line[l].col[3].removeChildren();
+
+            this._line[l].col[2].color = this._progColor.int;
+            this._line[l].col[2].txt = "Y:" + this._program._procedure[this._activeProcedure].line[i].operator;
+            this._line[l].col[3].addChild(this._lineMenuNumber[0], guiOptions.childTop);
+            this._line[l].col[3].addChild(this._lineMenuNumber[5], guiOptions.childTop);
+
+
+
+
+            this._lineSetVisible(l, 3);
+            if (this._program._procedure[this._activeProcedure].line[i].right == null) {
+              this._line[l].col[3].color = this._progColor.na;
+              this._line[l].col[3].txt = "";
+              //console.log("X3")
+
+
+            } else {
+
+
+              this._line[l].col[3].color = this._progColor.int;
+              this._line[l].col[3].txt = "Z:" + this._program._procedure[this._activeProcedure].line[i].right;
+
+
+
+
+            }
+
+          }
+        }
+
+
+
+
+      } else if (this._program._procedure[this._activeProcedure].line[i] instanceof comGame) {
+
+        console.log("com av" + l)
+        this._line[l].col[0].color = this._progColor.game;
+        this._line[l].col[0].txt = "Game";// + this._program._procedure[this._activeProcedure].line[i].regNo;
+        this._line[l].col[1].removeChildren();
+        this._line[l].col[1].addChild(this._lineMenuBISA[2], guiOptions.childBottom);
+        //  this._line[l].col[1].addChild(this._lineMenuPosRot[0], guiOptions.childBottom);
+
+        /*   this._line[l].col[1].addChild(this._lineMenuNumber[0], guiOptions.childTop);
+           this._line[l].col[1].addChild(this._lineMenuNumber[5], guiOptions.childTop);
+   
+           this._lineMenuForwardDown.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childBottom));
+           this._lineMenuLeftRight.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childLeft))
+           this._lineMenuColor.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childRight));
+   */
+        //------------------- 1
+        if (this._program._procedure[this._activeProcedure].line[i].left == null) {
+
+          this._line[l].col[1].color = this._progColor.na;
+          this._line[l].col[1].txt = "";
+
+          this._lineSetVisible(l, 1);
+        } else {
+
+          this._line[l].col[2].removeChildren();
+
+          //     console.log("swithc: " + this._program._procedure[this._activeProcedure].line[i].leftType)
+          this._lineSetVisible(l, 1);
+
+          switch (this._program._procedure[this._activeProcedure].line[i].leftType) {
+
+
+
+
+            case this._program.opType.shape:
+              this._line[l].col[1].color = this._progColor.shape;
+              this._line[l].col[1].txt = "S" + this._program._procedure[this._activeProcedure].line[i].left;
+              //this._lineMenuPlusUni.forEach(item => this._line[l].col[2].addChild(item, guiOptions.childBottom))
+
+              break;
+
+
+          }
+
+
+
+        }
+
+
+
+
+
+      } else if (this._program._procedure[this._activeProcedure].line[i] instanceof comSleep) {
+
+
+        this._line[l].col[0].color = this._progColor.sleep;
+        this._line[l].col[0].txt = "Sleep"
+        this._line[l].col[1].removeChildren();
+        //this._line[l].col[1].addChild(this._lineMenuBISA[2], guiOptions.childBottom);
+        //  this._line[l].col[1].addChild(this._lineMenuPosRot[0], guiOptions.childBottom);
+
+        this._line[l].col[1].addChild(this._lineMenuNumber[0], guiOptions.childTop);
+        this._line[l].col[1].addChild(this._lineMenuNumber[5], guiOptions.childTop);
+
+        /* this._lineMenuForwardDown.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childBottom));
+         this._lineMenuLeftRight.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childLeft))
+         this._lineMenuColor.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childRight));
+ */
+        //------------------- 1
+        if (this._program._procedure[this._activeProcedure].line[i].left == null) {
+
+          this._line[l].col[1].color = this._progColor.na;
+          this._line[l].col[1].txt = "";
+
+          this._lineSetVisible(l, 1);
+        } else {
+
+          this._line[l].col[2].removeChildren();
+
+
+          switch (this._program._procedure[this._activeProcedure].line[i].leftType) {
+
+
+
+
+            case this._program.opType.number:
+              this._line[l].col[1].color = this._progColor.int;
+              this._line[l].col[1].txt = "" + this._program._procedure[this._activeProcedure].line[i].left + " .";
+              this._line[l].col[2].addChild(this._lineMenuNumber[0], guiOptions.childTop);
+              this._line[l].col[2].addChild(this._lineMenuNumber[5], guiOptions.childTop);
+
+              break;
+
+
+          }
+
+          //------------------- 2
+          if (this._program._procedure[this._activeProcedure].line[i].operator == null) {
+            this._line[l].col[2].color = this._progColor.na;
+            this._line[l].col[2].txt = "";
+            this._lineSetVisible(l, 2);
+
+          } else {
+
+
+            this._line[l].col[3].removeChildren();
+
+            this._line[l].col[2].color = this._progColor.int;
+            this._line[l].col[2].txt = "" + this._program._procedure[this._activeProcedure].line[i].operator;
+            this._line[l].col[3].addChild(this._lineMenuNumber[0], guiOptions.childTop);
+            this._line[l].col[3].addChild(this._lineMenuNumber[5], guiOptions.childTop);
+
+
+
+
+            this._lineSetVisible(l, 2);
+            /* if (this._program._procedure[this._activeProcedure].line[i].right == null) {
+               this._line[l].col[3].color = this._progColor.na;
+               this._line[l].col[3].txt = "";
+               //console.log("X3")
+ 
+ 
+             } else {
+ 
+ 
+               this._line[l].col[3].color = this._progColor.int;
+               this._line[l].col[3].txt = "Z:" + this._program._procedure[this._activeProcedure].line[i].right;
+ 
+ 
+ 
+ 
+             }
+ */
+          }
+        }
+
+
+
+
+
+
+      } else if (this._program._procedure[this._activeProcedure].line[i] instanceof comWorld) {
+
+        console.log("com av" + l)
+        this._line[l].col[0].color = this._progColor.world;
+        this._line[l].col[0].txt = "World";// + this._program._procedure[this._activeProcedure].line[i].regNo;
+        this._line[l].col[1].removeChildren();
+        this._line[l].col[1].addChild(this._lineMenuBISA[2], guiOptions.childBottom);
+
+        this._lineMenuColor.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childRight));
+
+        //  this._line[l].col[1].addChild(this._lineMenuPosRot[0], guiOptions.childBottom);
+
+        /*   this._line[l].col[1].addChild(this._lineMenuNumber[0], guiOptions.childTop);
+           this._line[l].col[1].addChild(this._lineMenuNumber[5], guiOptions.childTop);
+   
+           this._lineMenuForwardDown.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childBottom));
+           this._lineMenuLeftRight.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childLeft))
+           this._lineMenuColor.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childRight));
+   */
+        //------------------- 1
+        if (this._program._procedure[this._activeProcedure].line[i].left == null) {
+
+          this._line[l].col[1].color = this._progColor.na;
+          this._line[l].col[1].txt = "";
+
+          this._lineSetVisible(l, 1);
+        } else {
+
+          this._line[l].col[2].removeChildren();
+
+          //     console.log("swithc: " + this._program._procedure[this._activeProcedure].line[i].leftType)
+          this._lineSetVisible(l, 1);
+
+          switch (this._program._procedure[this._activeProcedure].line[i].leftType) {
+
+            case this._program.opType.black:
+              this._line[l].col[1].color = this._progColor.black;
+              this._line[l].col[1].txt = "Black"
+
+              break;
+
+            case this._program.opType.red:
+              this._line[l].col[1].color = this._progColor.red;
+              this._line[l].col[1].txt = "Red"
+
+              break;
+
+            case this._program.opType.green:
+              this._line[l].col[1].color = this._progColor.green;
+              this._line[l].col[1].txt = "Green"
+
+              break;
+
+            case this._program.opType.blue:
+              this._line[l].col[1].color = this._progColor.blue;
+              this._line[l].col[1].txt = "Blue"
+
+              break;
+
+
+            case this._program.opType.shape:
+              this._line[l].col[1].color = this._progColor.shape;
+              this._line[l].col[1].txt = "S" + this._program._procedure[this._activeProcedure].line[i].left;
+              //this._lineMenuPlusUni.forEach(item => this._line[l].col[2].addChild(item, guiOptions.childBottom))
+
+              break;
+
+
+          }
+
+
+
+        }
+
+
+
+
+      } else if (this._program._procedure[this._activeProcedure].line[i] instanceof comJump) {
+
+
+        this._line[l].col[0].color = this._progColor.jump;
+        this._line[l].col[0].txt = "Jump"
+        this._line[l].col[1].removeChildren();
+        this._labelRegLine.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childRight));
+        this._procedureLine.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childBottom));
+
+        this._lineSetVisible(l, 1);
+        if (this._program._procedure[this._activeProcedure].line[i].left == null) {
+
+          this._line[l].col[1].color = this._progColor.na;
+          this._line[l].col[1].txt = "";
+
+        } else {
+
+          //   console.log("Left type: " + this._program._procedure[this._activeProcedure].line[i].leftType)
+
+          switch (this._program._procedure[this._activeProcedure].line[i].leftType) {
+
+            case this._program.opType.label:
+
+              this._line[l].col[1].color = this._progColor.label;
+              this._line[l].col[1].txt = "L" + this._program._procedure[this._activeProcedure].line[i].left;
+              break;
+
+            case this._program.opType.procedure:
+
+              this._line[l].col[1].color = this._progColor.procedure;
+              this._line[l].col[1].txt = "P" + this._program._procedure[this._activeProcedure].line[i].left;
+              break;
+
+
+          }
+          //    this._line[l].col[1].color = this._progColor.label;
+          //  this._line[l].col[1].txt = "L" + this._program._procedure[this._activeProcedure].line[i].left;
+
+        }
+
+
+
+      } else if (this._program._procedure[this._activeProcedure].line[i] instanceof comCall) {
+
+
+        this._line[l].col[0].color = this._progColor.call;
+        this._line[l].col[0].txt = "Call"
+        this._line[l].col[1].removeChildren();
+        this._labelRegLine.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childRight));
+        this._procedureLine.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childBottom));
+
+        this._lineSetVisible(l, 1);
+        if (this._program._procedure[this._activeProcedure].line[i].left == null) {
+
+          this._line[l].col[1].color = this._progColor.na;
+          this._line[l].col[1].txt = "";
+
+        } else {
+
+          switch (this._program._procedure[this._activeProcedure].line[i].leftType) {
+
+            case this._program.opType.label:
+
+              this._line[l].col[1].color = this._progColor.label;
+              this._line[l].col[1].txt = "L" + this._program._procedure[this._activeProcedure].line[i].left;
+              break;
+
+            case this._program.opType.procedure:
+
+              this._line[l].col[1].color = this._progColor.procedure;
+              this._line[l].col[1].txt = "P" + this._program._procedure[this._activeProcedure].line[i].left;
+              break;
+
+
+          }
+          //    this._line[l].col[1].color = this._progColor.label;
+          //  this._line[l].col[1].txt = "L" + this._program._procedure[this._activeProcedure].line[i].left;
+
+
+        }
+
+
+
+      } else if (this._program._procedure[this._activeProcedure].line[i] instanceof comReturn) {
+
+
+        this._line[l].col[0].color = this._progColor.return;
+        this._line[l].col[0].txt = "Ret"
+
+        this._lineSetVisible(l, 0);
+
+
+
+
+
+      } else if (this._program._procedure[this._activeProcedure].line[i] instanceof comIf) {
+
+
+        this._line[l].col[0].color = this._progColor.if;
+        this._line[l].col[0].txt = "If"
+        this._line[l].col[1].removeChildren();
+        this._line[l].col[1].addChild(this._lineMenuBISA[0], guiOptions.childBottom);
+
+        //------------------- 1
+        if (this._program._procedure[this._activeProcedure].line[i].left == null) {
+
+          this._line[l].col[1].color = this._progColor.na;
+          this._line[l].col[1].txt = "";
+
+          this._lineSetVisible(l, 1);
+        } else {
+
+          this._line[l].col[2].removeChildren();
+
+          this._line[l].col[1].color = this._progColor.bool;
+          this._line[l].col[1].txt = "B" + this._program._procedure[this._activeProcedure].line[i].left;
+
+
+          this._lineMenuJumpReturn2.forEach(item => this._line[l].col[2].addChild(item, guiOptions.childBottom));
+          //------------------- 2
+          if (this._program._procedure[this._activeProcedure].line[i].operator == null) {
+            this._line[l].col[2].color = this._progColor.na;
+            this._line[l].col[2].txt = "";
+            this._lineSetVisible(l, 2);
+
+          } else {
+
+
+            this._line[l].col[3].removeChildren();
+
+            //   this._line[l].col[2].color = this._progColor.int;
+            //   this._line[l].col[2].txt = "" + this._program._procedure[this._activeProcedure].line[i].operator;
+            //this._line[l].col[3].addChild(this._lineMenuNumber[0], guiOptions.childTop);
+            //this._line[l].col[3].addChild(this._lineMenuNumber[5], guiOptions.childTop);
+
+
+
+            switch (this._program._procedure[this._activeProcedure].line[i].operator) {
+
+              case this._program.opType.jump:
+                this._line[l].col[2].color = this._progColor.jump;
+                this._line[l].col[2].txt = "Jump"
+                this._labelRegLine.forEach(item => this._line[l].col[3].addChild(item, guiOptions.childLeft));
+                this._procedureLine.forEach(item => this._line[l].col[3].addChild(item, guiOptions.childBottom));
+
+
+                break;
+
+              case this._program.opType.call:
+                this._line[l].col[2].color = this._progColor.call;
+                this._line[l].col[2].txt = "Call"
+                this._labelRegLine.forEach(item => this._line[l].col[3].addChild(item, guiOptions.childLeft));
+                this._procedureLine.forEach(item => this._line[l].col[3].addChild(item, guiOptions.childBottom));
+
+                break;
+
+
+              case this._program.opType.return:
+                this._line[l].col[2].color = this._progColor.return;
+                this._line[l].col[2].txt = "Ret"
+                this._lineSetVisible(l, 2);
+                break breakOut;
+
+
+            }
+
+            if (this._program._procedure[this._activeProcedure].line[i].right == null) {
+              this._line[l].col[3].color = this._progColor.na;
+              this._line[l].col[3].txt = "";
+              this._lineSetVisible(l, 3);
+
+            } else {
+              this._lineSetVisible(l, 3);
+              //  this._line[l].col[3].color = this._progColor.label;
+              //  this._line[l].col[3].txt = "L" + this._program._procedure[this._activeProcedure].line[i].right;
+              switch (this._program._procedure[this._activeProcedure].line[i].rightType) {
+
+                case this._program.opType.label:
+
+                  this._line[l].col[3].color = this._progColor.label;
+                  this._line[l].col[3].txt = "L" + this._program._procedure[this._activeProcedure].line[i].right;
+                  break;
+
+                case this._program.opType.procedure:
+
+                  this._line[l].col[3].color = this._progColor.procedure;
+                  this._line[l].col[3].txt = "P" + this._program._procedure[this._activeProcedure].line[i].right;
+                  break;
+
+
+              }
+
+            }
+
+
+          }
+        }
+
+
+      } else if (this._program._procedure[this._activeProcedure].line[i] instanceof comLabel) {
+
+        //only show interesting
+        this._line[l].col[0].color = this._progColor.label;
+        this._line[l].col[0].txt = "Label"
+        this._line[l].col[1].removeChildren();
+        this._labelRegLine.forEach(item => this._line[l].col[1].addChild(item, guiOptions.childRight));
+
+        this._lineSetVisible(l, 1);
+        if (this._program._procedure[this._activeProcedure].line[i].left == null) {
+
+          this._line[l].col[1].color = this._progColor.na;
+          this._line[l].col[1].txt = "";
+
+        } else {
+
+          this._line[l].col[1].color = this._progColor.label;
+          this._line[l].col[1].txt = "L" + this._program._procedure[this._activeProcedure].line[i].left;
+
+        }
+
+
+
+
+      } else {
+        console.log("else")
+
+      }
+
+    }
+
+  }
+
+
+  _updateReg() {
+
+
+    for (let i = this._boolRegIndex; i < this._boolRegIndex + 3; i++) {
+      this._boolReg[i - this._boolRegIndex].color = this._progColor.bool;
+      this._boolRegLine[i - this._boolRegIndex].txt = "B" + i;
+      if (this._program.boolReg[i] == true) {
+        this._boolReg[i - this._boolRegIndex].txt = "B" + i + ":T";
+      } else if (this._program.boolReg[i] == false) {
+        this._boolReg[i - this._boolRegIndex].txt = "B" + i + ":F";
+      } else {
+        this._boolReg[i - this._boolRegIndex].color = this._progColor.na;
+        this._boolReg[i - this._boolRegIndex].txt = "B" + i;
+      }
+    }
+
+    for (let i = this._intRegIndex; i < this._intRegIndex + 3; i++) {
+      this._intReg[i - this._intRegIndex].color = this._progColor.int;
+      this._intRegLine[i - this._intRegIndex].txt = "I" + i;
+      if (this._program.intReg[i] != null) {
+        this._intReg[i - this._intRegIndex].txt = "I" + i + ":" + this._program.intReg[i];
+      } else {
+        this._intReg[i - this._intRegIndex].color = this._progColor.na;
+        this._intReg[i - this._intRegIndex].txt = "I" + i;
+      }
+    }
+
+    for (let i = this._labelRegIndex; i < this._labelRegIndex + 3; i++) {
+      this._labelReg[i - this._labelRegIndex].txt = "L" + i;
+      this._labelRegLine[i - this._labelRegIndex].txt = "L" + i;
+      if (this._program.labelReg[i] != null) {
+        this._labelReg[i - this._labelRegIndex].color = this._progColor.label;
+      } else {
+        this._labelReg[i - this._labelRegIndex].color = this._progColor.na;
+      }
+    }
+
+    for (let i = this._shapeRegIndex; i < this._shapeRegIndex + 3; i++) {
+      this._shapeReg[i - this._shapeRegIndex].txt = "S" + i;
+      this._shapeRegLine[i - this._shapeRegIndex].txt = "S" + i;
+      if (this._program.shapeReg[i] != null) {
+        this._shapeReg[i - this._shapeRegIndex].color = this._progColor.shape;
+      } else {
+        this._shapeReg[i - this._shapeRegIndex].color = this._progColor.na;
+      }
+    }
+
+    for (let i = this._avatardRegIndex; i < this._avatardRegIndex + 3; i++) {
+      this._avatardReg[i - this._avatardRegIndex].txt = "A" + i;
+      this._avatardRegLine[i - this._avatardRegIndex].txt = "A" + i;
+      if (this._program.avatardReg[i] != null) {
+        this._avatardReg[i - this._avatardRegIndex].color = this._progColor.avatard;
+      } else {
+        this._avatardReg[i - this._avatardRegIndex].color = this._progColor.na;
+      }
+    }
+
+    for (let i = this._procedureIndex; i < this._procedureIndex + 3; i++) {
+      this._procedure[i - this._procedureIndex].txt = "P" + i;
+      this._procedureLine[i - this._procedureIndex].txt = "P" + i;
+
+
+
+      if (i == this._activeProcedure) {
+        this._procedure[i - this._procedureIndex].color = this._progColor.procedure;
+      } else {
+        this._procedure[i - this._procedureIndex].color = this._progColor.na;
+      }
+    }
+
+
+  }
+
+  hide() {
+
+    this._programPlay.setNotVisible();//setVisible(-9, -3, guiOptions.center, guiOptions.center);
+    this._programStep.setNotVisible();//setVisible(-9, -2, guiOptions.center, guiOptions.center);
+    this._programReset.setNotVisible();//.setVisible(-9, -1, guiOptions.center, guiOptions.center);
+
+    this._boolRegMinus.setNotVisible();//.setVisible(-8, 3, guiOptions.center, guiOptions.center);
+    this._boolRegPlus.setNotVisible();//.setVisible(-4, 3, guiOptions.center, guiOptions.center);
+    //this._boolReg.forEach(function (item, index) { item.txt = "B" + (index + this._boolRegIndex); item.setVisible(-7 + index, 3, guiOptions.center, guiOptions.center) }.bind(this));
+    this._boolReg.forEach(item => item.setNotVisible());
+
+
+    this._intRegMinus.setNotVisible();//.setVisible(-2, 3, guiOptions.center, guiOptions.center);
+    this._intRegPlus.setNotVisible();//.setVisible(2, 3, guiOptions.center, guiOptions.center);
+   // this._intReg.forEach(function (item, index) { item.txt = "I" + (index + this._intRegIndex); item.setVisible(-1 + index, 3, guiOptions.center, guiOptions.center) }.bind(this));
+    this._intReg.forEach(item => item.setNotVisible());
+      
+    this._labelRegMinus.setNotVisible();//.setVisible(4, 3, guiOptions.center, guiOptions.center);
+    this._labelRegPlus.setNotVisible();//.setVisible(8, 3, guiOptions.center, guiOptions.center);
+   // this._labelReg.forEach(function (item, index) { item.txt = "L" + (index + this._labelRegIndex); item.setVisible(5 + index, 3, guiOptions.center, guiOptions.center) }.bind(this));
+    this._labelReg.forEach(item => item.setNotVisible());
+
+    this._shapeRegMinus.setNotVisible();//.setVisible(-8, 4, guiOptions.center, guiOptions.center);
+    this._shapeRegPlus.setNotVisible();//.setVisible(-4, 4, guiOptions.center, guiOptions.center);
+    //this._shapeReg.forEach(function (item, index) { item.txt = "S" + (index + this._shapeRegIndex); item.setVisible(-7 + index, 4, guiOptions.center, guiOptions.center) }.bind(this));
+    this._shapeReg.forEach(item => item.setNotVisible());
+
+    this._avatardRegMinus.setNotVisible();//.setVisible(-2, 4, guiOptions.center, guiOptions.center);
+    this._avatardRegPlus.setNotVisible();//.setVisible(2, 4, guiOptions.center, guiOptions.center);
+    //this._avatardReg.forEach(function (item, index) { item.txt = "A" + (index + this._avatardRegIndex); item.setVisible(-1 + index, 4, guiOptions.center, guiOptions.center) }.bind(this));
+    this._avatardReg.forEach(item => item.setNotVisible());
+      
+    this._procedureMinus.setNotVisible();//.setVisible(9, -3, guiOptions.center, guiOptions.center);
+    this._procedurePlus.setNotVisible();//.setVisible(9, 1, guiOptions.center, guiOptions.center);
+    //this._procedure.forEach(function (item, index) { item.txt = "P" + (index + this._avatardRegIndex); item.setVisible(9, -2 + index, guiOptions.center, guiOptions.center) }.bind(this));
+    this._procedure.forEach(item => item.setNotVisible());
+
+
+    this._lineMinus.setNotVisible();//.setVisible(-9, 0, guiOptions.center, guiOptions.center);
+    this._linePlus.setNotVisible();//.setVisible(-9, 1, guiOptions.center, guiOptions.center);
+   // this._line.forEach(function (item, index) { item.col[0].setVisible(-7 + Math.floor(index / 6) * 6, -4 + (index % 6), guiOptions.center, guiOptions.center) }.bind(this));
+    this._line.forEach(item => item.col.forEach( col => col.setNotVisible()));
+
+
+
+
+  }
+
+  close(){
+    this.hide();
+
+  }
+
+
+}

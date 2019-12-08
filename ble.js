@@ -19,7 +19,7 @@ let ble = {
   },
   buttonHideTimeOutFunction: function () {
 
-    Game.close();
+    Game.clearForCenterButton();
     ble._connectButton.setVisible(0, 0, guiOptions.center, guiOptions.center);
 
 
@@ -161,7 +161,7 @@ let ble = {
 
     if (!ble.bluetoothDevice.gatt.connected) {
       ble.busySend = false;
-      Game.close();
+      Game.clearForCenterButton();
 
       ble._connectButton.setVisible(0, 0, guiOptions.center, guiOptions.center);
       return;

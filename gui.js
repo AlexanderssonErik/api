@@ -17,10 +17,17 @@ class Gui {
         Gui._SizeSetting = 1;
         Gui._VisibleStack = [];
         Gui._dontResizeGuiInput = false;
+        Gui._pointerUpFunction = null;
+
 
     }
 
     static pointerDown(evt) {
+
+        if (Gui._pointerUpFunction != null) {
+            Gui._pointerUpFunction(evt);
+            return true;
+        }
 
         let hitElement = Gui._VisibleStack.find(function (item, index) {
             if (evt.pageX >= item.xMin && evt.pageX <= item.xMax && evt.pageY >= item.yMin && evt.pageY <= item.yMax) {
@@ -41,7 +48,7 @@ class Gui {
         let oldVisibleStack = Gui._VisibleStack;
         Gui._VisibleStack = [];
 
-        oldVisibleStack.forEach(item => item.guiElement.setVisible(item.guiElement._horPos, item.guiElement._verPos, item.guiElement._horAlign, item.guiElement._verAlign));
+        oldVisibleStack.forEach(item => item.guiElement._setVisible(item.guiElement._horPos, item.guiElement._verPos, item.guiElement._horAlign, item.guiElement._verAlign));
 
     }
 
@@ -70,27 +77,21 @@ class Gui {
         this._sizeWidthMulti = 1;
         this._margin = [0.5, 1, 2];
 
-        this._cameraAlreadLocked = false;
-        this._blockAlreadyHidden = false;
+        //this._cameraAlreadLocked = false;
+        //  this._blockAlreadyHidden = false;
+        this._visible = false;
 
     }
 
     pointerUp() {
-        if (!this._cameraAlreadLocked) {
-            camera.unlock();
-        }
-
+        camera.guiUnlock();
         if (!this._blockAlreadyHidden) {
             world.showBlock();
         }
     }
     pointerDown() {
-        if (camera.locked) {
-            this._cameraAlreadLocked = true;
-        } else {
-            this._cameraAlreadLocked = false;
-            camera.lock();
-        }
+
+        camera.guiLock();
         this._blockAlreadyHidden = world.blockHidden;
     }
 
@@ -137,9 +138,19 @@ class Gui {
         document.body.removeChild(this._element);
     }
 
-
     setVisible(hor, ver, horAlign, verAlign) {
+        if (this._visible) {
+            return;
+        }
+        this._setVisible(hor, ver, horAlign, verAlign);
+    }
 
+    _setVisible(hor, ver, horAlign, verAlign) {
+
+        /*  if(this._visible){
+              return;
+          }*/
+        this._visible = true;
         this._setPos({ hor: hor, ver: ver, horAlign: horAlign, verAlign: verAlign });
 
         let buttonPosition = {
@@ -154,6 +165,10 @@ class Gui {
     }
 
     setNotVisible() {
+        if (!this._visible) {
+            return;
+        }
+        this._visible = false;
 
         let index = Gui._VisibleStack.length - 1;
         while (index >= 0) {
@@ -197,6 +212,7 @@ class GuiColorWheel extends Gui {
         this._currentMeshFunction = meshFunction;
         scene.onPointerMove = this.pointerMove.bind(this);
         scene.onPointerUp = this.pointerUp.bind(this);
+        Gui._pointerUpFunction = this.pointerUp.bind(this);
 
         this._downPageX = evt.pageX;
         this._downPageY = evt.pageY;
@@ -254,7 +270,8 @@ class GuiColorWheel extends Gui {
         super.pointerUp();
         scene.onPointerMove = null;
         scene.onPointerUp = null;
-
+        Gui._pointerUpFunction = null;
+        
         this._hide();
     }
 
@@ -309,11 +326,17 @@ class GuiButton extends Gui {
         return guiElment;
     }
 
+    removeChildren() {
+        this._child = [[], [], [], []];
+
+    }
+
 
     pointerDown(evt) {
 
         scene.onPointerMove = this.pointerMove.bind(this);
         scene.onPointerUp = this.pointerUp.bind(this);
+        Gui._pointerUpFunction =  this.pointerUp.bind(this);
 
         GuiButton._ActiveStack = [];
 
@@ -329,11 +352,11 @@ class GuiButton extends Gui {
         this._element.style.background = this._backgroundDown;
         this._direction = null;
         this._parent = null;
-            
-        if (this._pointerDownFunction != null) {           
+
+        if (this._pointerDownFunction != null) {
             this._pointerDownFunction();
         }
-        
+
         this._showChildren();
         super.pointerDown();
 
@@ -415,6 +438,7 @@ class GuiButton extends Gui {
         super.pointerUp();
         scene.onPointerMove = null;
         scene.onPointerUp = null;
+        Gui._pointerUpFunction = null;
 
         this._element.style.background = this._background;
 
@@ -437,7 +461,66 @@ class GuiButtonImg extends GuiButton {
     constructor(img, pointerUp, pointerMove, pointerDown) {
         super(document.createElement('IMG'), pointerUp, pointerMove, pointerDown);
         this._element.src = img;
+
+
     }
+}
+
+class GuiButtonTxt extends GuiButton {
+
+    constructor(txt, pointerUp, pointerMove, pointerDown) {
+        super(document.createElement('p'), pointerUp, pointerMove, pointerDown);
+        this._element.textContent = txt;
+
+        this._background = 'rgba(96, 96, 96, 0.8)';
+        this._backgroundDown = 'rgba(40, 40, 40, 1)';
+        this._size = [3.5, 5, 5];
+        this._margin = [0.1, 0.2, 0.2];
+
+        //this._element.style.margin = "0 0 0 0";
+        // this._element.style.borderRadius = "20%";
+        this._element.style.textAlign = 'center';
+        // this.imgOrTxt.style.fontSize = '40px'
+        this._element.style.color = 'white';
+        // this._element.style.cursor = "default";
+        //  this._sizeWidthMulti = 2;
+    }
+    _setPos({ hor = 0, ver = 0, horAlign = 0, verAlign = 0 }) {
+
+        this._element.style.lineHeight = window.innerWidth * (this._size[Gui._SizeSetting] - this._margin[Gui._SizeSetting]) / 100 + 'px';
+        this._element.style.fontSize = window.innerHeight * window.innerWidth / window.innerHeight * this._size[Gui._SizeSetting] / 300 + 'px'
+
+        super._setPos({ hor: hor, ver: ver, horAlign: horAlign, verAlign: verAlign })
+
+    }
+
+    set color(color) {
+        this._background = color;
+        this._element.style.background = color;
+    }
+
+    showBorder() {
+        this._element.style.borderColor = '#00FF00';
+        this._element.style.borderStyle = 'solid';
+        this._element.style.borderWidth = '0px 0px 0px thick';
+    }
+
+    hideBorder() {
+        this._element.style.border = '';
+
+    }
+
+    set colorDown(color) {
+        this._backgroundDown = color;
+    }
+
+
+
+    set txt(txt) {
+        this._element.textContent = txt;
+    }
+
+
 }
 
 class GuiBattery extends Gui {
@@ -462,9 +545,9 @@ class GuiInput extends Gui {
 
         this._element.style.pointerEvents = 'auto';
         this._element.type = 'text';
- 
-        this._element.onfocus = function () {Gui._dontResizeGuiInput = true}.bind(this);
-        this._element.onblur = function () {Gui._dontResizeGuiInput = false}.bind(this);
+
+        this._element.onfocus = function () { Gui._dontResizeGuiInput = true }.bind(this);
+        this._element.onblur = function () { Gui._dontResizeGuiInput = false }.bind(this);
 
         this._element.value = text;
         this._background = 'rgba(96, 96, 96, 0.3)',
@@ -481,10 +564,10 @@ class GuiInput extends Gui {
     }
     _setPos({ hor = 0, ver = 0, horAlign = 0, verAlign = 0 }) {
 
-        if(Gui._dontResizeGuiInput){
+        if (Gui._dontResizeGuiInput) {
             return; //touch keyboard issues if resize
         }
- 
+
         this._element.style.lineHeight = window.innerWidth * (this._size[Gui._SizeSetting] - this._margin[Gui._SizeSetting]) / 100 + 'px';
         this._element.style.fontSize = window.innerHeight * window.innerWidth / window.innerHeight * this._size[Gui._SizeSetting] / 200 + 'px'
 
@@ -492,7 +575,7 @@ class GuiInput extends Gui {
 
     }
 
-    pointerDown(evt) {        
+    pointerDown(evt) {
         return;
     }
     get text() {
@@ -637,6 +720,7 @@ class GuiButtonPaint extends Gui {
         super.pointerDown();
         scene.onPointerMove = this.pointerMove.bind(this);
         scene.onPointerUp = this.pointerUp.bind(this);
+        Gui._pointerUpFunction = this.pointerUp.bind(this);
 
         this._applyColor();
     }
@@ -658,6 +742,7 @@ class GuiButtonPaint extends Gui {
         super.pointerUp();
         scene.onPointerMove = null;
         scene.onPointerUp = null;
+        Gui._pointerUpFunction = null;
 
     }
 
@@ -683,7 +768,7 @@ class GuiText extends Gui {
         super._setPos({ hor: hor, ver: ver, horAlign: horAlign, verAlign: verAlign })
     }
 
-    pointerDown(evt) {        
+    pointerDown(evt) {
         return;
     }
 
@@ -729,10 +814,10 @@ class GuiVideo extends Gui {
     constructor(src) {
         super(document.createElement('iframe'), null);
         this._element.src = src + "?autoplay=1";
-        
+
         this._element.allow = "autoplay"
         this._element.style.border = "none";
-        
+
         this._element.style.borderRadius = "0%";
 
         this._horAlign = guiOptions.center;
@@ -745,7 +830,7 @@ class GuiVideo extends Gui {
         this._element.style.pointerEvents = 'auto';
     }
 
-    pointerDown(evt) {        
+    pointerDown(evt) {
         return;
     }
 

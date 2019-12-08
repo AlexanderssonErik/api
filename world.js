@@ -60,6 +60,7 @@ let world = {
         } else if (volt > 9) {
             volt = 9;
         }
+       
 
         if (this._voltBars != volt) {
             this._voltBars = volt;

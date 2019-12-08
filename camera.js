@@ -115,6 +115,33 @@ let cameraAlpha= {
       this.lock();
   
     },
+
+    topView : function (){
+      this._baseDown = true;
+      this._arcRotateCamera.setTarget(new BABYLON.Vector3(4.5, 0, 4.5));  
+      this._arcRotateCamera.upperRadiusLimit = 65;
+      //this._arcRotateCamera.radius = 40;
+      this._arcRotateCamera.radius = 15;
+      this._arcRotateCamera.lowerBetaLimit =0;
+      this._arcRotateCamera.beta = 0;
+      this.setAlpha(cameraAlpha.front, true, true);
+
+
+     // this._arcRotateCamera.lowerBetaLimit =Math.PI/8;
+      this._arcRotateCamera.upperBetaLimit  = 0; 
+    },
+
+    aboveView : function (){
+      this._baseDown = true;
+      this._arcRotateCamera.setTarget(new BABYLON.Vector3(4.5,3.5 ,4.5));
+      this._arcRotateCamera.radius = 27;
+      this._arcRotateCamera.beta = Math.PI/3;
+    },
+      
+
+
+
+
   
     zoomToStartPos : function(){
       if(this._locked){
@@ -125,6 +152,16 @@ let cameraAlpha= {
     },
     get locked(){
       return this._locked;
+    },
+
+    guiLock : function (){
+      scene.activeCamera.detachControl(canvas);
+    },
+
+    guiUnlock : function (){
+      if(!this._locked){
+        scene.activeCamera.attachControl(canvas); 
+      }
     },
 
     lock : function(){    

@@ -1,15 +1,24 @@
 let database = {
     //add firebase account here
     _config: {
+      
         apiKey: "AIzaSyAYJgJb07yCtFdoQKEcxuNHH7qe_aX2hq4",
         authDomain: "bilo-d71d2.firebaseapp.com",
+        databaseURL: "https://bilo-d71d2.firebaseio.com",
         projectId: "bilo-d71d2",
+        storageBucket: "bilo-d71d2.appspot.com",
+        messagingSenderId: "699058898703",
+        appId: "1:699058898703:web:2d52cf91c70bee90a1a07a",
+        measurementId: "G-LQ66YHH7EP"
+      
       },
      _data: null,
     _signInGoogleButton: null,
     _signInMailButton: null,
     createSignInMailButton: null,
     
+    _analytics : null,
+
     _emailInput: null,
     _passwordInput: null,
  
@@ -85,7 +94,9 @@ let database = {
             ble.callAfterDatabaseLogin();
         }else{
               
-              firebase.initializeApp(this._config);
+              firebase.initializeApp(this._config);             
+              this._analytics = firebase.analytics();
+
               this._data = firebase.firestore();
 
               firebase.auth().onAuthStateChanged(function (authUser) {
@@ -102,7 +113,13 @@ let database = {
                   ble.callAfterDatabaseLogin();
         
                   let time = firebase.firestore.Timestamp.now();
-                  let d = time.toMillis();               
+                  let d = time.toMillis();      
+
+                  database._analytics.logEvent('login', {
+                    method: "?",          
+                    items: [{ name: database._user.uid }]
+                  });
+                  
                   database._data.collection("user").doc(database._user.uid).set({ name: database._user.name, email: database._user.email, timestamp: firebase.firestore.FieldValue.arrayUnion(d) }, { merge: true }).then(function () {
                   }).catch(function (error) {
                     console.log("Error setting user document:", error);
@@ -149,7 +166,12 @@ let database = {
         if(!this._user.loggedIn || this._user.uid == ""){
           return;
         }
-  
+
+        this._analytics.logEvent('level_end', {
+          level_name: name + level + difficulty,         
+          success: "yes",   
+          items: [{ name: this._user.uid }]
+        });
        
     
         this._data.collection(name).doc(this._user.uid).set({ timeStamp: firebase.firestore.FieldValue.arrayUnion( {level: level, difficulty: difficulty, timeStamp: firebase.firestore.Timestamp.now().toMillis(), type: "win"}) }, { merge: true }).then(function () {
@@ -159,12 +181,29 @@ let database = {
     
       },
 
+      selectContent: function({name = null}){
+        if(!this._user.loggedIn || this._user.uid == ""){
+          return;
+        }
+        this._analytics.logEvent('select_content', {
+          content_type : name,
+          item_id : this._user.uid,
+          items: [{ name: this._user.uid }]
+        });
+
+      },
   
       setLevel: function ({name = null, level = null , difficulty = null}) {
         if(!this._user.loggedIn || this._user.uid == ""){
             return;
           }
     
+
+          this._analytics.logEvent('level_start', {
+            level_name: name + level + difficulty,            
+            items: [{ name: this._user.uid }]
+          });
+
           this._data.collection(name).doc(this._user.uid).set({ timeStamp: firebase.firestore.FieldValue.arrayUnion( {level: level, difficulty: difficulty, timeStamp: firebase.firestore.Timestamp.now().toMillis(), type: "start"}) }, { merge: true }).then(function () {
     
         }).catch(function (error) {

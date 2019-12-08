@@ -4,23 +4,12 @@ class Algebra extends Game {
 
     level.push({ difficulty: [], image: null });
 
-    level[0].difficulty.push({ image: "./icon/games/algebra/lvl1.svg" });
-    level[0].difficulty.push({ image: "./icon/games/algebra/lvl2.svg" });
-    level[0].difficulty.push({ image: "./icon/games/algebra/lvl3.svg" });
+    level[0].difficulty.push({ image: "./icon/games/algebra/lvl1L.svg" });
+    level[0].difficulty.push({ image: "./icon/games/algebra/lvl2L.svg" });
+    level[0].difficulty.push({ image: "./icon/games/algebra/lvl3L.svg" });
 
 
-    level.push({ difficulty: [], image: null });
-    level[level.length - 1].difficulty.push({ stage: [], image: null });
-    level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
-    level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
-    level[level.length - 1].difficulty.push({ stage: [], image: null });
-    level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
-    level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
-    level[level.length - 1].difficulty.push({ stage: [], image: null });
-    level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
-    level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
-
-    level.push({ difficulty: [], image: null });
+    level.push({ difficulty: [], image: "./icon/games/algebra/lvl1.svg" });
     level[level.length - 1].difficulty.push({ stage: [], image: null });
     level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
     level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
@@ -31,7 +20,7 @@ class Algebra extends Game {
     level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
     level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
 
-    level.push({ difficulty: [], image: null });
+    level.push({ difficulty: [], image: "./icon/games/algebra/lvl2.svg" });
     level[level.length - 1].difficulty.push({ stage: [], image: null });
     level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
     level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
@@ -42,7 +31,7 @@ class Algebra extends Game {
     level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
     level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
 
-    level.push({ difficulty: [], image: null });
+    level.push({ difficulty: [], image: "./icon/games/algebra/lvl3.svg" });
     level[level.length - 1].difficulty.push({ stage: [], image: null });
     level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
     level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
@@ -53,7 +42,18 @@ class Algebra extends Game {
     level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
     level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
 
-    level.push({ difficulty: [], image: null });
+    level.push({ difficulty: [], image: "./icon/games/algebra/lvl4.svg" });
+    level[level.length - 1].difficulty.push({ stage: [], image: null });
+    level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
+    level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
+    level[level.length - 1].difficulty.push({ stage: [], image: null });
+    level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
+    level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
+    level[level.length - 1].difficulty.push({ stage: [], image: null });
+    level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
+    level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
+
+    level.push({ difficulty: [], image: "./icon/games/algebra/lvl5.svg" });
     level[level.length - 1].difficulty.push({ stage: [], image: null });
     level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);
     level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([]);

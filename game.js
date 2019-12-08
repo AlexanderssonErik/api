@@ -23,6 +23,12 @@ class Game {
 
     }
 
+    static clearForCenterButton(){
+        if (this._active != null) {
+            this._active.clearForCenterButton();        
+        }      
+    }
+
 
     constructor({ level = null, levelMenu = true, userCreatedLevel = false }) {
 
@@ -78,6 +84,8 @@ class Game {
             this._buildLevelMenu(this._level, userCreatedLevel);
         }
 
+        database.selectContent({ name: this.constructor.name});
+
     }
 
 
@@ -127,14 +135,14 @@ class Game {
                 this._levelMenu.push(new GuiButtonImg("./icon/level/lvlStart.svg", function () { this._setLevelByMenu({ level: -1, difficulty: 0 }) }.bind(this)));
                 this._levelMenu[0].setVisible(0, 0, guiOptions.right, guiOptions.top);
                 if (userCreatedLevel) {
-                    let userLevelButton = this._levelMenu[0].addChild(new GuiButtonImg("./icon/level/lvl1.svg", function () { this._loadUserLevel({ level: 0, difficulty: 0 }) }.bind(this)), guiOptions.childLeft);
-                    userLevelButton.addChild(new GuiButtonImg("./icon/level/lvl1Diy.svg", function () { this._buildUserLevel({ level: 0, difficulty: 0 }) }.bind(this)), guiOptions.childBottom);
+                    let userLevelButton = this._levelMenu[0].addChild(new GuiButtonImg("./icon/level/lvl1Diy.svg", function () { this._loadUserLevel({ level: 0, difficulty: 0 }) }.bind(this)), guiOptions.childLeft);
+                    userLevelButton.addChild(new GuiButtonImg("./icon/level/lvl1DiyCreate.svg", function () { this._buildUserLevel({ level: 0, difficulty: 0 }) }.bind(this)), guiOptions.childBottom);
 
-                    userLevelButton = this._levelMenu[0].addChild(new GuiButtonImg("./icon/level/lvl2.svg", function () { this._loadUserLevel({ level: 0, difficulty: 1 }) }.bind(this)), guiOptions.childLeft);
-                    userLevelButton.addChild(new GuiButtonImg("./icon/level/lvl2Diy.svg", function () { this._buildUserLevel({ level: 0, difficulty: 1 }) }.bind(this)), guiOptions.childBottom);
+                    userLevelButton = this._levelMenu[0].addChild(new GuiButtonImg("./icon/level/lvl2Diy.svg", function () { this._loadUserLevel({ level: 0, difficulty: 1 }) }.bind(this)), guiOptions.childLeft);
+                    userLevelButton.addChild(new GuiButtonImg("./icon/level/lvl2DiyCreate.svg", function () { this._buildUserLevel({ level: 0, difficulty: 1 }) }.bind(this)), guiOptions.childBottom);
 
-                    userLevelButton = this._levelMenu[0].addChild(new GuiButtonImg("./icon/level/lvl3.svg", function () { this._loadUserLevel({ level: 0, difficulty: 2 }) }.bind(this)), guiOptions.childLeft);
-                    userLevelButton.addChild(new GuiButtonImg("./icon/level/lvl3Diy.svg", function () { this._buildUserLevel({ level: 0, difficulty: 1 }) }.bind(this)), guiOptions.childBottom)
+                    userLevelButton = this._levelMenu[0].addChild(new GuiButtonImg("./icon/level/lvl3Diy.svg", function () { this._loadUserLevel({ level: 0, difficulty: 2 }) }.bind(this)), guiOptions.childLeft);
+                    userLevelButton.addChild(new GuiButtonImg("./icon/level/lvl3DiyCreate.svg", function () { this._buildUserLevel({ level: 0, difficulty: 1 }) }.bind(this)), guiOptions.childBottom)
 
                 }
 
@@ -595,6 +603,10 @@ class Game {
         this._levelMenu = [];
 
 
+    }
+
+    clearForCenterButton (){
+  
     }
 
 

@@ -708,6 +708,134 @@ class MeshShadowBottom extends MeshShadow {
 }
 
 
+
+class MeshShadowTopDrop extends Mesh {
+
+    constructor(block, y, color) {
+        super({ mesh: MeshShadowBottom._staticMesh.map(item => item.clone()) }, block);
+        //this._updateColor();
+
+
+        this._mesh.forEach(function (item) {
+            item.position.y = y;
+            if (y < 1) {
+                item.scaling = new BABYLON.Vector3(1, 1, 1);
+            } else {
+                item.scaling = new BABYLON.Vector3(MeshShadowTopDrop._baseScaling - y / MeshShadowTopDrop._divScaling, MeshShadowTopDrop._baseScaling - y / MeshShadowTopDrop._divScaling, MeshShadowTopDrop._baseScaling - y / MeshShadowTopDrop._divScaling);
+            }
+
+        });
+
+        this._mesh[0].material = MeshShadowTopDrop._staticMaterial[color];
+
+    }
+
+    static init({ mesh = [] }) {
+
+        MeshShadowTopDrop._baseScaling = 1;
+        MeshShadowTopDrop._divScaling = 12;
+
+        MeshShadowTopDrop._staticMesh = mesh;
+
+        let emissiveColor = 0.8;
+        let alphaSetting = 1;
+        let emissiveColor2 = 0;
+        let alphaSetting2 = 0.6;
+        let darkOffset = 0.2;
+
+        MeshShadowTopDrop._staticMaterial = [];
+
+        MeshShadowTopDrop._staticMaterial[0] = new BABYLON.StandardMaterial("", scene);
+        MeshShadowTopDrop._staticMaterial[0].diffuseColor = new BABYLON.Color3(1, 0, 0);
+        MeshShadowTopDrop._staticMaterial[0].emissiveColor = new BABYLON.Color3(emissiveColor, 0, 0);
+        MeshShadowTopDrop._staticMaterial[0].alpha = alphaSetting;
+        MeshShadowTopDrop._staticMaterial[1] = new BABYLON.StandardMaterial("", scene);
+        MeshShadowTopDrop._staticMaterial[1].diffuseColor = new BABYLON.Color3(0, 1, 0);
+        MeshShadowTopDrop._staticMaterial[1].emissiveColor = new BABYLON.Color3(0, emissiveColor, 0);
+        MeshShadowTopDrop._staticMaterial[1].alpha = alphaSetting;
+        MeshShadowTopDrop._staticMaterial[2] = new BABYLON.StandardMaterial("", scene);
+        MeshShadowTopDrop._staticMaterial[2].diffuseColor = new BABYLON.Color3(1, 1, 0);
+        MeshShadowTopDrop._staticMaterial[2].emissiveColor = new BABYLON.Color3(emissiveColor, emissiveColor, 0);
+        MeshShadowTopDrop._staticMaterial[2].alpha = alphaSetting;
+        MeshShadowTopDrop._staticMaterial[3] = new BABYLON.StandardMaterial("", scene);
+        MeshShadowTopDrop._staticMaterial[3].diffuseColor = new BABYLON.Color3(0, 0, 1);
+        MeshShadowTopDrop._staticMaterial[3].emissiveColor = new BABYLON.Color3(0, 0, emissiveColor);
+        MeshShadowTopDrop._staticMaterial[3].alpha = alphaSetting;
+        MeshShadowTopDrop._staticMaterial[4] = new BABYLON.StandardMaterial("", scene);
+        MeshShadowTopDrop._staticMaterial[4].diffuseColor = new BABYLON.Color3(1, 0, 1);
+        MeshShadowTopDrop._staticMaterial[4].emissiveColor = new BABYLON.Color3(emissiveColor, 0, emissiveColor);
+        MeshShadowTopDrop._staticMaterial[4].alpha = alphaSetting;
+        MeshShadowTopDrop._staticMaterial[5] = new BABYLON.StandardMaterial("", scene);
+        MeshShadowTopDrop._staticMaterial[5].diffuseColor = new BABYLON.Color3(0, 1, 1);
+        MeshShadowTopDrop._staticMaterial[5].emissiveColor = new BABYLON.Color3(0, emissiveColor, emissiveColor);
+        MeshShadowTopDrop._staticMaterial[5].alpha = alphaSetting;
+
+
+        MeshShadowTopDrop._staticMaterial[6] = new BABYLON.StandardMaterial("", scene);
+        MeshShadowTopDrop._staticMaterial[6].diffuseColor = new BABYLON.Color3(1 - darkOffset, 0, 0);
+        MeshShadowTopDrop._staticMaterial[6].emissiveColor = new BABYLON.Color3(emissiveColor2, 0, 0);
+        MeshShadowTopDrop._staticMaterial[6].alpha = alphaSetting2;
+        MeshShadowTopDrop._staticMaterial[7] = new BABYLON.StandardMaterial("", scene);
+        MeshShadowTopDrop._staticMaterial[7].diffuseColor = new BABYLON.Color3(0, 1 - darkOffset, 0);
+        MeshShadowTopDrop._staticMaterial[7].emissiveColor = new BABYLON.Color3(0, emissiveColor2, 0);
+        MeshShadowTopDrop._staticMaterial[7].alpha = alphaSetting2;
+        MeshShadowTopDrop._staticMaterial[8] = new BABYLON.StandardMaterial("", scene);
+        MeshShadowTopDrop._staticMaterial[8].diffuseColor = new BABYLON.Color3(1 - darkOffset, 1 - darkOffset, 0);
+        MeshShadowTopDrop._staticMaterial[8].emissiveColor = new BABYLON.Color3(emissiveColor2, emissiveColor2, 0);
+        MeshShadowTopDrop._staticMaterial[8].alpha = alphaSetting2;
+        MeshShadowTopDrop._staticMaterial[9] = new BABYLON.StandardMaterial("", scene);
+        MeshShadowTopDrop._staticMaterial[9].diffuseColor = new BABYLON.Color3(0, 0, 1 - darkOffset);
+        MeshShadowTopDrop._staticMaterial[9].emissiveColor = new BABYLON.Color3(0, 0, emissiveColor2);
+        MeshShadowTopDrop._staticMaterial[9].alpha = alphaSetting2;
+        MeshShadowTopDrop._staticMaterial[10] = new BABYLON.StandardMaterial("", scene);
+        MeshShadowTopDrop._staticMaterial[10].diffuseColor = new BABYLON.Color3(1 - darkOffset, 0, 1 - darkOffset);
+        MeshShadowTopDrop._staticMaterial[10].emissiveColor = new BABYLON.Color3(emissiveColor2, 0, emissiveColor2);
+        MeshShadowTopDrop._staticMaterial[10].alpha = alphaSetting2;
+        MeshShadowTopDrop._staticMaterial[11] = new BABYLON.StandardMaterial("", scene);
+        MeshShadowTopDrop._staticMaterial[11].diffuseColor = new BABYLON.Color3(0, 1 - darkOffset, 1 - darkOffset);
+        MeshShadowTopDrop._staticMaterial[11].emissiveColor = new BABYLON.Color3(0, emissiveColor2, emissiveColor2);
+        MeshShadowTopDrop._staticMaterial[11].alpha = alphaSetting2;
+
+        MeshShadowTopDrop._staticMaterial[12] = new BABYLON.StandardMaterial("", scene);
+        MeshShadowTopDrop._staticMaterial[12].diffuseColor = new BABYLON.Color3(0.9, 0.9, 0.9);
+        MeshShadowTopDrop._staticMaterial[12].emissiveColor = new BABYLON.Color3(0, 0, 0);
+        MeshShadowTopDrop._staticMaterial[12].alpha = 1;
+
+
+    }
+    _updateColor() {
+        this._mesh[0].material = MeshShadowTopDrop._staticMaterial[this._block.color[0]]; //remove?       
+
+    }
+
+    _updatePos() {
+        this._mesh.forEach(function (item) {
+            item.position.x = this._block.x;
+            item.position.z = this._block.z;
+
+        }.bind(this));
+        this._updateColor();
+    }
+
+    drop(speed) {
+
+        let frameRate = 20;
+        let endFrame = frameRate * speed / 1000;
+
+        let animateY = new BABYLON.Animation("", "position.y", frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+        let animateScale = new BABYLON.Animation("", "scaling", frameRate, BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+
+        animateScale.setKeys([{ frame: 0, value: new BABYLON.Vector3(MeshShadowTopDrop._baseScaling - this._mesh[0].position.y / MeshShadowTopDrop._divScaling, MeshShadowTopDrop._baseScaling - this._mesh[0].position.y / MeshShadowTopDrop._divScaling, MeshShadowTopDrop._baseScaling - this._mesh[0].position.y / MeshShadowTopDrop._divScaling) }, { frame: endFrame, value: new BABYLON.Vector3(MeshShadowTopDrop._baseScaling - (this._mesh[0].position.y - 1) / MeshShadowTopDrop._divScaling, MeshShadowTopDrop._baseScaling - (this._mesh[0].position.y - 1) / MeshShadowTopDrop._divScaling, MeshShadowTopDrop._baseScaling - (this._mesh[0].position.y - 1) / MeshShadowTopDrop._divScaling) }]);
+        animateY.setKeys([{ frame: 0, value: this._mesh[0].position.y }, { frame: endFrame, value: this._mesh[0].position.y - Mesh._staticPitch }]);
+
+        scene.beginDirectAnimation(this._mesh[0], [animateScale], 0, endFrame, false);
+        scene.beginDirectAnimation(this._mesh[0], [animateY], 0, endFrame, false);
+
+    }
+
+}
+
+
 class MeshNumber extends Mesh {
 
     static init({ mesh = [] }) {

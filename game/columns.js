@@ -5,13 +5,15 @@ class Columns extends Game {
     super({ level: level, userCreatedLevel: false });
 
     this._enumColumnsState = {
-      displayColor: 0,
-      setColor: 1,
-      checkThree: 2,
-      colorDown: 3,
+      setColor: 0,
+      checkThree: 1,
+      colorDown: 2,
     }
     this._columnsState = 0;
 
+
+    this._secretCount = 3;
+    this._secretCountIndex = 0;
     this._colorCount = 3;
     this._displayColors = [];
     this._displayColorsIndex = 0;
@@ -27,9 +29,8 @@ class Columns extends Game {
     this._speedColorSelect = 3;
     this._speedColorSelectIndex = 0;
 
-    this._colorSelector = new BlockPillar({ x: 1, y: 0, z: 1, color: [meshColor.blue] });
-    this._colorSelectorBlock = new Block2x2({ x: 1, y: 0, z: 1, r: 0, color: [0, 0] });
     this._playFieldBlocks = [];
+    this._forRemovalBlocks = [];
 
 
     this._playfield = [new BlockPillar({ x: 7, y: 0, z: 7, color: [meshColor.blue] }), new BlockPillar({ x: 7, y: 0, z: 5, color: [meshColor.blue] }), new BlockPillar({ x: 7, y: 0, z: 3, color: [meshColor.blue] }), new BlockPillar({ x: 5, y: 0, z: 7, color: [meshColor.blue] }), new BlockPillar({ x: 5, y: 0, z: 5, color: [meshColor.blue] }), new BlockPillar({ x: 3, y: 0, z: 7, color: [meshColor.blue] }),];
@@ -47,7 +48,7 @@ class Columns extends Game {
     super._setLevel({ level: level, difficulty: difficulty });
 
     this._playFieldBlocks = [];
-    this._columnsState = this._enumColumnsState.displayColor;
+    this._columnsState = this._enumColumnsState.setColor;
     this._currentColor = 0;
 
 
@@ -56,28 +57,32 @@ class Columns extends Game {
         this._colorCount = 4;
 
         this._speedColorSelect = 4;
+        this._secretCount = 4;
+
         break;
       case 2:
-        this._colorCount = 4;
+        this._colorCount = 5;
         this._speedColorSelect = 3;
-
+        this._secretCount = 3;
 
         break;
       case 3:
-        this._colorCount = 5;
+        this._colorCount = 6;
         this._speedColorSelect = 2;
-
+        this._secretCount = 3;
 
         break;
       case 4:
-        this._colorCount = 5;
+        this._colorCount = 7;
         this._speedColorSelect = 1;
+        this._secretCount = 3;
 
 
         break;
       default:
-        this._colorCount = 6;
+        this._colorCount = 7;
         this._speedColorSelect = 1;
+        this._secretCount = 3;
 
         break;
 
@@ -98,8 +103,9 @@ class Columns extends Game {
     super.reset();
     Block.setColor({ block: world.block, color: 0, blink: false });
     this._playFieldBlocks = [];
-    this._columnsCurrentLevel = 0;
+    this._columnsCurrentLevel = 1;
     this._score = 0
+    this._secretCountIndex = 0;
 
   }
 
@@ -144,43 +150,27 @@ class Columns extends Game {
 
     let currentPlayFieldBlocks = []
 
-    let setWorldColorSelector = BlockPillar.calcSet({ left: BlockPixel.convertBlock(world.block), right: this._colorSelector, careColor: false, careRotation: false });
-
-    setWorldColorSelector.intersectionLeft.forEach(function (item) {
-
-      if (currentColorSelectorBlocks.find(findItem => item.block == findItem) === undefined) {
-        currentColorSelectorBlocks.push(item.block);
-      }
-
-    });
-
-    if (currentColorSelectorBlocks.length == 0) {
-      this.show({ block: [this._colorSelectorBlock], careColor: false });
-      return;
-    } else {
-      this.show([]);
-    }
-
-
-
-    setWorldColorSelector = Block.calcSet({ left: world.block, right: currentColorSelectorBlocks, careColor: false, careRotation: false });
+    let setForRemovalBlocks = Block.calcSet({ left: world.block, right: this._forRemovalBlocks, careColor: false, careRotation: false });
+    this._forRemovalBlocks = setForRemovalBlocks.intersectionLeft;
 
     let setCurrentPlayFieldBlocks = BlockPillar.calcSet({ left: world.block, right: this._playfield, careColor: false, careRotation: false });
-    currentPlayFieldBlocks = setCurrentPlayFieldBlocks.intersectionLeft;
+    setCurrentPlayFieldBlocks = Block.calcSet({ left: setCurrentPlayFieldBlocks.intersectionLeft, right: this._forRemovalBlocks, careColor: false, careRotation: false });
 
+    currentPlayFieldBlocks = setCurrentPlayFieldBlocks.diffLeft;
 
     let setFalselyRemovedBlocks = Block.calcSet({ left: currentPlayFieldBlocks, right: this._playFieldBlocks, careColor: false, careRotation: false });
     if (setFalselyRemovedBlocks.diffRight.length > 0) {
       this.show({ block: setFalselyRemovedBlocks.diffRight, careColor: false });
       return;
+    } else {
+      this.show({ block: [], careColor: false });
     }
 
     Block.copyColor({ to: currentPlayFieldBlocks, from: this._playFieldBlocks, careRotation: false });
 
-
     switch (this._columnsState) {
 
-      case this._enumColumnsState.displayColor:
+      case this._enumColumnsState.setColor:
         if (this._timeoutDelay == null) {
 
           while (this._displayColors.length < 3) {
@@ -190,15 +180,22 @@ class Columns extends Game {
             }
           }
 
+          if (currentPlayFieldBlocks.some(function (item) {
+            if (!item.color.some(itemFind => itemFind != 0)) {
+              item.color = this._displayColors[this._displayColorsIndex];
+              this._displayColors = [];
+              this._columnsState = this._enumColumnsState.checkThree;
+              this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 100);
+              this._speedColorSelectIndex = this._speedColorSelect;
 
-          if (currentColorSelectorBlocks.length > 1) {
+              this._secretCountIndex++;
+              this._secretCountIndex %= this._secretCount;
 
-            currentColorSelectorBlocks.forEach(item => item.color = this._displayColors[this._displayColorsIndex])
+              return true;
+            }
+          }.bind(this))) {
 
-            this._currentColor = this._displayColors[this._displayColorsIndex];
-            this._columnsState = this._enumColumnsState.setColor;
-            this._displayColors = [];
-            break; 
+            break;
           }
 
           this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 100);
@@ -207,23 +204,19 @@ class Columns extends Game {
           this._displayColorsIndex++;
           this._displayColorsIndex %= 3;
 
-          currentColorSelectorBlocks.forEach(item => item.color = this._displayColors[this._displayColorsIndex])
+          if (this._secretCountIndex == this._secretCount - 1) {
+            world.base.ledFront = meshColor.red;
+            world.base.ledLeft = meshColor.magenta;
+            world.base.ledRight = meshColor.cyan;
+            world.base.ledBack = meshColor.green;
+          } else {
+            world.base.ledFront = this._displayColors[this._displayColorsIndex];
+            world.base.ledLeft = this._displayColors[this._displayColorsIndex];
+            world.base.ledRight = this._displayColors[this._displayColorsIndex];
+            world.base.ledBack = this._displayColors[this._displayColorsIndex];
+          }
 
         }
-        break;
-      case this._enumColumnsState.setColor:
-
-        this._displayColors = [];
-
-        currentPlayFieldBlocks.some(function (item) {
-          if (!item.color.some( itemFind => itemFind != 0) ) {
-            item.color = this._currentColor;
-            this._columnsState = this._enumColumnsState.checkThree;
-            this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 100);
-            this._speedColorSelectIndex = this._speedColorSelect;
-            return true;
-          }
-        }.bind(this))
 
         break;
 
@@ -251,15 +244,27 @@ class Columns extends Game {
 
           BlockPixel.setBlockColor({ block: forRemoval, color: 0, blink: false, colorComplete: false });
 
-          if (this._score >= this._levelScoreProgression[this._columnsCurrentLevel]) {         
-            sound.win();
-            this._columnsCurrentLevel++;
-            this._setLevel({ level: this._columnsCurrentLevel, difficulty: 0 });
-            return;
-          } else if(forRemoval.length > 0) {            
-            sound.correct((this._score - this._levelScoreProgression[this._columnsCurrentLevel - 1]) / (this._levelScoreProgression[this._columnsCurrentLevel] - this._levelScoreProgression[this._columnsCurrentLevel - 1]));
-          }
+          if (forRemoval.length > 0) {
 
+            forRemoval.forEach(function (item) {
+              if (!item.block.color.some(itemFind => itemFind != 0)) {
+                if (!(this._forRemovalBlocks.some(itemFind => itemFind == item.block))) {
+                  this._forRemovalBlocks.push(item.block);
+                }
+              }
+
+            }.bind(this));
+
+            if (this._score >= this._levelScoreProgression[this._columnsCurrentLevel]) {
+              sound.win();
+              this._columnsCurrentLevel++;
+              this._setLevel({ level: this._columnsCurrentLevel, difficulty: 0 });
+              return;
+            } else {
+              sound.correct((this._score - this._levelScoreProgression[this._columnsCurrentLevel - 1]) / (this._levelScoreProgression[this._columnsCurrentLevel] - this._levelScoreProgression[this._columnsCurrentLevel - 1]));
+
+            }
+          }
 
           this._columnsState = this._enumColumnsState.colorDown;
           this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 100);
@@ -270,65 +275,63 @@ class Columns extends Game {
 
       case this._enumColumnsState.colorDown:
 
-      if (this._timeoutDelay == null) {
+        if (this._timeoutDelay == null) {
 
-        let blockDropped = false;
-        let curretBlocksPixels = BlockPixel.convertBlock(currentPlayFieldBlocks);
-        this._playfield.forEach(function (item) {
+          let blockDropped = false;
+          let curretBlocksPixels = BlockPixel.convertBlock(currentPlayFieldBlocks);
+          this._playfield.forEach(function (item) {
 
+            let set = BlockPillar.calcSet({ left: curretBlocksPixels, right: item, careColor: false, careRotation: false });
+            if (set.intersectionLeft.length > 1) {
 
-          
-          let set = BlockPillar.calcSet({ left: curretBlocksPixels, right: item, careColor: false, careRotation: false });
-          if (set.intersectionLeft.length > 1) {
-
-            let bottomBlock = [set.intersectionLeft[0]];
-            set.intersectionLeft.forEach(function (itemPillar) {
-              if (itemPillar.y < bottomBlock[0].y) {
-                bottomBlock = [itemPillar];
-              }else if (itemPillar.y == bottomBlock[0].y){
-                bottomBlock.push(itemPillar);
-              }
-            });
-
-            while (true) {
-              let topBlock = null;
+              let bottomBlock = [set.intersectionLeft[0]];
               set.intersectionLeft.forEach(function (itemPillar) {
-
-                if (itemPillar.y > bottomBlock[0].y) {
-                  if (topBlock == null) {
-                    topBlock = [itemPillar];
-                  } else if (itemPillar.y < topBlock[0].y) {
-                    topBlock = [itemPillar];
-                  }else if (itemPillar.y == topBlock[0].y) {
-                    topBlock.push( itemPillar);
-                  }
+                if (itemPillar.y < bottomBlock[0].y) {
+                  bottomBlock = [itemPillar];
+                } else if (itemPillar.y == bottomBlock[0].y) {
+                  bottomBlock.push(itemPillar);
                 }
-
               });
-              if (topBlock == null) {
-                return;
-              }
 
-              if (bottomBlock[0].color[0] == 0) {
-                if (topBlock[0].color[0] != 0) {
-                  blockDropped = true;
+              while (true) {
+                let topBlock = null;
+                set.intersectionLeft.forEach(function (itemPillar) {
+
+                  if (itemPillar.y > bottomBlock[0].y) {
+                    if (topBlock == null) {
+                      topBlock = [itemPillar];
+                    } else if (itemPillar.y < topBlock[0].y) {
+                      topBlock = [itemPillar];
+                    } else if (itemPillar.y == topBlock[0].y) {
+                      topBlock.push(itemPillar);
+                    }
+                  }
+
+                });
+                if (topBlock == null) {
+                  return;
                 }
-                BlockPixel.setBlockColor({ block: bottomBlock, color: topBlock[0].color[0], blink: false, colorComplete: false });
-                BlockPixel.setBlockColor({ block: topBlock, color: 0, blink: false, colorComplete: false });
+
+                if (bottomBlock[0].color[0] == 0) {
+                  if (topBlock[0].color[0] != 0) {
+                    blockDropped = true;
+                  }
+                  BlockPixel.setBlockColor({ block: bottomBlock, color: topBlock[0].color[0], blink: false, colorComplete: false });
+                  BlockPixel.setBlockColor({ block: topBlock, color: 0, blink: false, colorComplete: false });
+                }
+                bottomBlock = topBlock;
               }
-              bottomBlock = topBlock;
             }
+          });
+          if (blockDropped) {
+            this._columnsState = this._enumColumnsState.checkThree;
+          } else {
+            this._columnsState = this._enumColumnsState.setColor;
           }
-        });
-        if (blockDropped) {
-          this._columnsState = this._enumColumnsState.checkThree;
-        } else {
-          this._columnsState = this._enumColumnsState.displayColor;
+          this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 100);
+          this._speedColorSelectIndex = this._speedColorSelect;
         }
-        this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 100);
-        this._speedColorSelectIndex = this._speedColorSelect;
-      }
-      
+
         break;
     }
     this._playFieldBlocks = [];

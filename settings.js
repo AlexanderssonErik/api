@@ -47,10 +47,10 @@ let settings = {
         button.addChild(new GuiButtonImg("./icon/settings/soundOff.svg", sound.off), guiOptions.childRight)
         button.addChild(new GuiButtonImg("./icon/settings/soundOn.svg", sound.on), guiOptions.childRight)
 
-        button = new GuiButtonImg("./icon/settings/sound.svg")
+        button = new GuiButtonImg("./icon/settings/stl.svg")
         startButton.addChild(button, guiOptions.childTop)
-        button.addChild(new GuiButtonImg("./icon/settings/soundOff.svg", this.exportSTL.bind(this)), guiOptions.childRight);
-        //button.addChild(new GuiButtonImg("./icon/settings/soundOff.svg", world.printBlock), guiOptions.childRight);
+        button.addChild(new GuiButtonImg("./icon/settings/stlPrint.svg", this.exportSTL.bind(this)), guiOptions.childRight);
+        button.addChild(new GuiButtonImg("./icon/settings/worldPrint.svg", world.printBlock), guiOptions.childRight);
 
 
         this._confirmFullScreenOffButton = new GuiButtonImg("./icon/settings/fullscreenOff.svg", this.fullscreenOff.bind(this));
@@ -80,7 +80,7 @@ let settings = {
         button.addChild(new GuiButtonImg("./icon/games/shapeHunter.svg", function () { new ShapeHunter() }), guiOptions.childRight);
         button.addChild(new GuiButtonImg("./icon/games/memory.svg", function () { new Memo() }), guiOptions.childRight);
         button.addChild(new GuiButtonImg("./icon/games/colorMatch.svg", function () { new ColorMatch() }), guiOptions.childRight);
-        button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { new MasterMind() }), guiOptions.childRight);
+        button.addChild(new GuiButtonImg("./icon/games/masterMind.svg", function () { new MasterMind() }), guiOptions.childRight);
 
 
         button = new GuiButtonImg("./icon/games/categoryStackGames.svg");
@@ -88,6 +88,13 @@ let settings = {
         button.addChild(new GuiButtonImg("./icon/games/whack.svg", function () { new Whack() }), guiOptions.childRight);
 
         button.addChild(new GuiButtonImg("./icon/games/columns.svg", function () { new Columns() }), guiOptions.childRight);
+        button.addChild(new GuiButtonImg("./icon/games/blockTris.svg", function () { new BlockTris() }), guiOptions.childRight);
+
+
+       /* button = new GuiButtonImg("./icon/games/categoryProgramming.svg");
+        startButton.addChild(button, guiOptions.childBottom)
+        button.addChild(new GuiButtonImg("./icon/games/categoryProgramming.svg", function () { new Programming() }), guiOptions.childRight);
+*/
 
 
 

@@ -67,8 +67,7 @@ class Tangram2D extends Game {
             case this._enumTangram2DState.left:
               returnShadow.push(new BlockShadowLeft({ x: x, y: y, color: [color] }));
               break;
-            case this._enumTangram2DState.top:
-              //returnShadow.push(new BlockShadowBottom({ x: y, z: x, color: [color] }));
+            case this._enumTangram2DState.top:        
               returnShadow.push(new BlockShadowTop({ x: y, z: x, color: [color] }));
               break;
           }
@@ -177,6 +176,10 @@ class Tangram2D extends Game {
     camera.reset();
     GuiButtonPaint.reset();
     super.close();
+  }
+
+  clearForCenterButton(){
+    GuiButtonPaint.reset();
   }
 
 }

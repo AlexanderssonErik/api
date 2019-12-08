@@ -114,6 +114,7 @@ class Tangram extends Game {
 
       if (!this._careColor) {
         BlockShadow.setColor({ block: set.intersectionLeft, color: meshColor.green });
+        //  BlockShadow.setBlockColor({ block: set.intersectionLeft, color: meshColor.green })
         this.showShadow({ block: set.intersectionLeft, add: true });
       }
 
@@ -131,6 +132,8 @@ class Tangram extends Game {
       }
     }
   }
+
+
 
   update() {
 
@@ -165,12 +168,13 @@ class Tangram extends Game {
       this.updateSide({ worldShadow: shadow.front, gameShadow: this._activeStageShadow.front });
       this.updateSide({ worldShadow: shadow.left, gameShadow: this._activeStageShadow.left });
       this.updateSide({ worldShadow: shadow.bottom, gameShadow: this._activeStageShadow.bottom });
+      this._colorOkBlocksGreen();
       if (this._sidesCorrect == 5) {
-
         this._lastWorldBlock = null;
         this.win({});
       }
     } else {
+      this._colorOkBlocksGreen();
       if (this._sidesCorrect == 1) {
 
         this._lastWorldBlock = null;
@@ -180,5 +184,18 @@ class Tangram extends Game {
 
     this.soundProgression({ correct: this._shadowPixelCorrect, wrong: this._shadowPixelWrong, maxCorret: this._shadowPixelMaxCorrect });
   }
+
+
+  _colorOkBlocksGreen() {
+    if (!this._careColor && !this._showNoHints) {
+      world.block.forEach(function (item) {
+        if (!item.color.some(find => find == meshColor.red)) {
+          item.color = meshColor.green;
+        }
+      }.bind(this));
+    }
+
+  }
+
 
 }

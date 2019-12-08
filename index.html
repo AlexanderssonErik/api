@@ -3,9 +3,12 @@
 <head>
     <title>bilo</title>
 
-    <script src="./firebase/firebase-app.js"></script>
-    <script src="./firebase/firebase-auth.js"></script>
-    <script src="./firebase/firebase-firestore.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.5.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase-firestore.js"></script>
+
 
     <script src="./babylon/earcut.js"></script>
     <script src="./babylon/babylon.js"></script>
@@ -53,9 +56,11 @@
     <script src="./game/whack.js"></script>
     <script src="./game/columns.js"></script>
     <script src="./game/masterMind.js"></script>
+    <script src="./game/blockTris.js"></script>
 
-    <script src="https://www.youtube.com/iframe_api"></script>
-
+    <script src="./game/programming.js"></script>
+    <script src="./game/programmingGui.js"></script>
+    <script src="./game/programmingProgram.js"></script>
 
 
     <style>
@@ -160,6 +165,8 @@
         MeshShadowFront.init(meshesShadowFront());
         MeshShadowBottom.init(meshesShadowBottom());
 
+        MeshShadowTopDrop.init(meshesShadowBottom());
+
         //MeshNumber.init(meshesNumber());
         MeshNumberPillar.init(meshesNumberPillar());
         MeshPad.init(meshesPad());
@@ -184,15 +191,56 @@
 
         database.init({ enabled: true }); //first create your own firebase account and configure database.js before enabling the database (still need to call database.init)
 
+        ProgrammingProgram.init();
+
         let colorWheel = new GuiColorWheel();
 
         window.onload = function () {
-            engine.hideLoadingUI();     
-            if( canvas.height * canvas.width < 2000000){
-                setTimeout(function () { optimizer.start();}, 1000);      
-            }else{
+            engine.hideLoadingUI();
+            if (canvas.height * canvas.width < 2000000) {
+                setTimeout(function () { optimizer.start(); }, 3000);
+            } else {
                 MeshNumber.init(meshesNumber());
             }
+/*
+            let b = [];
+            let m = [];
+
+            //y,
+            for (let y = 0; y < 10; y++) {
+
+              //  if (y % 2 != 0) {
+                //if (y % 2 == 0) {
+                for (let x = 1; x < 6; x++) {
+                        if (x == 1) {
+                            b[y] = [];
+                            m[y] = [];
+                        }
+                        for (let z = 1; z < 6; z++) {
+                            if (z == 1) {
+                                b[y][x] = [];
+                                m[y][x] = [];
+                            }
+                            if((x == 1 && z ==1 )|| (x == 5 && z ==5 )||(x == 5 && z ==1 )||(x == 1 && z ==5 )){
+                            b[y][x][z] = new BlockShadowTop({ x: x, y: y + 0.1, z: z, color: [ y%6] });
+
+                            m[y][x][z] =  new MeshShadowTopDrop(b[y][x][z] , y * Mesh._staticPitch, 6 + y%6);
+                            }else{
+                                b[y][x][z] = new BlockShadowTop({ x: x, y: y + 0.1, z: z, color: [ y%6] });
+
+                                m[y][x][z] =  new MeshShadowTopDrop(b[y][x][z] , y * Mesh._staticPitch, y%6);
+
+                            }
+                           // m[y][x][z] = new MeshShadowTopDrop(b[y][x][z]);
+
+                        }
+                    }
+  
+
+            }*/
+            
+        
+
         };
 
 
@@ -206,7 +254,7 @@
 
         window.addEventListener('DOMContentLoaded', function () {
             scene.onPointerDown = function (evt, pickResult) {
-
+          
                 if (Gui.pointerDown(evt)) {
 
                 } else if (pickResult.hit) {
@@ -223,19 +271,19 @@
                 clearTimeout(timeOutResizeDeBounce);
                 timeOutResizeDeBounce = setTimeout(timeOutResizeDeBounceFunction, 500);
             });
-     
-            
+
+
         });
 
         let timeOutStartSceneOptimize = null
 
-        var options = new BABYLON.SceneOptimizerOptions(40, 1000);
+        var options = new BABYLON.SceneOptimizerOptions(40, 2000);
         options.addOptimization(new BABYLON.HardwareScalingOptimization(0, 0.5));
         var optimizer = new BABYLON.SceneOptimizer(scene, options, true, true);
 
-       optimizer.onSuccessObservable.add(function () {
-            MeshNumber.init(meshesNumber());          
-            console.log("State: Done: " + engine.getHardwareScalingLevel() + " fps: " + optimizer.currentFrameRate);           
+        optimizer.onSuccessObservable.add(function () {
+            MeshNumber.init(meshesNumber());
+            console.log("State: Done: " + engine.getHardwareScalingLevel() + " fps: " + optimizer.currentFrameRate);
             engine.setHardwareScalingLevel(engine.getHardwareScalingLevel() + 0.25);
             console.log("State: finished: " + engine.getHardwareScalingLevel() + " fps: " + optimizer.currentFrameRate);
         });
@@ -251,17 +299,17 @@
         console.log("canvas.height: " + canvas.height);
         console.log("pixel count: " + canvas.height * canvas.width);*/
 
-        
+
         //setTimeout(function () { optimizer.start();}, 1000);
 
-       
 
-       /* setTimeout(function () {            
-            console.log("setHardwareScalingLevel(0.5);");
-            engine.setHardwareScalingLevel(0.5)
-            setTimeout(function () { optimizer.start();}, 10000);
 
-        }, 10000);*/
+        /* setTimeout(function () {
+             console.log("setHardwareScalingLevel(0.5);");
+             engine.setHardwareScalingLevel(0.5)
+             setTimeout(function () { optimizer.start();}, 10000);
+
+         }, 10000);*/
 
         //optimizer.start();
 
