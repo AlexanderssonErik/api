@@ -6,7 +6,7 @@ class Tangram extends Game {
     level.push({ difficulty: [], image: null });
 
     tangramLevel.buildLevel(level)
-    super({ level: level, userCreatedLevel: true });
+    super({ level: level, userCreatedLevel: true, displayLevel: true, displayStage: true });
 
 
     this._showAllSides = false;

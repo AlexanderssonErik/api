@@ -5,7 +5,7 @@ class ShapeHunter extends Game {
     level.push({ difficulty: [], image: null });
     shapeHunterLevel.buildLevel(level)
 
-    super({ level: level, userCreatedLevel: true });
+    super({ level: level, userCreatedLevel: true, displayLevel: true, displayStage: true });
 
     this._activeStagePixel = [];
     this._activeStageForbiddenPixel = [];

@@ -23,19 +23,29 @@ class Game {
 
     }
 
-    static clearForCenterButton(){
+    static clearForCenterButton() {
         if (this._active != null) {
-            this._active.clearForCenterButton();        
-        }      
+            this._active.clearForCenterButton();
+        }
     }
 
 
-    constructor({ level = null, levelMenu = true, userCreatedLevel = false }) {
+    constructor({ level = null, levelMenu = true, userCreatedLevel = false, displayLevel = false, displayStage = false }) {
 
 
         if (Game._active != null) {
             Game._active.close();
         }
+
+        //level display
+        this._displayLevel = displayLevel;
+        this._displayStage = displayStage;
+        if (this._displayLevel) {
+            this._levelDisplay = new GuiTextLevel("Lv: 1.1-1");
+            this._levelDisplay.setVisible(0, 0, guiOptions.center, guiOptions.top);
+
+        }
+
 
         this._levelIndex = 0;
         this._difficultyIndex = 0;
@@ -46,6 +56,7 @@ class Game {
 
         this._meshBlock2x2 = [];
         this._meshBlock2x4 = [];
+        this._meshPixel = [];
 
         this._meshShadowRight = [];
         this._meshShadowFront = [];
@@ -84,7 +95,7 @@ class Game {
             this._buildLevelMenu(this._level, userCreatedLevel);
         }
 
-        database.selectContent({ name: this.constructor.name});
+        database.selectContent({ name: this.constructor.name });
 
     }
 
@@ -92,6 +103,7 @@ class Game {
     _buildUserLevel({ level = 0, difficulty = 0 }) {
 
         this.reset();
+        Block.setColor({block: world.block, color: meshColor.black})
         colorWheel.colorComplete();
         world.showBase();
         world.showBlock();
@@ -104,7 +116,14 @@ class Game {
 
     _saveUserLevel({ level = 0, difficulty = 0 }) {
 
+ 
         database.saveUserLevel({ name: this.constructor.name, difficulty: difficulty, block: world.blockString });
+       if(world.block.length >0){
+        setTimeout(function() { this._loadUserLevel({ level: level, difficulty: difficulty }); }.bind(this), 500);
+        this._okButton.setNotVisible();
+        this._okButton = null;
+       }
+        
     }
 
     _loadUserLevel({ level = 0, difficulty = 0 }) {
@@ -132,7 +151,9 @@ class Game {
         level.forEach(function (l, iL) {
 
             if (iL == 0) {
-                this._levelMenu.push(new GuiButtonImg("./icon/level/lvlStart.svg", function () { this._setLevelByMenu({ level: -1, difficulty: 0 }) }.bind(this)));
+                // this._levelMenu.push(new GuiButtonImg("./icon/level/lvlStart.svg", function () { this._setLevelByMenu({ level: -1, difficulty: 0 }) }.bind(this)));
+                this._levelMenu.push(new GuiButtonImg("./icon/level/lvlStart.svg"));
+
                 this._levelMenu[0].setVisible(0, 0, guiOptions.right, guiOptions.top);
                 if (userCreatedLevel) {
                     let userLevelButton = this._levelMenu[0].addChild(new GuiButtonImg("./icon/level/lvl1Diy.svg", function () { this._loadUserLevel({ level: 0, difficulty: 0 }) }.bind(this)), guiOptions.childLeft);
@@ -142,26 +163,27 @@ class Game {
                     userLevelButton.addChild(new GuiButtonImg("./icon/level/lvl2DiyCreate.svg", function () { this._buildUserLevel({ level: 0, difficulty: 1 }) }.bind(this)), guiOptions.childBottom);
 
                     userLevelButton = this._levelMenu[0].addChild(new GuiButtonImg("./icon/level/lvl3Diy.svg", function () { this._loadUserLevel({ level: 0, difficulty: 2 }) }.bind(this)), guiOptions.childLeft);
-                    userLevelButton.addChild(new GuiButtonImg("./icon/level/lvl3DiyCreate.svg", function () { this._buildUserLevel({ level: 0, difficulty: 1 }) }.bind(this)), guiOptions.childBottom)
-
+                    userLevelButton.addChild(new GuiButtonImg("./icon/level/lvl3DiyCreate.svg", function () { this._buildUserLevel({ level: 0, difficulty: 2 }) }.bind(this)), guiOptions.childBottom);
                 }
 
             } else {
-                if(l.image != null){
-                    this._levelMenu.push(this._levelMenu[0].addChild(new GuiButtonImg(l.image, function () { this._setLevelByMenu({ level: iL, difficulty: 0 }) }.bind(this)), guiOptions.childBottom));
-                }else{
+                if (l.image != null) {
+                    if (l.difficulty[0] == null || l.difficulty[0].image == null) {
+                        this._levelMenu.push(this._levelMenu[0].addChild(new GuiButtonImg(l.image, function () { this._setLevelByMenu({ level: iL, difficulty: 0 }) }.bind(this)), guiOptions.childBottom));
+                    } else {
+                        this._levelMenu.push(this._levelMenu[0].addChild(new GuiButtonImg(l.image), guiOptions.childBottom));
+                    }
+                } else {
                     this._levelMenu.push(this._levelMenu[0].addChild(new GuiButtonImg("./icon/level/lvl" + iL + ".svg", function () { this._setLevelByMenu({ level: iL, difficulty: 0 }) }.bind(this)), guiOptions.childBottom));
                 }
             }
 
+            let levelButton = this._levelMenu[this._levelMenu.length - 1];
             l.difficulty.forEach(function (d, iD) {
                 if (d.image != null) {
-                    this._levelMenu.push(this._levelMenu[iL].addChild(new GuiButtonImg(d.image, function () { this._setLevelByMenu({ level: iL, difficulty: iD }) }.bind(this)), guiOptions.childLeft));
+                    this._levelMenu.push(levelButton.addChild(new GuiButtonImg(d.image, function () { this._setLevelByMenu({ level: iL, difficulty: iD }) }.bind(this)), guiOptions.childLeft));
                 }
-
-            }.bind(this)
-
-            );
+            }.bind(this));
 
         }.bind(this));
 
@@ -177,25 +199,35 @@ class Game {
 
         database.setLevel({ name: this.constructor.name, level: level, difficulty: difficulty });
 
+
+
+
         if (this._level[level] == null || this._level[level].difficulty[difficulty] == null) {
             console.log("no level!!!!")
+            if (this._displayLevel) {
+                this._levelDisplay.text = "Lv: " + level;
+            }
+
             return;
         }
 
         this.reset();
-        
-        this._levelIndex = level;
 
+        this._levelIndex = level;
         this._difficultyIndex = difficulty;
+
+        let randStage = 0;
 
         if (this._level[level].difficulty[difficulty].stage == null) {
 
         } else if (this._level[level].difficulty[difficulty].stage.length > 2) {
 
-            let nextStage = this._level[level].difficulty[difficulty].stage[Math.floor(Math.random() * this._level[level].difficulty[difficulty].stage.length)];
+            randStage = Math.floor(Math.random() * this._level[level].difficulty[difficulty].stage.length);
+            let nextStage = this._level[level].difficulty[difficulty].stage[randStage];
 
             while (nextStage == this.activeStage || nextStage == this.previousActiveStage) {
-                nextStage = this._level[level].difficulty[difficulty].stage[Math.floor(Math.random() * this._level[level].difficulty[difficulty].stage.length)];
+                randStage = Math.floor(Math.random() * this._level[level].difficulty[difficulty].stage.length);
+                nextStage = this._level[level].difficulty[difficulty].stage[randStage];
 
             }
             this.previousActiveStage = this.activeStage;
@@ -205,6 +237,15 @@ class Game {
             this.activeStage = this._level[level].difficulty[difficulty].stage[0];
         }
 
+        if (this._displayLevel) {
+
+            if (this._displayStage) {
+                this._levelDisplay.text = "Lv: " + (this._levelIndex) + "." + (this._difficultyIndex + 1) + "-" + (randStage + 1);
+            } else {
+                this._levelDisplay.text = "Lv: " + (this._levelIndex) + "." + (this._difficultyIndex + 1);
+            }
+
+        }
 
         if (update) {
             this.update();
@@ -258,6 +299,11 @@ class Game {
         while (this._meshBlock2x4.length > 0) {
             this._meshBlock2x4[this._meshBlock2x4.length - 1].dispose();
             this._meshBlock2x4.pop();
+        }
+
+        while (this._meshPixel.length > 0) {
+            this._meshPixel[this._meshPixel.length - 1].dispose();
+            this._meshPixel.pop();
         }
 
         while (this._meshShadowRight.length > 0) {
@@ -405,15 +451,15 @@ class Game {
     }
 
     soundProgression({ correct = 0, wrong = 0, maxCorret = null, filterSound = true }) {
-        
+
         if (maxCorret = null) {
             maxCorret = this.activeStage.length;
         }
 
         if (wrong > this._wrong) {
             this._filterFailSoundCount++;
-  
-            if (!filterSound || this._filterFailSoundCount > 1) {        
+
+            if (!filterSound || this._filterFailSoundCount > 1) {
                 sound.wrong(correct / maxCorret);
                 this._filterFailSoundCount = 0;
             } else {
@@ -554,6 +600,7 @@ class Game {
 
         let count2x2 = 0;
         let count2x4 = 0;
+        let countPixel = 0;
 
 
         block.forEach(function (item, index) {
@@ -573,6 +620,13 @@ class Game {
                     this._meshBlock2x4.push(new Mesh2x4Trans(item));
                 }
                 count2x4++;
+            } else if (item instanceof BlockPixel) {
+                if (this._meshPixel.length > countPixel) {
+                    this._meshPixel[countPixel].block = item;
+                } else {
+                    this._meshPixel.push(new MeshPixelTrans(item));
+                }
+                countPixel++;
             }
 
 
@@ -591,7 +645,10 @@ class Game {
             this._meshBlock2x4.pop();
         }
 
-
+        while (this._meshPixel.length > countPixel) {
+            this._meshPixel[this._meshPixel.length - 1].dispose();
+            this._meshPixel.pop();
+        }
 
 
     }
@@ -602,11 +659,14 @@ class Game {
         this._levelMenu.forEach(item => item.setNotVisible());
         this._levelMenu = [];
 
+        if (this._displayLevel) {
+            this._levelDisplay.setNotVisible();
+        }
 
     }
 
-    clearForCenterButton (){
-  
+    clearForCenterButton() {
+
     }
 
 

@@ -141,6 +141,11 @@
 
         let scene = new BABYLON.Scene(engine);
         scene.clearColor = new BABYLON.Color3(0.7, 0.8, 0.9);
+
+        /*var url = "https://upload.wikimedia.org/wikipedia/commons/e/e9/Gradient_1024x768.jpg";
+    var background = new BABYLON.Layer("back", url, scene);
+	background.isBackground = true;*/
+
         engine.displayLoadingUI();
 
 
@@ -150,6 +155,7 @@
 
         MeshBase.init();
         MeshPixel.init(meshesPixel());
+
 
         Mesh2x2.init(meshes2x2());
         Mesh2x4.init(meshes2x4());
@@ -202,44 +208,102 @@
             } else {
                 MeshNumber.init(meshesNumber());
             }
-/*
-            let b = [];
-            let m = [];
 
-            //y,
-            for (let y = 0; y < 10; y++) {
-
-              //  if (y % 2 != 0) {
-                //if (y % 2 == 0) {
-                for (let x = 1; x < 6; x++) {
-                        if (x == 1) {
-                            b[y] = [];
-                            m[y] = [];
-                        }
-                        for (let z = 1; z < 6; z++) {
-                            if (z == 1) {
-                                b[y][x] = [];
-                                m[y][x] = [];
-                            }
-                            if((x == 1 && z ==1 )|| (x == 5 && z ==5 )||(x == 5 && z ==1 )||(x == 1 && z ==5 )){
-                            b[y][x][z] = new BlockShadowTop({ x: x, y: y + 0.1, z: z, color: [ y%6] });
-
-                            m[y][x][z] =  new MeshShadowTopDrop(b[y][x][z] , y * Mesh._staticPitch, 6 + y%6);
-                            }else{
-                                b[y][x][z] = new BlockShadowTop({ x: x, y: y + 0.1, z: z, color: [ y%6] });
-
-                                m[y][x][z] =  new MeshShadowTopDrop(b[y][x][z] , y * Mesh._staticPitch, y%6);
-
-                            }
-                           // m[y][x][z] = new MeshShadowTopDrop(b[y][x][z]);
-
-                        }
-                    }
   
-
-            }*/
-            
+        /*
+            let block = [new Block2x2({ x: 0, y: 0, z: 0, r: 0, color: [2, 2] }), new Block2x2({ x: 2, y: 0, z: 0, r: 0 }), new Block2x2({ x: 4, y: 0, z: 2, r: 0 }), new Block2x2({ x: 4, y: 2, z: 2, r: 0 }), new Block2x2({ x: 4, y: 1, z: 2, r: 0 })]
         
+            let avatedPixel = new BlockAvatard({ x: 0, y: 2, z: 0, r: 0 })
+           
+            let me = new MeshAvatard(avatedPixel, block );
+
+            avatedPixel.z = 1;
+            avatedPixel.y = 1;
+
+            me.updatePos();*/
+
+
+            /* let mesh = new MeshPixel(block);
+ 
+            // mesh._mesh.forEach(item => item.scaling.y = 5);
+ 
+            // mesh._mesh[0].scaling.y = 5;
+ 
+             mesh._mesh[0].scaling.x = 0.5;
+ 
+             mesh._mesh[0].scaling.y = 0.5;
+             mesh._mesh[0].scaling.z = 0.5;
+ 
+   
+ 
+ 
+             let block2 = new Block2x2({ x: 2, y: 0, z: 0, r: 0 })
+ 
+ let mesh2 = new Mesh2x2(block2);
+ 
+ // mesh._mesh.forEach(item => item.scaling.y = 5);
+ 
+ // mesh._mesh[0].scaling.y = 5;
+ 
+ scale = new BABYLON.Vector3(0.5, 0.5, 0.5);
+ 
+ mesh2._mesh[0].scaling = scale;
+ 
+ mesh2._mesh[1].scaling = scale;*/
+
+
+            /*
+            mesh2._mesh[0].scaling .x = 0.5;
+            
+            mesh2._mesh[0].scaling.y = 0.5;
+            mesh2._mesh[0].scaling.z = 0.5;
+            
+            
+            mesh2._mesh[1].scaling.x = 0.5;
+            
+            mesh2._mesh[1].scaling.y = 0.5;
+            mesh2._mesh[1].scaling.z = 0.5;
+            */
+            /*camera.fovView();
+
+            
+                        let b = [];
+                        let m = [];
+            
+                        //y,
+                        for (let y = 0; y < 10; y++) {
+            
+                          //  if (y % 2 != 0) {
+                            //if (y % 2 == 0) {
+                            for (let x = 1; x < 6; x++) {
+                                    if (x == 1) {
+                                        b[y] = [];
+                                        m[y] = [];
+                                    }
+                                    for (let z = 1; z < 6; z++) {
+                                        if (z == 1) {
+                                            b[y][x] = [];
+                                            m[y][x] = [];
+                                        }
+                                        if((x == 1 && z ==1 )|| (x == 5 && z ==5 )||(x == 5 && z ==1 )||(x == 1 && z ==5 )){
+                                        b[y][x][z] = new BlockShadowTop({ x: x, y: y + 0.1, z: z, color: [ y%6] });
+            
+                                        m[y][x][z] =  new MeshShadowTopDrop(b[y][x][z] , y * Mesh._staticPitch, 6 + y%6);
+                                        }else{
+                                            b[y][x][z] = new BlockShadowTop({ x: x, y: y + 0.1, z: z, color: [ y%6] });
+            
+                                            m[y][x][z] =  new MeshShadowTopDrop(b[y][x][z] , y * Mesh._staticPitch, y%6);
+            
+                                        }
+                                       // m[y][x][z] = new MeshShadowTopDrop(b[y][x][z]);
+            
+                                    }
+                                }
+              
+            
+                        }*/
+
+
 
         };
 
@@ -254,7 +318,7 @@
 
         window.addEventListener('DOMContentLoaded', function () {
             scene.onPointerDown = function (evt, pickResult) {
-          
+
                 if (Gui.pointerDown(evt)) {
 
                 } else if (pickResult.hit) {

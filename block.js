@@ -17,6 +17,31 @@ class Block {
 
     }
 
+    static string(block) {
+
+        let str = "[";
+        block.forEach(function (item) {
+            if (item instanceof Block2x2) {
+                str += "new Block2x2({ x : ";
+            } else if(item instanceof Block2x4) {
+                str += "new Block2x4({ x : ";
+            }else if(item instanceof BlockPixel) {
+                str += "new BlockPixel({ x : ";
+            }
+            str += item.x;
+            str += ", y : " + item.y;
+            str += ", z : " + item.z;
+            str += ", r : " + item.r;
+            str += ", color : [" + item.color + "]";
+            str += "}),";
+        });
+        str += "]";
+
+        return str;
+
+
+    }
+
     static transform({ block = [], x = 0, y = 0, z = 0, r = 0 }) {
         let returnBlock = Block.copy(block);
 
@@ -387,6 +412,9 @@ class Block2x4 extends Block {
     }
 }
 
+
+
+
 class BlockPixel extends Block {
 
     static calcSetNoCarePosition({ left = [], right = [], careColor = true, careRotation = true }) {
@@ -527,7 +555,7 @@ class BlockPixel extends Block {
     }
 
     equal({ block = null, careColor = true }) {
-        if (!(block instanceof BlockPixel)) {
+        if (!(block instanceof BlockPixel || block instanceof BlockAvatard)) {
             return false;
         }
 
@@ -545,6 +573,246 @@ class BlockPixel extends Block {
         return new BlockPixel({ x: this.x, y: this.y, z: this.z, color: color, block: this.block });
 
     }
+}
+
+class BlockAvatard extends Block {
+
+
+    equal({ block = null, careColor = true }) {
+        if (!(block instanceof BlockPixel || block instanceof BlockAvatard)) {
+            return false;
+        }
+
+        if (this._x == block._x && this._y == block._y && this._z == block._z) {
+            if (!careColor || (this._color[0] == block._color[0])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    _collision(block) {
+        let set = Block.calcSet({ left: this, right: block, careColor: false, careRotation: false });
+        if (set.intersectionLeft.length != 0) {
+            return true;
+        }
+        return false;
+    }
+    _canPlace(block) {
+
+        if (this._collision(block)) {
+            return false;
+        }
+
+        if (this.y == 0 && this.x > -1 && this.x < 10 && this.z > -1 && this.z < 10) {
+            return true;
+        }
+
+        this.y--;
+        if (this._collision(block)) {
+            this.y++;
+            return true;
+        }
+        this.y++;
+        return false;
+
+    }
+
+    place({ x = 0, y = 0, z = 0 }) {
+
+        let worldPixel = BlockPixel.convertBlock(world.block);
+        let startX = this.x;
+        let startY = this.y;
+        let startZ = this.z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        if( this._canPlace(worldPixel) ){
+            return true;
+        }
+        this.x = startX;
+        this.y = startY;
+        this.z = startZ;
+        return false;
+    }
+
+    _forward(block){
+        switch (this._r) {
+            case 0:
+                this.x++;
+                if (this._canPlace(block)) {
+                    return true;
+                }
+                this.x--;
+                break;
+            case 1:
+                this.z--;
+                if (this._canPlace(block)) {
+                    return true;
+                }
+                this.z++;
+                break;
+            case 2:
+                this.x--;
+                if (this._canPlace(block)) {
+                    return true;
+                }
+                this.x++;
+                break;
+            case 3:
+                this.z++;
+                if (this._canPlace(block)) {
+                    return true;
+                }
+                this.z--;
+                break;
+        }
+        return false;
+
+    }
+
+    canMoveForward(){
+
+        let startX = this.x;
+        let startZ = this.z;
+
+        if(this.moveForward()){
+            this.x = startX;
+            this.z = startZ;
+            return true;
+        }
+        return false;
+
+    }
+
+
+    moveForward() {
+        let worldPixel = BlockPixel.convertBlock(world.block);
+        if (!this._canPlace(worldPixel)) {
+            return false;
+        }
+
+        return this._forward(worldPixel);
+
+
+    }
+
+    canMoveUp(){
+
+        let startX = this.x;      
+        let startZ = this.z;
+
+        if(this.moveUp()){
+            this.x = startX;
+            this.y--;
+            this.z = startZ;
+            return true;
+        }
+        return false;
+
+    }
+
+    moveUp() {
+        let worldPixel = BlockPixel.convertBlock(world.block);
+        if (!this._canPlace(worldPixel)) {
+            return false;
+        }
+
+        this.y++;
+        if (this._collision(worldPixel)) {
+            this.y--;
+            return false;
+        }
+
+        if(this._forward(worldPixel)){
+            return true;
+        }
+        
+        this.y--;
+        return false;
+
+    }
+
+    canMoveDown(){
+
+        let startX = this.x;       
+        let startZ = this.z;
+
+        if(this.moveDown()){
+            this.x = startX;
+            this.y++;
+            this.z = startZ;
+            return true;
+        }
+        return false;
+
+    }
+
+    moveDown() {
+        let worldPixel = BlockPixel.convertBlock(world.block);
+        if (!this._canPlace(worldPixel)) {
+            return false;
+        }
+
+        let startX = this.x;
+        let startZ = this.z;
+
+        this.y--;
+        if(!this._forward(worldPixel)){
+            this.y++;
+            return false;
+        }
+        
+        this.y++;
+        if (this._collision(worldPixel)) {
+            this.x = startX;
+            this.z = startZ;
+            return false;
+        }
+
+        this.y--;
+        return true;
+
+
+    }
+    turnLeft(){
+        let worldPixel = BlockPixel.convertBlock(world.block);
+        if (!this._canPlace(worldPixel)) {
+            return false;
+        }
+        this.r--;
+        if(this.r <0){
+            this.r = 3;
+        }
+        return true;
+
+    }
+    turnRight(){
+        let worldPixel = BlockPixel.convertBlock(world.block);
+        if (!this._canPlace(worldPixel)) {
+            return false;
+        }
+        this.r++;
+        this.r%=4;
+        return true;
+        
+    }
+    blockUnder(){
+        let worldPixel = BlockPixel.convertBlock(world.block);
+        this.y--;
+
+        let set = Block.calcSet({ left: this, right: worldPixel, careColor: false, careRotation: false });
+        if (set.intersectionRight.length != 0) {
+            this.y++;
+            return set.intersectionRight[0].block;
+        }
+        this.y++;
+        return null;
+        
+    }
+
+
+
 }
 
 class BlockShadow extends Block {
@@ -630,9 +898,9 @@ class BlockShadow extends Block {
     }
     constructor({ x = null, y = null, z = null, color = [null], block = null }) { // color = [null]?
         super({ x: x, y: y, z: z, color: color });
-        if(block == null){ //20191120
+        if (block == null) { //20191120
             this.block = [];
-        }else{
+        } else {
             this.block = [block];
         }
     }
@@ -709,7 +977,7 @@ class BlockShadowLeft extends BlockShadow {
 
             if (item.z > max) {
                 max = item.z;
-                retColor = item.color[0]; 
+                retColor = item.color[0];
             }
 
         });
@@ -747,7 +1015,7 @@ class BlockShadowRight extends BlockShadow {
         this.block.forEach(function (item) {
             if (item.z < min) {
                 min = item.z;
-                retColor = item.color[0]; 
+                retColor = item.color[0];
             }
 
             if (item.z > max) {
@@ -791,7 +1059,7 @@ class BlockShadowBack extends BlockShadow {
 
             if (item.x > max) {
                 max = item.x;
-                retColor = item.color[0]; 
+                retColor = item.color[0];
             }
         });
         return super._calcColor({ max: max, min: min, retColor: retColor, careColor: careColor, careGap: careGap });
@@ -828,7 +1096,7 @@ class BlockShadowFront extends BlockShadow {
         this.block.forEach(function (item) {
             if (item.x < min) {
                 min = item.x;
-                retColor = item.color[0]; 
+                retColor = item.color[0];
             }
 
             if (item.x > max) {
@@ -866,7 +1134,7 @@ class BlockShadowBottom extends BlockShadow {
         }
 
         this.block.forEach(function (item) {
-   
+
             if (item.y < min) {
                 min = item.y;
                 retColor = item.color[0];
@@ -911,10 +1179,10 @@ class BlockShadowTop extends BlockShadow {
         }
 
         this.block.forEach(function (item) {
-   
+
             if (item.y < min) {
                 min = item.y;
-               // retColor = item.color[0];
+                // retColor = item.color[0];
             }
 
             if (item.y > max) {
@@ -1016,7 +1284,7 @@ class BlockPillar extends Block {
         convertedItem.forEach(function (item) {
             convertedBlock.forEach(function (itemBlock) {
                 if (item.x == itemBlock.x && item.z == itemBlock.z) {
-                    found++;                   
+                    found++;
                 }
             });
         });

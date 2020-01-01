@@ -201,26 +201,7 @@ let world = {
 
 
     get blockString() {
-
-        let str = "[";
-        world.block.forEach(function (item) {
-            if (item instanceof Block2x2) {
-                str += "new Block2x2({ x : ";
-            } else {
-                str += "new Block2x4({ x : ";
-            }
-            str += item.x;
-            str += ", y : " + item.y;
-            str += ", z : " + item.z;
-            str += ", r : " + item.r;
-            str += ", color : [" + item.color + "]";
-            str += "}),";
-        });
-        str += "]";
-
-        return str;
-
-
+        return Block.string(world.block);
     },
 
     printBlock: function () {

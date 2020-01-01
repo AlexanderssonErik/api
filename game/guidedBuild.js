@@ -5,7 +5,7 @@ class GuidedBuild extends Game {
     level.push({ difficulty: [], image: null });
     guidedBuildLevel.buildLevel(level)
 
-    super({ level: level, userCreatedLevel: true });
+    super({ level: level, userCreatedLevel: true, displayLevel: true, displayStage: true  });
 
     this._setLevel({ level: 1, difficulty: 0 });
 
@@ -14,7 +14,7 @@ class GuidedBuild extends Game {
 
   _setLevel({ level = 0, difficulty = 0 }) {
 
-    super._setLevel({ level: level, difficulty: difficulty });
+    super._setLevel({ level: level, difficulty: difficulty});
 
     if (level > 0) {
       this.showDifficultyButton();

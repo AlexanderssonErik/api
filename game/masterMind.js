@@ -2,7 +2,7 @@ class MasterMind extends Game {
   constructor() {
     let level = [];
 
-    super({ level: level, userCreatedLevel: false });
+    super({ level: level, userCreatedLevel: false, displayLevel: true });
 
     this._masterMindCurrentLevel = 1;
     this._score = 0

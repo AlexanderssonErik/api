@@ -70,6 +70,7 @@ class Mesh {
         this._mesh.forEach(item => item.material = Mesh._staticMaterial[0]);
         this._line.forEach(item => item.color = Mesh._staticColor[0]);
         if (block != null) {
+
             this._block = block;
             this._updatePos();
         }
@@ -286,6 +287,24 @@ class MeshPixel extends Mesh {
     }
     constructor(block) {
         super({ mesh: MeshPixel._staticMesh.map(item => item.clone()), line: MeshPixel._staticLine.map(item => item.clone()) }, block);
+    }
+}
+
+class MeshPixelTrans extends MeshPixel {
+    constructor(block) {
+        super(block);
+        this._updateColor();
+    }
+
+    _updatePos() {
+        super._updatePos();
+        this._mesh[0].alphaIndex = this._block.y;
+    }
+
+
+    _updateColor() {
+        this._mesh[0].material = Mesh2x2Trans._staticMaterial[this._block.color[0]]; //remove?
+
     }
 }
 
@@ -713,7 +732,6 @@ class MeshShadowTopDrop extends Mesh {
 
     constructor(block, y, color) {
         super({ mesh: MeshShadowBottom._staticMesh.map(item => item.clone()) }, block);
-        //this._updateColor();
 
 
         this._mesh.forEach(function (item) {
@@ -732,8 +750,8 @@ class MeshShadowTopDrop extends Mesh {
 
     static init({ mesh = [] }) {
 
-        MeshShadowTopDrop._baseScaling = 1;
-        MeshShadowTopDrop._divScaling = 12;
+        MeshShadowTopDrop._baseScaling = 0.95;
+        MeshShadowTopDrop._divScaling = 40;
 
         MeshShadowTopDrop._staticMesh = mesh;
 
@@ -878,6 +896,133 @@ class MeshNumber extends Mesh {
 }
 
 
+
+class MeshAvatard extends Mesh {
+
+
+    _updatePos() {
+
+    }
+
+    /* jumpPos(){
+ 
+ 
+     }*/
+
+    updatePos() {
+
+        let animateStopRot = (this._block.r - this._r) * Math.PI / 2;
+        if (this._block.r - this._r > 2) {
+            animateStopRot = - Math.PI / 2;
+        } else if (this._block.r - this._r < -2) {
+            animateStopRot = Math.PI / 2;
+        }
+
+        this._mesh.forEach(function (item) {
+            if (this._r != this._block.r) {
+                let animate = new BABYLON.Animation("", "rotation.y", 20, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+                let animateFrame = [{ frame: 0, value: item.rotation.y }, { frame: 5, value: item.rotation.y + animateStopRot }];
+                animate.setKeys(animateFrame);
+                scene.beginDirectAnimation(item, [animate], 0, 5, false);
+            }
+            if (this._x != this._block.x) {
+                let animate = new BABYLON.Animation("", "position.x", 20, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+                let animateFrame = [{ frame: 0, value: item.position.x }, { frame: 5, value: item.position.x + this._block.x - this._x }];
+                animate.setKeys(animateFrame);
+                scene.beginDirectAnimation(item, [animate], 0, 5, false);
+            }
+            if (this._z != this._block.z) {
+                let animate = new BABYLON.Animation("", "position.z", 20, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+                let animateFrame = [{ frame: 0, value: item.position.z }, { frame: 5, value: item.position.z + this._block.z - this._z }];
+                animate.setKeys(animateFrame);
+                scene.beginDirectAnimation(item, [animate], 0, 5, false);
+            }
+            if (this._y != this._block.y) {
+                let animate = new BABYLON.Animation("", "position.y", 20, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+                let animateFrame;
+                if (this._block.y - this._y > 0) {
+                    animateFrame = [{ frame: 0, value: item.position.y }, { frame: 2, value: item.position.y + (this._block.y - this._y) * Mesh._staticPitch }, { frame: 5, value: item.position.y + (this._block.y - this._y) * Mesh._staticPitch }];
+
+                } else {
+                    animateFrame = [{ frame: 0, value: item.position.y }, { frame: 3, value: item.position.y }, { frame: 5, value: item.position.y + (this._block.y - this._y) * Mesh._staticPitch }];
+
+                }
+                animate.setKeys(animateFrame);
+                scene.beginDirectAnimation(item, [animate], 0, 5, false);
+            }
+        }.bind(this));
+        this._r = this._block.r;
+        this._x = this._block.x;
+        this._y = this._block.y;
+        this._z = this._block.z;
+
+    }
+
+
+    constructor(block, blocks) {
+
+        let pixels = BlockPixel.convertBlock(blocks);
+
+        let maxX = -999;
+        let maxZ = -999;
+        let minX = 999;
+        let minZ = 999;
+
+
+        pixels.forEach(function (item) {
+            if (item.x > maxX) {
+                maxX = item.x;
+            }
+            if (item.z > maxZ) {
+                maxZ = item.z;
+            }
+            if (item.x < minX) {
+                minX = item.x;
+            }
+            if (item.z < minZ) {
+                minZ = item.z;
+            }
+
+        });
+
+        let scale = 1 / (1 + maxX - minX);
+
+        if (1 / (1 + maxZ - minZ) < scale) {
+            scale = 1 / (1 + maxZ - minZ);
+        }
+
+        let meshes = [];
+        let scaleVector = new BABYLON.Vector3(scale, scale, scale);
+
+        pixels.forEach(function (item) {
+            //let mesh = BABYLON.MeshBuilder.CreateBox("avaPix", { height: 1.19 * scale, width: 1 * scale, depth: 1 * scale }, scene);
+            let mesh = BABYLON.MeshBuilder.CreateSphere("", { diameter: scale * 0.95 }, scene);
+
+            mesh.position.x = (item.x - minX - (maxX - minX) / 2) * scale;
+            mesh.position.y = + 0.2 + (item.y + 1.19 / 2) * scale;
+            mesh.position.z = (item.z - minZ - (maxZ - minZ) / 2) * scale;
+            mesh.setPivotMatrix(BABYLON.Matrix.Translation(mesh.position.x, 0, mesh.position.z));
+            meshes.push(mesh);
+        });
+
+        super({ mesh: meshes }, block);
+
+        this._mesh.forEach(function (item, index) {
+            item.material = Mesh._staticMaterial[pixels[index].color[0]];
+            item.position.x = item.position.x + block.x;
+            item.position.y = item.position.y + block.y * Mesh._staticPitch;
+            item.position.z = item.position.z + block.z;
+        })
+
+        this._r = 0;
+        this._x = block.x;
+        this._y = block.y;
+        this._z = block.z;
+
+    }
+}
+
+
 class MeshNumberPillar extends Mesh {
 
     static init({ mesh = [] }) {
@@ -902,7 +1047,6 @@ class MeshNumberPillar extends Mesh {
         } else {
             super._updateColor();
         }
-
     }
 }
 

@@ -5,7 +5,7 @@ let sound = {
     wrongMp3: new Audio("./sounds/wrong.mp3"),
     winMp3: new Audio("./sounds/win.mp3"),
     failMp3: new Audio("./sounds/fail.mp3"),
-    buttonMp3: new Audio("./sounds/click.mp3"),
+    buttonMp3: new Audio("./sounds/click.mp3"),  
     mute: false,
     init: function () {
 

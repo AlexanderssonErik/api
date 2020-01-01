@@ -2,7 +2,7 @@ class ColorMatch extends Game {
   constructor() {
     let level = [];
 
-    super({ level: level, userCreatedLevel: false });
+    super({ level: level, userCreatedLevel: false, displayLevel: true });
 
     this._colorMatchLevel = [
       [new Block2x2({ x: 7, y: 0, z: 5, r: 1, color: [0, 0] }), new Block2x2({ x: 7, y: 1, z: 5, r: 1, color: [0, 0] }),],
@@ -55,10 +55,6 @@ class ColorMatch extends Game {
     this._paintBrush = meshColor.black;
     this._placedBlocks = [];
 
-    world.base.ledFront = meshColor.black;
-    world.base.ledLeft = meshColor.magenta;
-    world.base.ledRight = meshColor.cyan;
-    world.base.ledBack = meshColor.black;
 
     this._setLevel({ level: 1, difficulty: 0 });
   }
@@ -90,6 +86,11 @@ class ColorMatch extends Game {
 
     super.update();
 
+    world.base.ledFront = meshColor.black;
+    world.base.ledLeft = meshColor.black;
+    world.base.ledRight = meshColor.black;
+    world.base.ledBack = meshColor.black;
+
     let set = Block.calcSet({ left: world.block, right: this._activeDisplayBlocks, careColor: false, careRotation: false });
     this.show({ block: set.diffRight, careColor: false });
 
@@ -102,6 +103,11 @@ class ColorMatch extends Game {
         if (set.diffRight.length == 0) {
           this._colorMatchState = this._enumColorMatchState.delayShowColor;
           this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 1500);
+        }else{
+          world.base.ledFront = meshColor.black;
+          world.base.ledLeft = meshColor.magenta;
+          world.base.ledRight = meshColor.cyan;
+          world.base.ledBack = meshColor.black;
         }
 
         break;
@@ -115,6 +121,8 @@ class ColorMatch extends Game {
         }
 
         if (this._timeoutDelay == null) {
+
+
           this._shownColorCount = 0;
           this._paintBrush = 0;
           this._colorMatchState = this._enumColorMatchState.showColor;
@@ -161,10 +169,16 @@ class ColorMatch extends Game {
         break;
       case this._enumColorMatchState.reproduce:
 
+        world.base.ledFront = meshColor.green;
+        world.base.ledLeft = meshColor.blue;
+        world.base.ledRight = meshColor.red;
+        world.base.ledBack = meshColor.black;
+
         if (this._redPad.mesh == null) {
           this._redPad.mesh = new MeshPad(this._redPad.block);
           this._greenPad.mesh = new MeshPad(this._greenPad.block);
           this._bluePad.mesh = new MeshPad(this._bluePad.block);
+
         }
 
         let worldPixel = BlockPixel.convertBlock(world.block);
@@ -225,6 +239,7 @@ class ColorMatch extends Game {
           if (this._winCount > 1) {
             this._winCount = 0;
             this._colorMatchCurrentLevel++;
+            this._setLevel({ level: this._colorMatchCurrentLevel+1, difficulty: 0 }); 
             if (this._colorMatchLevel.length > this._colorMatchCurrentLevel) {
               this._activeDisplayBlocks = this._colorMatchLevel[this._colorMatchCurrentLevel];
             }

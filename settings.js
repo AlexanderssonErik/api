@@ -91,10 +91,10 @@ let settings = {
         button.addChild(new GuiButtonImg("./icon/games/blockTris.svg", function () { new BlockTris() }), guiOptions.childRight);
 
 
-       /* button = new GuiButtonImg("./icon/games/categoryProgramming.svg");
+        button = new GuiButtonImg("./icon/games/categoryProgramming.svg");
         startButton.addChild(button, guiOptions.childBottom)
         button.addChild(new GuiButtonImg("./icon/games/categoryProgramming.svg", function () { new Programming() }), guiOptions.childRight);
-*/
+
 
 
 

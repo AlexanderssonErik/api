@@ -5,7 +5,7 @@ class Tangram2D extends Game {
     level.push({ difficulty: [], image: null });
     tangram2DLevel.buildLevel(level)
 
-    super({ level: level, userCreatedLevel: true });
+    super({ level: level, userCreatedLevel: true, displayLevel: true, displayStage: true });
     this._tangram2DState = 0;
 
     this._enumTangram2DState = {

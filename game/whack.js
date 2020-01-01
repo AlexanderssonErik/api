@@ -2,7 +2,7 @@ class Whack extends Game {
   constructor() {
     let level = [];
 
-    super({ level: level, userCreatedLevel: false });
+    super({ level: level, userCreatedLevel: false, displayLevel: true });
 
 
     this._score = 0
@@ -59,10 +59,6 @@ class Whack extends Game {
       currentLevel: -1,
     };
 
-    world.base.ledFront = meshColor.black;
-    world.base.ledLeft = meshColor.magenta;
-    world.base.ledRight = meshColor.cyan;
-    world.base.ledBack = meshColor.black;
 
     this._setLevel({ level: 1, difficulty: 0 });
   }
@@ -182,6 +178,11 @@ class Whack extends Game {
 
     super.update();
 
+    world.base.ledFront = meshColor.black;
+    world.base.ledLeft = meshColor.black;
+    world.base.ledRight = meshColor.black;
+    world.base.ledBack = meshColor.black;
+
     let allShown = true;
 
     this.show({ block: [], careColor: false });
@@ -192,6 +193,11 @@ class Whack extends Game {
         if (set.diffRight.length > 0) {
           this.show({ block: set.diffRight, careColor: false });
           allShown = false;
+          world.base.ledFront = meshColor.black;
+          world.base.ledLeft = meshColor.magenta;
+          world.base.ledRight = meshColor.cyan;
+          world.base.ledBack = meshColor.black;
+
         }
       }
     }.bind(this));

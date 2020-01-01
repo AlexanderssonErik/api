@@ -2,7 +2,7 @@ class BlockTris extends Game {
     constructor() {
         let level = [];
 
-        super({ level: level, userCreatedLevel: false });
+        super({ level: level, userCreatedLevel: false, displayLevel: true });
 
         this._enumBlockTrisState = {
             check: 0,
@@ -48,10 +48,12 @@ class BlockTris extends Game {
         this._possibleShadow = [];
 
         this._markers = [];
-        this._markers.push(new MeshShadowTopDrop(new BlockShadowBottom({ x: 1, z: 1 }), 0, 12));
-        this._markers.push(new MeshShadowTopDrop(new BlockShadowBottom({ x: 1, z: 5 }), 0, 12));
-        this._markers.push(new MeshShadowTopDrop(new BlockShadowBottom({ x: 5, z: 1 }), 0, 12));
-        this._markers.push(new MeshShadowTopDrop(new BlockShadowBottom({ x: 5, z: 5 }), 0, 12));
+   
+        for(let x = 1; x < 6; x++){
+            for(let z = 1; z < 6; z++){
+                this._markers.push(new MeshShadowTopDrop(new BlockShadowBottom({ x: x, z: z }), 0, 12));
+            }
+        }
 
         this._possibleShadowBlocks.forEach(function (item) {
             let shadow = BlockShadow.convert({ block: [item] });
@@ -60,7 +62,7 @@ class BlockTris extends Game {
         }.bind(this));
 
 
-        camera.aboveView();
+        camera.fovView();
 
         this._timeoutDelay = null;
         this._setLevel({ level: 1, difficulty: 0 });
@@ -102,6 +104,8 @@ class BlockTris extends Game {
     }
 
     close() {
+
+        camera.fovViewOff();
         camera.reset();
         clearTimeout(this._timeoutDelay);
         super.close();
@@ -270,7 +274,15 @@ class BlockTris extends Game {
                             }.bind(this));
 
 
-                            if (!(this._patternShadow[i].some(item => item.x == 1 && item.z == 1))) {
+                            for(let x = 1; x < 6; x++){
+                                for(let z = 1; z < 6; z++){
+                                    if (!(this._patternShadow[i].some(item => item.x == x && item.z == z))) {
+                                        this._patternMesh[layer].push(new MeshShadowTopDrop(new BlockShadowBottom({ x: x, z: z }), this._patternStartY * Mesh._staticPitch, this._color + 6));
+                                    }
+                                }
+                            }
+
+                            /*if (!(this._patternShadow[i].some(item => item.x == 1 && item.z == 1))) {
                                 this._patternMesh[layer].push(new MeshShadowTopDrop(new BlockShadowBottom({ x: 1, z: 1 }), this._patternStartY * Mesh._staticPitch, this._color + 6));
                             }
                             if (!(this._patternShadow[i].some(item => item.x == 1 && item.z == 5))) {
@@ -281,7 +293,7 @@ class BlockTris extends Game {
                             }
                             if (!(this._patternShadow[i].some(item => item.x == 5 && item.z == 5))) {
                                 this._patternMesh[layer].push(new MeshShadowTopDrop(new BlockShadowBottom({ x: 5, z: 5 }), this._patternStartY * Mesh._staticPitch, this._color + 6));
-                            }
+                            }*/
 
                             this._color++;
                             this._color %= 6;

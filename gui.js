@@ -19,7 +19,6 @@ class Gui {
         Gui._dontResizeGuiInput = false;
         Gui._pointerUpFunction = null;
 
-
     }
 
     static pointerDown(evt) {
@@ -77,8 +76,6 @@ class Gui {
         this._sizeWidthMulti = 1;
         this._margin = [0.5, 1, 2];
 
-        //this._cameraAlreadLocked = false;
-        //  this._blockAlreadyHidden = false;
         this._visible = false;
 
     }
@@ -147,9 +144,7 @@ class Gui {
 
     _setVisible(hor, ver, horAlign, verAlign) {
 
-        /*  if(this._visible){
-              return;
-          }*/
+
         this._visible = true;
         this._setPos({ hor: hor, ver: ver, horAlign: horAlign, verAlign: verAlign });
 
@@ -473,17 +468,12 @@ class GuiButtonTxt extends GuiButton {
         this._element.textContent = txt;
 
         this._background = 'rgba(96, 96, 96, 0.8)';
-        this._backgroundDown = 'rgba(40, 40, 40, 1)';
-        this._size = [3.5, 5, 5];
-        this._margin = [0.1, 0.2, 0.2];
-
-        //this._element.style.margin = "0 0 0 0";
-        // this._element.style.borderRadius = "20%";
+        this._backgroundDown = 'rgba(0, 0, 0, 1)';
+        this._size = [3.5, 4.8, 4.8];
+        this._margin = [0.2, 0.3, 0.3];
         this._element.style.textAlign = 'center';
-        // this.imgOrTxt.style.fontSize = '40px'
         this._element.style.color = 'white';
-        // this._element.style.cursor = "default";
-        //  this._sizeWidthMulti = 2;
+
     }
     _setPos({ hor = 0, ver = 0, horAlign = 0, verAlign = 0 }) {
 
@@ -745,6 +735,40 @@ class GuiButtonPaint extends Gui {
         Gui._pointerUpFunction = null;
 
     }
+
+
+}
+
+
+class GuiTextLevel extends Gui {
+    constructor(text) {
+        super(document.createElement('p'), null);
+
+        this._element.textContent = text;
+        this._background = 'rgba(0, 0, 0, 0)';
+        this._element.style.textAlign = "center";
+        this._element.style.color = 'white';
+        this._sizeWidthMulti = 5;
+
+        this._size = [1.75, 2.5, 4];
+
+    }
+    _setPos({ hor = 0, ver = 0, horAlign = 0, verAlign = 0 }) {
+
+        this._element.style.lineHeight = window.innerWidth * (this._size[Gui._SizeSetting] - this._margin[Gui._SizeSetting]) / 100 + 'px';
+        this._element.style.fontSize = window.innerHeight * window.innerWidth / window.innerHeight * this._size[Gui._SizeSetting] / 200 + 'px'
+
+        super._setPos({ hor: hor, ver: ver, horAlign: horAlign, verAlign: verAlign })
+    }
+
+    pointerDown(evt) {
+        return;
+    }
+
+    set text(text) {
+        this._element.textContent = text;
+    }
+
 
 
 }

@@ -2,7 +2,7 @@ class Columns extends Game {
   constructor() {
     let level = [];
 
-    super({ level: level, userCreatedLevel: false });
+    super({ level: level, userCreatedLevel: false, displayLevel: true });
 
     this._enumColumnsState = {
       setColor: 0,
@@ -87,6 +87,8 @@ class Columns extends Game {
         break;
 
     }
+    //remove select timing
+    this._speedColorSelect =1;
 
     this.update();
 
@@ -179,6 +181,10 @@ class Columns extends Game {
               this._displayColors.push(randColor);
             }
           }
+
+          //remove pick by timing placement function
+          this._displayColors[1]= this._displayColors[0];
+          this._displayColors[2]= this._displayColors[0];
 
           if (currentPlayFieldBlocks.some(function (item) {
             if (!item.color.some(itemFind => itemFind != 0)) {

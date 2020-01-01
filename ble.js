@@ -10,6 +10,7 @@ let ble = {
   receivedData: [],
   blocksReceiving: 0,
   bluetoothDevice: null,
+  emptyCommandTimout: 3000,
 
   init: function () {
 
@@ -155,7 +156,7 @@ let ble = {
 
   sendEmptyCommand: function () {
 
-    console.log("ble sendEmptyCommand");
+    console.log("ble sendEmptyCommand, timeout: " + ble.emptyCommandTimout);
     clearTimeout(ble.shortTimeOut);
     clearTimeout(ble.timeOut);
 
@@ -167,7 +168,7 @@ let ble = {
       return;
     }
 
-    ble.timeOut = setTimeout(ble.sendEmptyCommand, 3000);
+    ble.timeOut = setTimeout(ble.sendEmptyCommandSecond, ble.emptyCommandTimout);
 
     cmd = new Uint8Array(4);
 
@@ -184,6 +185,21 @@ let ble = {
 
   },
 
+
+  sendEmptyCommandSecond(){
+
+    ble.emptyCommandTimout = 10000;
+    console.log("ble sendEmptyCommand Second, timeout: " + ble.emptyCommandTimout);
+
+    ble.sendEmptyCommand();
+
+  },
+  sendEmptyCommandFirst(){
+    ble.emptyCommandTimout = 3000;
+    console.log("ble sendEmptyCommand First, timeout: " + ble.emptyCommandTimout);
+    ble.sendEmptyCommand();
+  },
+
   sendCommand: function () {
 
     clearTimeout(ble.shortTimeOut);
@@ -194,7 +210,7 @@ let ble = {
     }
 
     clearTimeout(ble.timeOut);
-    ble.timeOut = setTimeout(ble.sendEmptyCommand, 3000);
+    ble.timeOut = setTimeout(ble.sendEmptyCommandFirst, 3000);
 
     var cmd;
     let cmd_tmp = [];
