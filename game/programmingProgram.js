@@ -1137,6 +1137,7 @@ class ProgrammingProgram {
   }
 
   close() {
+    this.reset();//!!!
     ProgrammingProgram.avatardMesh.forEach(function (item) {
       if (item != null) {
         item.dispose();

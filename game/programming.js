@@ -41,16 +41,16 @@ class Programming extends Game {
 
     this._gui.close();
     this._program.close();
-
-    if (program != null) {
+    
+    if (program != null) {      
       program = ProgrammingProgram.processLoadObject(program);
-
       this._program = new ProgrammingProgram({ game: this, procedure: program.procedure, intReg: program.intReg, boolReg: program.boolReg, shapeReg: program.shapeReg, shapeRegConfigPos: program.shapeRegConfigPos, shapeRegConfigCol: program.shapeRegConfigCol, avatardReg: program.avatardReg });
-    } else {
+    } else {     
       this._program = new ProgrammingProgram({ game: this });
     }
-
+   
     this._gui = new ProgrammingGui({ game: this, program: this._program });
+    this._setLevel({ level: 0, difficulty: 0 });
 
   }
 

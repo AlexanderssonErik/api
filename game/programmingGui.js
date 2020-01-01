@@ -2030,6 +2030,7 @@ class ProgrammingGui {
   }
 
   close() {
+    this._reset();
     this.hide();
 
     colorWheel.disenable();

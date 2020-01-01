@@ -259,20 +259,71 @@ let database = {
       return;
     }
 
+   // console.log("name: " + name)
     
-    let docRef = this._data.collection(name).doc(this._user.uid)
+    let docRef = this._data.collection(name).doc(this._user.uid);
 
     docRef.get().then(function (doc) {
       if (doc.exists) {
 
         let gameData = doc.data();
+/*
+        var start = new Date().getTime();
+        while (new Date().getTime() < start + 500);*/
 
-          let prog = eval("gameData.userProgram" + level) ;          
+       /* console.log("gameData: " + gameData)
+        console.log("gameData1: " + gameData.userProgram1)
+        console.log("gameData2: " + gameData.userProgram2)
+          console.log("load level: " + level)*/
+          let prog = eval("gameData.userProgram" + level) ;   
+          
+          if(prog == null){
+
+          /*  console.log("DFSFDSAFDSDFSFDDAFD")
+
+            console.log("this._data: " + database._data)
+            console.log("name: " + name)*/
+
+            docRef = database._data.collection(name).doc(database._user.uid);
+            docRef.get().then(function (doc) {
+              gameData = doc.data();
+            /*  console.log("B gameData: " + gameData)
+              console.log("B gameData1: " + gameData.userProgram1)*/
+              prog = eval("gameData.userProgram" + level) ;   
+
+              if (prog == null) {
+               // console.log("load level 1");
+                callBackFunction({ level: level, program: null });
+              }else{
+              //  console.log("load level 2");
+                callBackFunction({ level: level, program: prog });
+            
+            //  callBackFunction({ level: level, program: eval("gameData.userProgram" + level) });
+              }  
+
+            });
+
+          /*  gameData = doc.data();
+            console.log("B gameData1: " + gameData.userProgram1)
+            prog = eval("gameData.userProgram" + level) ; 
+*/
+            return 
+          }
+
+          /*if(prog == null){
+            gameData = doc.data();
+            console.log("C gameData1: " + gameData.userProgram1)
+            prog = eval("gameData.userProgram" + level) ; 
+          }*/
 
           if (prog == null) {
+           //// console.log("load level 1");
             callBackFunction({ level: level, program: null });
           }else{
-          callBackFunction({ level: level, program: eval("gameData.userProgram" + level) });
+           // console.log("load level 2");
+            callBackFunction({ level: level, program: prog });
+        
+        //  callBackFunction({ level: level, program: eval("gameData.userProgram" + level) });
           }        
 
       } else {
