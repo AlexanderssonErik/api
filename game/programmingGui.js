@@ -1,8 +1,9 @@
 
 
 class ProgrammingGui {
-  constructor({ game = null, program = null }) {
+  constructor({ game = null, program = null, lock = false }) {
 
+    this._locked = lock;
     this._rowDisp = 15;
 
     this._progColor = {
@@ -68,19 +69,24 @@ class ProgrammingGui {
     this._activeBoolReg = 0;
     this._boolRegIndex = 0;
     this._boolRegMinus = new GuiButtonTxt("-", function () { if (this._boolRegIndex > 0) { this._boolRegIndex-- }; this._updateReg() }.bind(this));
+    if(!this._locked){
     this._boolRegSetMenu = [new GuiButtonTxt("true", function () { this._setBoolReg(true) }.bind(this)), new GuiButtonTxt("false", function () { this._setBoolReg(false) }.bind(this))];
     this._boolRegSetMenu.forEach(item => item.color = this._progColor.boolButton)
+  }
     this._boolReg = [new GuiButtonTxt("B0", null, null, function () { this._setActveBoolReg(this._boolRegIndex) }.bind(this)), new GuiButtonTxt("B1", null, null, function () { this._setActveBoolReg(this._boolRegIndex + 1) }.bind(this)), new GuiButtonTxt("B2", null, null, function () { this._setActveBoolReg(this._boolRegIndex + 2) }.bind(this))];
+    if(!this._locked){
     this._boolReg.forEach(item => this._boolRegSetMenu.forEach(menu => item.addChild(menu, guiOptions.childTop)));
+    }
     this._boolRegPlus = new GuiButtonTxt("+", function () { if (this._boolRegIndex < 97) { this._boolRegIndex++ }; this._updateReg() }.bind(this));
-
+    if(!this._locked){
     this._boolRegLine = [new GuiButtonTxt("B0", function () { this._lineBoolReg(this._boolRegIndex) }.bind(this)), new GuiButtonTxt("B1", function () { this._lineBoolReg(this._boolRegIndex + 1) }.bind(this)), new GuiButtonTxt("B2", function () { this._lineBoolReg(this._boolRegIndex + 2) }.bind(this))];
     this._boolRegLine.forEach(item => item.color = this._progColor.boolButton);
-
+    }
     //INT
     this._activeIntReg = 0;
     this._intRegIndex = 0;
     this._intRegMinus = new GuiButtonTxt("-", function () { if (this._intRegIndex > 0) { this._intRegIndex-- }; this._updateReg() }.bind(this));
+    if(!this._locked){
     this._intRegSetMenu = [new GuiButtonTxt("0", function () { this._setIntReg(0) }.bind(this)), new GuiButtonTxt("1", function () { this._setIntReg(1) }.bind(this)), new GuiButtonTxt("2", function () { this._setIntReg(2) }.bind(this)), new GuiButtonTxt("3", function () { this._setIntReg(3) }.bind(this)), new GuiButtonTxt("4", function () { this._setIntReg(4) }.bind(this)), new GuiButtonTxt("5", function () { this._setIntReg(5) }.bind(this)), new GuiButtonTxt("6", function () { this._setIntReg(6) }.bind(this)), new GuiButtonTxt("7", function () { this._setIntReg(7) }.bind(this)), new GuiButtonTxt("8", function () { this._setIntReg(8) }.bind(this)), new GuiButtonTxt("9", function () { this._setIntReg(9) }.bind(this))];
     this._intRegSetMenu.forEach(item => item.color = this._progColor.intButton)
     this._intRegSetMenu[0].addChild(this._intRegSetMenu[1], guiOptions.childRight);
@@ -91,14 +97,17 @@ class ProgrammingGui {
     this._intRegSetMenu[5].addChild(this._intRegSetMenu[7], guiOptions.childRight);
     this._intRegSetMenu[5].addChild(this._intRegSetMenu[8], guiOptions.childRight);
     this._intRegSetMenu[5].addChild(this._intRegSetMenu[9], guiOptions.childRight);
+    }
     this._intReg = [new GuiButtonTxt("I0", null, null, function () { this._setActveIntReg(this._intRegIndex) }.bind(this)), new GuiButtonTxt("I1", null, null, function () { this._setActveIntReg(this._intRegIndex + 1) }.bind(this)), new GuiButtonTxt("I2", null, null, function () { this._setActveIntReg(this._intRegIndex + 2) }.bind(this))];
+    if(!this._locked){
     this._intReg.forEach(item => item.addChild(this._intRegSetMenu[0], guiOptions.childTop));// this._intRegSetMenu.forEach(menu => item.addChild(menu, guiOptions.childTop)));
     this._intReg.forEach(item => item.addChild(this._intRegSetMenu[5], guiOptions.childTop));
+    }
     this._intRegPlus = new GuiButtonTxt("+", function () { if (this._intRegIndex < 97) { this._intRegIndex++ }; this._updateReg() }.bind(this));
-
+    if(!this._locked){
     this._intRegLine = [new GuiButtonTxt("I0", function () { this._lineIntReg(this._intRegIndex) }.bind(this)), new GuiButtonTxt("I1", function () { this._lineIntReg(this._intRegIndex + 1) }.bind(this)), new GuiButtonTxt("I2", function () { this._lineIntReg(this._intRegIndex + 2) }.bind(this))];
     this._intRegLine.forEach(item => item.color = this._progColor.intButton);
-
+    }
 
     //Label
     this._activeLabelReg = 0;
@@ -117,14 +126,25 @@ class ProgrammingGui {
     this._activeShapeReg = 0;
     this._shapeRegIndex = 0;
     this._shapeRegMinus = new GuiButtonTxt("-", function () { if (this._shapeRegIndex > 0) { this._shapeRegIndex-- }; this._updateReg() }.bind(this));
+    
+    if(!this._locked){
     this._shapeRegSetMenu = [new GuiButtonTxt("Mod", function () { this._modShapeReg(true) }.bind(this)), new GuiButtonTxt("Set", function () { this._setShapeReg() }.bind(this)), new GuiButtonTxt("Insp", function () { this._inspShapeReg() }.bind(this))];
+    }else{
+      this._shapeRegSetMenu = [ new GuiButtonTxt("Insp", function () { this._inspShapeReg() }.bind(this))];
+   
+    }
+    
+    
     this._shapeRegSetMenu.forEach(item => item.color = this._progColor.shapeButton)
-    this._shapeReg = [new GuiButtonTxt("S0", null, null, function () { this._setActveShapeReg(this._shapeRegIndex) }.bind(this)), new GuiButtonTxt("S1", null, null, function () { this._setActveShapeReg(this._shapeRegIndex + 1) }.bind(this)), new GuiButtonTxt("S2", null, null, function () { this._setActveShapeReg(this._shapeRegIndex + 2) }.bind(this))];
+    this._shapeReg = [new GuiButtonTxt("S0", null, null, function () {  this._setActveShapeReg(this._shapeRegIndex) }.bind(this)), new GuiButtonTxt("S1", null, null, function () { this._setActveShapeReg(this._shapeRegIndex + 1) }.bind(this)), new GuiButtonTxt("S2", null, null, function () { this._setActveShapeReg(this._shapeRegIndex + 2) }.bind(this))];
     this._shapeReg.forEach(item => this._shapeRegSetMenu.forEach(menu => item.addChild(menu, guiOptions.childTop)));
     this._shapeRegPlus = new GuiButtonTxt("+", function () { if (this._shapeRegIndex < 97) { this._shapeRegIndex++ }; this._updateReg() }.bind(this));
 
+    if(!this._locked){
     this._shapeRegLine = [new GuiButtonTxt("S0", function () { this._lineShapeReg(this._shapeRegIndex) }.bind(this)), new GuiButtonTxt("S1", function () { this._lineShapeReg(this._shapeRegIndex + 1) }.bind(this)), new GuiButtonTxt("S2", function () { this._lineShapeReg(this._shapeRegIndex + 2) }.bind(this))];
     this._shapeRegLine.forEach(item => item.color = this._progColor.shapeButton);
+    }
+
 
     this._viewShapeRegActive = false;
     this._inspShapeRegActive = false;
@@ -135,9 +155,11 @@ class ProgrammingGui {
     this._shapeRegPosRot[1].color = this._progColor.shapeButton;
     this._shapeRegPosRot[2].color = this._progColor.shapeButton;
     this._shapeRegPosRot[3].color = this._progColor.shapeButton;
+    if(!this._locked){
     this._shapeRegPosRot[0].addChild(this._shapeRegPosRot[1], guiOptions.childBottom);
     this._shapeRegPosRot[0].addChild(this._shapeRegPosRot[2], guiOptions.childBottom);
     this._shapeRegPosRot[0].addChild(this._shapeRegPosRot[3], guiOptions.childBottom);
+    }
 
     this._shapeRegPosRotInsp = new GuiButtonTxt("==Pos");
     this._shapeRegPosRotInsp.color = this._progColor.shapeButton;
@@ -149,12 +171,14 @@ class ProgrammingGui {
     this._shapeRegEqualColor[0].color = this._progColor.shapeButton;
     this._shapeRegEqualColor[1].color = this._progColor.shapeButton;
     this._shapeRegEqualColor[2].color = this._progColor.shapeButton;
+    if(!this._locked){
     this._shapeRegEqualColor[0].addChild(this._shapeRegEqualColor[1], guiOptions.childBottom);
     this._shapeRegEqualColor[0].addChild(this._shapeRegEqualColor[2], guiOptions.childBottom);
-
+    }
+    if(!this._locked){
     this._shapeRegReturn = new GuiButtonTxt("Ret", function () { this._setActveShapeRegReturn() }.bind(this))
     this._shapeRegSave = new GuiButtonTxt("Save", function () { this._setActveShapeRegSave() }.bind(this))
-
+    }
     this._shapeRegInspReturn = new GuiButtonTxt("Ret", function () { this._setActveShapeRegInspReturn() }.bind(this))
 
 
@@ -162,17 +186,23 @@ class ProgrammingGui {
     this._activeAvatardReg = 0;
     this._avatardRegIndex = 0;
     this._avatardRegMinus = new GuiButtonTxt("-", function () { if (this._avatardRegIndex > 0) { this._avatardRegIndex-- }; this._updateReg() }.bind(this));
+    if(!this._locked){
     this._avatardRegSetMenu = [new GuiButtonTxt("View", function () { this._viewAvatardReg(true) }.bind(this)), new GuiButtonTxt("Set", function () { this._setAvatardReg() }.bind(this))];
     this._avatardRegSetMenu.forEach(item => item.color = this._progColor.avatardButton)
+    }
     this._avatardReg = [new GuiButtonTxt("A0", null, null, function () { this._setActveAvatardReg(this._avatardRegIndex) }.bind(this)), new GuiButtonTxt("A1", null, null, function () { this._setActveAvatardReg(this._avatardRegIndex + 1) }.bind(this)), new GuiButtonTxt("A2", null, null, function () { this._setActveAvatardReg(this._avatardRegIndex + 2) }.bind(this))];
+    if(!this._locked){
     this._avatardReg.forEach(item => this._avatardRegSetMenu.forEach(menu => item.addChild(menu, guiOptions.childTop)));
+    }
     this._avatardRegPlus = new GuiButtonTxt("+", function () { if (this._avatardRegIndex < 97) { this._avatardRegIndex++ }; this._updateReg() }.bind(this));
-
+    if(!this._locked){
     this._avatardRegLine = [new GuiButtonTxt("A0", function () { this._lineAvatardReg(this._avatardRegIndex) }.bind(this)), new GuiButtonTxt("A1", function () { this._lineAvatardReg(this._avatardRegIndex + 1) }.bind(this)), new GuiButtonTxt("A2", function () { this._lineAvatardReg(this._avatardRegIndex + 2) }.bind(this))];
     this._avatardRegLine.forEach(item => item.color = this._progColor.avatardButton);
-
+    }
+    if(!this._locked){
     this._avatardRegReturn = new GuiButtonTxt("Ret", function () { this._setActveAvatardRegReturn() }.bind(this))
     this._avatardRegSave = new GuiButtonTxt("Save", function () { this._setActveAvatardRegSave() }.bind(this))
+    }
     this._viewAvatardRegActive = false;
 
 
@@ -181,7 +211,10 @@ class ProgrammingGui {
     // #######################################################
 
     this._programPlay = new GuiButtonTxt("Play", function () { this._play() }.bind(this));
+    this._programPlaySlow = new GuiButtonTxt("Slow", function () { this._playSlow() }.bind(this));
+    if(!this._locked){
     this._programStep = new GuiButtonTxt("Step", function () { this._step() }.bind(this));
+    }
     this._programReset = new GuiButtonTxt("Reset", function () { this._reset() }.bind(this));
     this._programHide = new GuiButtonTxt("Hide", function () { this._hideProgram() }.bind(this));
     this._programHideForPlay = false;
@@ -211,10 +244,13 @@ class ProgrammingGui {
     this._lineMenuBISA[1].color = this._progColor.intButton;
     this._lineMenuBISA[2].color = this._progColor.shapeButton;
     this._lineMenuBISA[3].color = this._progColor.avatardButton;
+    if(!this._locked){
     this._boolRegLine.forEach(item => this._lineMenuBISA[0].addChild(item, guiOptions.childRight));
+ 
     this._intRegLine.forEach(item => this._lineMenuBISA[1].addChild(item, guiOptions.childRight));
     this._shapeRegLine.forEach(item => this._lineMenuBISA[2].addChild(item, guiOptions.childRight));
     this._avatardRegLine.forEach(item => this._lineMenuBISA[3].addChild(item, guiOptions.childRight));
+  }
 
     this._lineMenuGameSleep = [new GuiButtonTxt("World", function () { this._lineWorld() }.bind(this)), new GuiButtonTxt("Game", function () { this._lineGame() }.bind(this)), new GuiButtonTxt("Sleep", function () { this._lineSleep() }.bind(this))]
     this._lineMenuGameSleep[0].color = this._progColor.worldButton;
@@ -265,7 +301,7 @@ class ProgrammingGui {
 
       }
       this._line[row].col[0].txt = row
-
+      if(!this._locked){
       this._line[row].col[0].addChild(this._lineMenuJumpReturn[0], guiOptions.childRight);
       this._lineMenuIfLabel.forEach(item => this._line[row].col[0].addChild(item, guiOptions.childRight));
 
@@ -273,6 +309,7 @@ class ProgrammingGui {
       this._line[row].col[0].addChild(this._lineMenuGameSleep[0], guiOptions.childLeft);
       this._line[row].col[0].addChild(this._lineMenuGameSleep[2], guiOptions.childLeft);
       this._lineMenuBISA.forEach(item => this._line[row].col[0].addChild(item, guiOptions.childBottom));
+      }
 
     }
 
@@ -352,6 +389,9 @@ class ProgrammingGui {
     this._lineMenuColor[2].color = this._progColor.greenButton;
     this._lineMenuColor[3].color = this._progColor.blueButton;
 
+    this._lineMenuShapeEmpty =  new GuiButtonTxt("Empt", function () { this._lineShapeEmpty(this._program.opType.shapeEmpty) }.bind(this)),
+    this._lineMenuShapeEmpty.color = this._progColor.shapeButton; 
+
     this._show();
 
     this._updateLine();
@@ -366,6 +406,18 @@ class ProgrammingGui {
       this._playTimer = setInterval(this._step.bind(this), 50);
     }else if(this._playTimer == null){
       this._playTimer = setInterval(this._step.bind(this), 50);
+    }else{
+      clearTimeout(this._playTimer);
+      this._playTimer = null;
+    }
+  }
+
+  _playSlow() {
+    if(this._stepEnd){
+      this._reset();
+      this._playTimer = setInterval(this._step.bind(this), 2000);
+    }else if(this._playTimer == null){
+      this._playTimer = setInterval(this._step.bind(this), 2000);
     }else{
       clearTimeout(this._playTimer);
       this._playTimer = null;
@@ -424,7 +476,7 @@ class ProgrammingGui {
     if (this._activeProgramLine != -1) {
       this._line[this._activeProgramLine].col[0].hideBorder();
     }
-
+ 
     clearTimeout(this._playTimer);
     this._playTimer = null;
     this._stepEnd = false;
@@ -433,8 +485,8 @@ class ProgrammingGui {
     this._sleepTick = 0;
 
     this._game.show({});
-
     this._updateReg();
+
     this._activeProgramLine = -1;
 
   }
@@ -607,6 +659,11 @@ class ProgrammingGui {
 
   _lineEqualColor(op) {
     this._program._procedure[this._activeProcedure].line[this._activeLine] = new comShape({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: op, operatorType: op });
+    this._updateLine();
+  }
+
+  _lineShapeEmpty(op) {  
+    this._program._procedure[this._activeProcedure].line[this._activeLine] = new comBool({ regNo: this._program._procedure[this._activeProcedure].line[this._activeLine].regNo, left: this._program._procedure[this._activeProcedure].line[this._activeLine].left, leftType: this._program._procedure[this._activeProcedure].line[this._activeLine].leftType, operator: this._program._procedure[this._activeProcedure].line[this._activeLine].operator, right: op, rightType: op });
     this._updateLine();
   }
 
@@ -815,6 +872,12 @@ class ProgrammingGui {
     this._activeShapeReg = no;
   }
 
+  _setActveAvatardReg(no) {
+    this._activeAvatardReg = no;
+  }
+
+
+
   _setActveShapeRegSave() {
 
     colorWheel.disenable();
@@ -923,13 +986,6 @@ class ProgrammingGui {
         this._shapeRegEqualColor[0].txt = "!=Col";
         break;
     }
-
-  }
-
-
-  _setActveAvatardReg(no) {
-    this._reset();
-    this._activeAvatardReg = no;
 
   }
 
@@ -1096,8 +1152,11 @@ class ProgrammingGui {
 
   _show() {
 
-    this._programPlay.setVisible(6, 4, guiOptions.center, guiOptions.center);
+    this._programPlay.setVisible(5, 4, guiOptions.center, guiOptions.center);
+    this._programPlaySlow.setVisible(6, 4, guiOptions.center, guiOptions.center);
+    if(!this._locked){
     this._programStep.setVisible(7, 4, guiOptions.center, guiOptions.center);
+    }
     this._programReset.setVisible(8, 4, guiOptions.center, guiOptions.center);
     this._programHide.setVisible(-9, -3, guiOptions.center, guiOptions.center);
 
@@ -1237,6 +1296,7 @@ class ProgrammingGui {
                 this._line[l].col[3].addChild(this._lineMenuBISA[1], guiOptions.childBottom)
                 break;
               case this._program.opType.shape:
+                this._line[l].col[3].addChild(this._lineMenuShapeEmpty, guiOptions.childTop)
                 this._line[l].col[3].addChild(this._lineMenuBISA[2], guiOptions.childBottom)
                 break;
               case this._program.opType.avatard:
@@ -1255,7 +1315,6 @@ class ProgrammingGui {
               this._line[l].col[3].txt = "";
 
             } else {
-
               switch (this._program._procedure[this._activeProcedure].line[i].rightType) {
                 case this._program.opType.trueFalse:
                   this._line[l].col[3].color = this._progColor.bool;
@@ -1274,6 +1333,12 @@ class ProgrammingGui {
                   this._line[l].col[3].color = this._progColor.int;
                   this._line[l].col[3].txt = "I" + this._program._procedure[this._activeProcedure].line[i].right;
                   break;
+                  
+                  case this._program.opType.shapeEmpty:
+                    this._line[l].col[3].color = this._progColor.shape;
+                    this._line[l].col[3].txt = "Empt";
+                    break;
+
                 case this._program.opType.shape:
                   this._line[l].col[3].color = this._progColor.shape;
                   this._line[l].col[3].txt = "S" + this._program._procedure[this._activeProcedure].line[i].right;
@@ -1898,6 +1963,13 @@ class ProgrammingGui {
 
       }
 
+      if(this._locked){
+      this._line[l].col[1].removeChildren();
+          this._line[l].col[2].removeChildren();
+          this._line[l].col[3].removeChildren();
+
+      }
+
     }
 
   }
@@ -1907,7 +1979,9 @@ class ProgrammingGui {
 
     for (let i = this._boolRegIndex; i < this._boolRegIndex + 3; i++) {
       this._boolReg[i - this._boolRegIndex].color = this._progColor.bool;
+      if(!this._locked){
       this._boolRegLine[i - this._boolRegIndex].txt = "B" + i;
+      }
       if (this._program.boolReg[i] == true) {
         this._boolReg[i - this._boolRegIndex].txt = "B" + i + ":T";
       } else if (this._program.boolReg[i] == false) {
@@ -1920,7 +1994,9 @@ class ProgrammingGui {
 
     for (let i = this._intRegIndex; i < this._intRegIndex + 3; i++) {
       this._intReg[i - this._intRegIndex].color = this._progColor.int;
+      if(!this._locked){
       this._intRegLine[i - this._intRegIndex].txt = "I" + i;
+      }
       if (this._program.intReg[i] != null) {
         this._intReg[i - this._intRegIndex].txt = "I" + i + ":" + this._program.intReg[i];
       } else {
@@ -1931,7 +2007,9 @@ class ProgrammingGui {
 
     for (let i = this._labelRegIndex; i < this._labelRegIndex + 3; i++) {
       this._labelReg[i - this._labelRegIndex].txt = "L" + i;
+      if(!this._locked){
       this._labelRegLine[i - this._labelRegIndex].txt = "L" + i;
+      }
       if (this._program.labelReg[i] != null) {
         this._labelReg[i - this._labelRegIndex].color = this._progColor.label;
       } else {
@@ -1941,7 +2019,9 @@ class ProgrammingGui {
 
     for (let i = this._shapeRegIndex; i < this._shapeRegIndex + 3; i++) {
       this._shapeReg[i - this._shapeRegIndex].txt = "S" + i;
+      if(!this._locked){
       this._shapeRegLine[i - this._shapeRegIndex].txt = "S" + i;
+      }
       if (this._program.shapeReg[i] != null) {
         this._shapeReg[i - this._shapeRegIndex].color = this._progColor.shape;
       } else {
@@ -1951,10 +2031,12 @@ class ProgrammingGui {
 
     for (let i = this._avatardRegIndex; i < this._avatardRegIndex + 3; i++) {
       this._avatardReg[i - this._avatardRegIndex].txt = "A" + i;
+      if(!this._locked){
       this._avatardRegLine[i - this._avatardRegIndex].txt = "A" + i;
+      }     
       if (this._program.avatardReg[i] != null) {
         this._avatardReg[i - this._avatardRegIndex].color = this._progColor.avatard;
-      } else {
+      } else {       
         this._avatardReg[i - this._avatardRegIndex].color = this._progColor.na;
       }
     }
@@ -1995,7 +2077,10 @@ class ProgrammingGui {
     }
 
     this._programPlay.setNotVisible();
+    this._programPlaySlow.setNotVisible();
+    if(!this._locked){
     this._programStep.setNotVisible();
+    }
     this._programReset.setNotVisible();
 
     this._boolRegMinus.setNotVisible();
@@ -2037,11 +2122,15 @@ class ProgrammingGui {
 
     this._shapeRegPosRot[0].setNotVisible();
     this._shapeRegEqualColor[0].setNotVisible();
+
+    this._shapeRegInspReturn.setNotVisible();
+    if(!this._locked){
     this._shapeRegReturn.setNotVisible();
     this._shapeRegSave.setNotVisible();
 
     this._avatardRegReturn.setNotVisible();
     this._avatardRegSave.setNotVisible();
+    }
 
     this._shapeRegPosRotInsp.setNotVisible();
     this._shapeRegEqualColorInsp.setNotVisible();

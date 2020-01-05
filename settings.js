@@ -94,6 +94,8 @@ let settings = {
         button = new GuiButtonImg("./icon/games/categoryProgramming.svg");
         startButton.addChild(button, guiOptions.childBottom)
         button.addChild(new GuiButtonImg("./icon/games/categoryProgramming.svg", function () { new Programming() }), guiOptions.childRight);
+        button.addChild(new GuiButtonImg("./icon/games/categoryProgramming.svg", function () { new ReadProgram() }), guiOptions.childRight);
+
 
 
 

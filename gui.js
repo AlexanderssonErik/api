@@ -125,7 +125,7 @@ class Gui {
                 this._element.style.top = 100 + window.innerWidth / window.innerHeight * this._margin[Gui._SizeSetting] / 2 - window.innerWidth / window.innerHeight * this._size[Gui._SizeSetting] + ver * window.innerWidth / window.innerHeight * this._size[Gui._SizeSetting] + "%";
                 break;
         }
-
+        
         this._element.style.background = this._background;
         document.body.appendChild(this._element);
 
@@ -329,6 +329,8 @@ class GuiButton extends Gui {
 
     pointerDown(evt) {
 
+      
+
         scene.onPointerMove = this.pointerMove.bind(this);
         scene.onPointerUp = this.pointerUp.bind(this);
         Gui._pointerUpFunction =  this.pointerUp.bind(this);
@@ -343,7 +345,7 @@ class GuiButton extends Gui {
             guiElement: this
         }
         GuiButton._ActiveStack.push(buttonPosition);
-        GuiButton._ActiveElement = this;
+        GuiButton._ActiveElement = this;     
         this._element.style.background = this._backgroundDown;
         this._direction = null;
         this._parent = null;
@@ -398,7 +400,7 @@ class GuiButton extends Gui {
         }.bind(this));
     }
 
-    _setBackground() {
+    _setBackground() { 
         this._element.style.background = this._background;  //needed?
     }
 
@@ -423,7 +425,7 @@ class GuiButton extends Gui {
 
             }
             GuiButton._ActiveElement._element.style.background = this._backgroundDown;
-        } else {
+        } else {        
             this._element.style.background = this._background;
         }
     }
@@ -433,8 +435,7 @@ class GuiButton extends Gui {
         super.pointerUp();
         scene.onPointerMove = null;
         scene.onPointerUp = null;
-        Gui._pointerUpFunction = null;
-
+        Gui._pointerUpFunction = null;       
         this._element.style.background = this._background;
 
         let hitElement = GuiButton._ActiveStack.find(function (item, index) {

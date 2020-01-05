@@ -215,6 +215,7 @@ class Game {
 
         this._levelIndex = level;
         this._difficultyIndex = difficulty;
+       
 
         let randStage = 0;
 
@@ -252,6 +253,7 @@ class Game {
         }
 
     }
+
 
     get difficultyIndex() {
 

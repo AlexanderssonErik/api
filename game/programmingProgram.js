@@ -9,8 +9,8 @@ class comBool {
     this._right = right;
     this._rightType = rightType;
   }
-  printConstructor(){
-    return "new comBool ({ regNo :" + this._regNo + ", left :" + this._left + ", leftType :" + this._leftType + ", operator :" +  this._operator + ", right :" + this._right + ", rightType :" + this._rightType +" }) ";
+  printConstructor() {
+    return "new comBool ({ regNo :" + this._regNo + ", left :" + this._left + ", leftType :" + this._leftType + ", operator :" + this._operator + ", right :" + this._right + ", rightType :" + this._rightType + " }) ";
   }
 
   run() {
@@ -100,15 +100,46 @@ class comBool {
 
         let leftPixel = ProgrammingProgram.shapeReg[this._left];
         let rightPixel;
+
+        if (leftPixel == null) {
+          return false;
+        }
+
+
+
         switch (this._rightType) {
           case ProgrammingProgram.opType.shape:
             rightPixel = ProgrammingProgram.shapeReg[this._right];
+            break;
+          case ProgrammingProgram.opType.shapeEmpty:
+            switch (this._operator) {
+              case ProgrammingProgram.opType.equal:
+                if (leftPixel.length == 0) {
+                  ProgrammingProgram.boolReg[this._regNo] = true;
+                } else {
+                  ProgrammingProgram.boolReg[this._regNo] = false;
+                }
+                return true;
+                break;
+              case ProgrammingProgram.opType.notEqual:
+                if (leftPixel.length != 0) {
+                  ProgrammingProgram.boolReg[this._regNo] = true;
+                } else {
+                  ProgrammingProgram.boolReg[this._regNo] = false;
+                }
+                return true;
+                break;
+              default:
+                return false;
+                break;
+            }
+
             break;
           default:
             return false;
             break;
         }
-        if (leftPixel == null || rightPixel == null) {
+        if (rightPixel == null) {
           return false;
         }
 
@@ -267,8 +298,8 @@ class comIf {
     this._right = right;
     this._rightType = rightType;
   }
-  printConstructor(){
-    return "new comIf ({ left :" + this._left + ", operator :" +  this._operator + ", right :" + this._right + ", rightType :" + this._rightType +" }) ";
+  printConstructor() {
+    return "new comIf ({ left :" + this._left + ", operator :" + this._operator + ", right :" + this._right + ", rightType :" + this._rightType + " }) ";
   }
 
   run() {
@@ -375,8 +406,8 @@ class comInt {
     this._rightType = rightType;
   }
 
-  printConstructor(){
-    return "new comInt ({ regNo :" + this._regNo + ", left :" + this._left + ", leftType :" + this._leftType + ", operator :" +  this._operator + ", right :" + this._right + ", rightType :" + this._rightType +" }) ";
+  printConstructor() {
+    return "new comInt ({ regNo :" + this._regNo + ", left :" + this._left + ", leftType :" + this._leftType + ", operator :" + this._operator + ", right :" + this._right + ", rightType :" + this._rightType + " }) ";
   }
   run() {
     switch (this._leftType) {
@@ -458,8 +489,8 @@ class comShape {
     this._rightType = rightType;
   }
 
-  printConstructor(){
-    return "new comShape ({ regNo :" + this._regNo + ", left :" + this._left + ", leftType :" + this._leftType + ", operator :" +  this._operator + ", operatorType :" +  this._operatorType + ", right :" + this._right + ", rightType :" + this._rightType +" }) ";
+  printConstructor() {
+    return "new comShape ({ regNo :" + this._regNo + ", left :" + this._left + ", leftType :" + this._leftType + ", operator :" + this._operator + ", operatorType :" + this._operatorType + ", right :" + this._right + ", rightType :" + this._rightType + " }) ";
   }
   run() {
     let set;
@@ -586,11 +617,11 @@ class comGame {
     this._left = left;
     this._leftType = leftType;
   }
-  printConstructor(){
+  printConstructor() {
     return "new comGame ({ left :" + this._left + ", leftType :" + this._leftType + " }) ";
   }
 
-  
+
   run() {
     if (this._left == null || ProgrammingProgram.shapeReg[this._left] == null) {
       return false;
@@ -617,7 +648,7 @@ class comWorld {
     this._left = left;
     this._leftType = leftType;
   }
-  printConstructor(){
+  printConstructor() {
     return "new comWorld ({ left :" + this._left + ", leftType :" + this._leftType + " }) ";
   }
 
@@ -683,7 +714,7 @@ class comJump {
     this._left = left;
     this._leftType = leftType;
   }
-  printConstructor(){
+  printConstructor() {
     return "new comJump ({ left :" + this._left + ", leftType :" + this._leftType + " }) ";
   }
 
@@ -718,7 +749,7 @@ class comLabel {
   constructor({ left = null }) {
     this._left = left;
   }
-  printConstructor(){
+  printConstructor() {
     return "new comLabel ({ left :" + this._left + " }) ";
   }
 
@@ -737,7 +768,7 @@ class comCall {
     this._left = left;
     this._leftType = leftType;
   }
-  printConstructor(){
+  printConstructor() {
     return "new comCall ({ left :" + this._left + ", leftType :" + this._leftType + " }) ";
   }
 
@@ -782,7 +813,7 @@ class comReturn {
     this._left = left;
   }
 
-  printConstructor(){
+  printConstructor() {
     return "new comReturn ({ left :" + this._left + " }) ";
   }
 
@@ -810,8 +841,8 @@ class comSleep {
     this._operator = operator;
     this._operatorType = operatorType;
   }
-  printConstructor(){
-    return "new comSleep ({ left :" + this._left + ", leftType :" + this._leftType + ", operator :" +  this._operator +", operatorType :" +  this._operatorType + " }) ";
+  printConstructor() {
+    return "new comSleep ({ left :" + this._left + ", leftType :" + this._leftType + ", operator :" + this._operator + ", operatorType :" + this._operatorType + " }) ";
   }
   run() {
 
@@ -857,8 +888,8 @@ class comAvatard {
     this._rightType = rightType;
   }
 
-  printConstructor(){
-    return "new comAvatard ({ regNo :" + this._regNo + ", left :" + this._left + ", leftType :" + this._leftType + ", operator :" +  this._operator + ", operatorType :" +  this._operatorType + ", right :" + this._right + ", rightType :" + this._rightType +" }) ";
+  printConstructor() {
+    return "new comAvatard ({ regNo :" + this._regNo + ", left :" + this._left + ", leftType :" + this._leftType + ", operator :" + this._operator + ", operatorType :" + this._operatorType + ", right :" + this._right + ", rightType :" + this._rightType + " }) ";
   }
 
 
@@ -924,7 +955,7 @@ class comAvatard {
         }
         ProgrammingProgram.avatardMesh[this._regNo].updatePos();
         ProgrammingProgram.timerTick = 1;
-        ProgrammingProgram.timer = setTimeout(function() {ProgrammingProgram.timerTick = 0}.bind(this), delay);     
+        ProgrammingProgram.timer = setTimeout(function () { ProgrammingProgram.timerTick = 0 }.bind(this), delay);
         break;
       case ProgrammingProgram.opType.right:
         if (!ProgrammingProgram.avatardBlock[this._regNo].turnRight()) {
@@ -932,8 +963,8 @@ class comAvatard {
         }
         ProgrammingProgram.avatardMesh[this._regNo].updatePos();
         ProgrammingProgram.timerTick = 1;
-        ProgrammingProgram.timer = setTimeout(function() {ProgrammingProgram.timerTick = 0}.bind(this), delay);   
-        
+        ProgrammingProgram.timer = setTimeout(function () { ProgrammingProgram.timerTick = 0 }.bind(this), delay);
+
         break;
       case ProgrammingProgram.opType.forward:
         if (!ProgrammingProgram.avatardBlock[this._regNo].moveForward()) {
@@ -941,7 +972,7 @@ class comAvatard {
         }
         ProgrammingProgram.avatardMesh[this._regNo].updatePos();
         ProgrammingProgram.timerTick = 1;
-        ProgrammingProgram.timer = setTimeout(function() {ProgrammingProgram.timerTick = 0}.bind(this), delay);   
+        ProgrammingProgram.timer = setTimeout(function () { ProgrammingProgram.timerTick = 0 }.bind(this), delay);
         break;
       case ProgrammingProgram.opType.up:
         if (!ProgrammingProgram.avatardBlock[this._regNo].moveUp()) {
@@ -949,7 +980,7 @@ class comAvatard {
         }
         ProgrammingProgram.avatardMesh[this._regNo].updatePos();
         ProgrammingProgram.timerTick = 1;
-        ProgrammingProgram.timer = setTimeout(function() {ProgrammingProgram.timerTick = 0}.bind(this), delay);   
+        ProgrammingProgram.timer = setTimeout(function () { ProgrammingProgram.timerTick = 0 }.bind(this), delay);
         break;
       case ProgrammingProgram.opType.down:
         if (!ProgrammingProgram.avatardBlock[this._regNo].moveDown()) {
@@ -957,7 +988,7 @@ class comAvatard {
         }
         ProgrammingProgram.avatardMesh[this._regNo].updatePos();
         ProgrammingProgram.timerTick = 1;
-        ProgrammingProgram.timer = setTimeout(function() {ProgrammingProgram.timerTick = 0}.bind(this), delay);   
+        ProgrammingProgram.timer = setTimeout(function () { ProgrammingProgram.timerTick = 0 }.bind(this), delay);
         break;
       default:
         return false;
@@ -997,7 +1028,7 @@ class comAvatard {
 
 class ProgrammingProgram {
 
-  static processLoadObject(program){
+  static processLoadObject(program) {
 
     for (let ii = 0; ii < program.procedure.length; ii++) {
       if (program.procedure[ii] != null) {
@@ -1063,7 +1094,8 @@ class ProgrammingProgram {
       procedure: 33,
       label: 34,
       trueFalse: 35,
-      
+      shapeEmpty: 36,
+
 
     }
 
@@ -1248,7 +1280,7 @@ class ProgrammingProgram {
     return false;
   }
 
-  get procedure(){
+  get procedure() {
     return this._procedure;
   }
 
