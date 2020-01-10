@@ -669,6 +669,8 @@ function meshesPixel() {
 
 
 
+
+
 function meshesStar() {
 
     let data = {
@@ -784,6 +786,15 @@ function createShadowBottom() {
     return shadow;
 
 }
+
+function createPlaneTransBase() {
+
+    let shadow = BABYLON.MeshBuilder.CreatePlane("blockPixel", { width: 0.9, height: 0.9 }, scene);
+    shadow.position.y = 0.01;
+    return shadow;
+
+}
+
 function meshesShadowLeft() {
 
     let data = {
@@ -892,6 +903,32 @@ function meshesShadowBottom() {
 
 }
 
+function meshesTransBase() {
+
+    let data = {
+        mesh: []
+
+    }
+
+    for (let x = 0; x < 10; x++) {
+        for (let z = 0; z < 10; z++) {
+
+            let shadow = createPlaneTransBase();
+
+            shadow.rotation.x = Math.PI / 2;
+            shadow.position.x = x;
+            shadow.position.z = z;
+
+            shadow = BABYLON.Mesh.MergeMeshes([shadow]);
+            shadow.isPickable = true;
+
+            scene.meshes.pop();
+            data.mesh.push(shadow);
+        }
+    }
+    return data;
+
+}
 
 
 
@@ -1039,7 +1076,7 @@ function meshes2x2Stl() {
     blockSTL2x2.rotation.z = Math.PI;
     blockSTL2x2.rotation.y = Math.PI / 2;
     let mesh = BABYLON.Mesh.MergeMeshes([blockSTL2x2]);
- 
+
     scene.meshes.pop();
     return mesh;
 }
@@ -1057,7 +1094,7 @@ function meshes2x4Stl() {
     blockSTL2x4.rotation.z = Math.PI;
     blockSTL2x4.rotation.y = Math.PI / 2;
     let mesh = BABYLON.Mesh.MergeMeshes([blockSTL2x4]);
-    
+
     scene.meshes.pop();
     return mesh;
 }

@@ -88,6 +88,20 @@ class comBool {
               ProgrammingProgram.boolReg[this._regNo] = false;
             }
             break;
+          case ProgrammingProgram.opType.greater:
+            if (leftVal > rightVal) {
+              ProgrammingProgram.boolReg[this._regNo] = true;
+            } else {
+              ProgrammingProgram.boolReg[this._regNo] = false;
+            }
+            break;
+          case ProgrammingProgram.opType.smaller:
+            if (leftVal < rightVal) {
+              ProgrammingProgram.boolReg[this._regNo] = true;
+            } else {
+              ProgrammingProgram.boolReg[this._regNo] = false;
+            }
+            break;
           default:
             return false;
             break;

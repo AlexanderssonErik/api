@@ -10,6 +10,11 @@ let world = {
     _hideBlock: false,
     _forceUpdateBlocks: false,
     _compass: { enabled: false, x: 0, y: 0, z: 0, zeroX: 0, zeroZ: 0, zeroAngle: [0, 0, 0, 0], sensAngle: [0, 0, 0, 0], realAngle: [cameraAlpha.front, cameraAlpha.right, cameraAlpha.back, cameraAlpha.left] },
+   /* _offsetX: 0,
+    _offsetY: 0,
+    _offsetZ: 0,
+*/
+
 
     init: function (baseMesh) {
         this._blockBase = new BlockBase();
@@ -73,6 +78,17 @@ let world = {
         return this._compass;
     },
 
+    moveX: function(dir){
+        this._offsetX +=dir;
+    },
+    moveY: function(dir){
+        this._offsetY +=dir;
+    },
+
+    moveZ: function(dir){
+        this._offsetZ +=dir;
+    },
+
 
     compassOn: function () {
         new CompassCalibration();
@@ -88,8 +104,10 @@ let world = {
 
         if (twobytwo) {
             this._incomingBlocks.push(new Block2x2({ x: x, y: y, z: z, r: rotation }));
+          //  this._incomingBlocks.push(new Block2x2({ x: x + this._offsetX, y: y+this._offsetY, z: z+this._offsetZ, r: rotation }));
         } else {
-            this._incomingBlocks.push(new Block2x4({ x: x, y: y, z: z, r: rotation }));
+            this._incomingBlocks.push(new Block2x4({ x: x , y: y, z: z, r: rotation }));
+          //  this._incomingBlocks.push(new Block2x4({ x: x + this._offsetX, y: y + this._offsetY, z: z + this._offsetZ, r: rotation }));
         }
 
 

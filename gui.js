@@ -72,6 +72,8 @@ class Gui {
         this._horPos = 0;
         this._verPos = 0;
 
+     
+
         this._size = [4, 7, 13];
         this._sizeWidthMulti = 1;
         this._margin = [0.5, 1, 2];
@@ -125,7 +127,7 @@ class Gui {
                 this._element.style.top = 100 + window.innerWidth / window.innerHeight * this._margin[Gui._SizeSetting] / 2 - window.innerWidth / window.innerHeight * this._size[Gui._SizeSetting] + ver * window.innerWidth / window.innerHeight * this._size[Gui._SizeSetting] + "%";
                 break;
         }
-        
+
         this._element.style.background = this._background;
         document.body.appendChild(this._element);
 
@@ -175,6 +177,131 @@ class Gui {
             index--;
         }
     }
+}
+
+class GuiMoveTransBase extends Gui {
+    constructor() {
+        //  super(null);
+        super(document.createElement('IMG'));
+        this._mesh = null;
+        this._downPageX = null;
+        this._downPageY = null;
+        this._lastRadius = 0;
+        /*this._element.src = "./icon/colorWheel/rgb.svg";
+        this._size = [15, 30, 50];
+        this._element.style.background = 'rgba(0, 0, 0, 0.0)';
+        this._background = 'rgba(0, 0, 0, 0.0)';
+        this._currentMeshFunction = null
+
+        this._horAlign = guiOptions.left;
+        this._verAlign = guiOptions.top;
+
+        this._downPageX = null;
+        this._downPageY = null;
+
+        this._colorComplete = true;
+
+        this._enabled = false;*/
+
+    }
+
+    _hide() {
+        return;
+    }
+
+    pointerDown(evt, mesh) {
+
+
+        this._mesh = mesh;
+        scene.onPointerMove = this.pointerMove.bind(this);
+        scene.onPointerUp = this.pointerUp.bind(this);
+        Gui._pointerUpFunction = this.pointerUp.bind(this);
+
+        this._downPageX = evt.pageX;
+        this._downPageY = evt.pageY;
+
+        super.pointerDown();
+
+    }
+    pointerMove(evt) {
+     
+        let pitch = 0.1;
+
+        if (camera.lookingFront) {
+            if ((evt.pageX - this._downPageX) / window.innerWidth < -pitch) {  
+                this._mesh.moveZ(1);         
+                camera.moveZ(1);
+               // world.moveZ(1);
+                this._downPageX = evt.pageX;
+            } else if ((evt.pageX - this._downPageX) / window.innerWidth > pitch) {
+                this._mesh.moveZ(-1);      
+                camera.moveZ(-1);
+               // world.moveZ(-1);
+                this._downPageX = evt.pageX;
+            }
+            
+    
+        } else if (camera.lookingBack) {
+            if ((evt.pageX - this._downPageX) / window.innerWidth < -pitch) {
+              this._mesh.moveZ(-1);      
+              camera.moveZ(-1);
+              //world.moveZ(-1);
+                this._downPageX = evt.pageX;
+            } else if ((evt.pageX - this._downPageX) / window.innerWidth > pitch) {
+                this._mesh.moveZ(1);      
+                camera.moveZ(1);
+                //world.moveZ(1);
+                this._downPageX = evt.pageX;
+            }    
+        } else if (camera.lookingLeft){
+            if ((evt.pageX - this._downPageX) / window.innerWidth > pitch) {
+                this._mesh.moveX(-1);      
+                camera.moveX(-1);
+                //world.moveX(-1);
+                this._downPageX = evt.pageX;
+            } else if ((evt.pageX - this._downPageX) / window.innerWidth < -pitch) {
+               this._mesh.moveX(1);      
+               camera.moveX(1);
+               //world.moveX(1);
+                this._downPageX = evt.pageX;
+            }
+        } else {
+            if ((evt.pageX - this._downPageX) / window.innerWidth > pitch) {
+                this._mesh.moveX(1);      
+                camera.moveX(1);
+                //world.moveX(1);
+                this._downPageX = evt.pageX;
+            } else if ((evt.pageX - this._downPageX) / window.innerWidth < -pitch) {
+                this._mesh.moveX(-1);      
+                camera.moveX(-1);
+                //world.moveX(-1);
+                this._downPageX = evt.pageX;
+            }
+        }
+
+        if ((evt.pageY - this._downPageY) / window.innerHeight < -pitch) {
+           this._mesh.moveY(1);      
+           camera.moveY(1);
+          // world.moveY(1);
+            this._downPageY = evt.pageY;
+        } else if ((evt.pageY - this._downPageY) / window.innerHeight > +pitch) {
+            this._mesh.moveY(-1);      
+            camera.moveY(-1);
+           // world.moveY(-1);
+            this._downPageY = evt.pageY;
+        }
+
+   
+    }
+    pointerUp() {
+        super.pointerUp();
+        scene.onPointerMove = null;
+        scene.onPointerUp = null;
+        Gui._pointerUpFunction = null;
+
+        this._hide();
+    }
+
 }
 
 class GuiColorWheel extends Gui {
@@ -266,7 +393,7 @@ class GuiColorWheel extends Gui {
         scene.onPointerMove = null;
         scene.onPointerUp = null;
         Gui._pointerUpFunction = null;
-        
+
         this._hide();
     }
 
@@ -329,11 +456,11 @@ class GuiButton extends Gui {
 
     pointerDown(evt) {
 
-      
+
 
         scene.onPointerMove = this.pointerMove.bind(this);
         scene.onPointerUp = this.pointerUp.bind(this);
-        Gui._pointerUpFunction =  this.pointerUp.bind(this);
+        Gui._pointerUpFunction = this.pointerUp.bind(this);
 
         GuiButton._ActiveStack = [];
 
@@ -345,7 +472,7 @@ class GuiButton extends Gui {
             guiElement: this
         }
         GuiButton._ActiveStack.push(buttonPosition);
-        GuiButton._ActiveElement = this;     
+        GuiButton._ActiveElement = this;
         this._element.style.background = this._backgroundDown;
         this._direction = null;
         this._parent = null;
@@ -400,7 +527,7 @@ class GuiButton extends Gui {
         }.bind(this));
     }
 
-    _setBackground() { 
+    _setBackground() {
         this._element.style.background = this._background;  //needed?
     }
 
@@ -425,7 +552,7 @@ class GuiButton extends Gui {
 
             }
             GuiButton._ActiveElement._element.style.background = this._backgroundDown;
-        } else {        
+        } else {
             this._element.style.background = this._background;
         }
     }
@@ -435,7 +562,7 @@ class GuiButton extends Gui {
         super.pointerUp();
         scene.onPointerMove = null;
         scene.onPointerUp = null;
-        Gui._pointerUpFunction = null;       
+        Gui._pointerUpFunction = null;
         this._element.style.background = this._background;
 
         let hitElement = GuiButton._ActiveStack.find(function (item, index) {

@@ -37,7 +37,8 @@
     <script src="./game/guidedBuild.js"></script>
     <script src="./game/guidedBuildLevel.js"></script>
 
-    <script src="./game/freeBuild.js"></script>
+    <script src="./game/freeBuild.js"></script>    
+    <script src="./game/freeFreeBuild.js"></script>
 
     <script src="./game/tangram.js"></script>
     <script src="./game/tangramLevel.js"></script>
@@ -156,6 +157,7 @@
         Mesh.init();
 
         MeshBase.init();
+        MeshBaseTrans.init(meshesTransBase());
         MeshPixel.init(meshesPixel());
 
 
@@ -193,7 +195,6 @@
         world.base.ledRight = meshColor.cyan;
         world.base.ledBack = meshColor.black;
 
-
         settings.init(meshes2x2Stl(), meshes2x4Stl());
         ble.init();
 
@@ -202,6 +203,8 @@
         ProgrammingProgram.init();
 
         let colorWheel = new GuiColorWheel();
+        let moveTransBase = new GuiMoveTransBase();
+       
 
         window.onload = function () {
             engine.hideLoadingUI();
@@ -324,14 +327,18 @@
                 if (Gui.pointerDown(evt)) {
 
                 } else if (pickResult.hit) {
-                    colorWheel.pointerDown(evt, pickResult.pickedMesh.name)
+                    if( pickResult.pickedMesh.name instanceof MeshBaseTrans){                       
+                        moveTransBase.pointerDown(evt, pickResult.pickedMesh.name)
+                    }else{
+                        colorWheel.pointerDown(evt, pickResult.pickedMesh.name)
+                    }
                 } else {
                     camera.pointerDown();
                 }
             };
 
-            engine.runRenderLoop(function () {
-                scene.render();
+            engine.runRenderLoop(function () { 
+                   scene.render();
             });
             window.addEventListener("resize", function () {
                 clearTimeout(timeOutResizeDeBounce);

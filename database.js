@@ -216,7 +216,6 @@ let database = {
       return;
     }
 
-
     this._data.collection(name).doc(this._user.uid).set({ timeStamp: firebase.firestore.FieldValue.arrayUnion({ level: level, difficulty: difficulty, timeStamp: firebase.firestore.Timestamp.now().toMillis(), type: "fail" }) }, { merge: true }).then(function () {
 
     }).catch(function (error) {
@@ -258,8 +257,6 @@ let database = {
     if (!this._user.loggedIn || this._user.uid == "") {
       return;
     }
-
-   // console.log("name: " + name)
     
     let docRef = this._data.collection(name).doc(this._user.uid);
 
@@ -267,63 +264,33 @@ let database = {
       if (doc.exists) {
 
         let gameData = doc.data();
-/*
-        var start = new Date().getTime();
-        while (new Date().getTime() < start + 500);*/
 
-       /* console.log("gameData: " + gameData)
-        console.log("gameData1: " + gameData.userProgram1)
-        console.log("gameData2: " + gameData.userProgram2)
-          console.log("load level: " + level)*/
           let prog = eval("gameData.userProgram" + level) ;   
-          
+          //firebase is stupid need to sometime reload
           if(prog == null){
 
-          /*  console.log("DFSFDSAFDSDFSFDDAFD")
-
-            console.log("this._data: " + database._data)
-            console.log("name: " + name)*/
-
+  
             docRef = database._data.collection(name).doc(database._user.uid);
             docRef.get().then(function (doc) {
               gameData = doc.data();
-            /*  console.log("B gameData: " + gameData)
-              console.log("B gameData1: " + gameData.userProgram1)*/
+ 
               prog = eval("gameData.userProgram" + level) ;   
 
               if (prog == null) {
-               // console.log("load level 1");
                 callBackFunction({ level: level, program: null });
               }else{
-              //  console.log("load level 2");
                 callBackFunction({ level: level, program: prog });
-            
-            //  callBackFunction({ level: level, program: eval("gameData.userProgram" + level) });
               }  
 
             });
 
-          /*  gameData = doc.data();
-            console.log("B gameData1: " + gameData.userProgram1)
-            prog = eval("gameData.userProgram" + level) ; 
-*/
             return 
           }
 
-          /*if(prog == null){
-            gameData = doc.data();
-            console.log("C gameData1: " + gameData.userProgram1)
-            prog = eval("gameData.userProgram" + level) ; 
-          }*/
-
-          if (prog == null) {
-           //// console.log("load level 1");
+          if (prog == null) {     
             callBackFunction({ level: level, program: null });
           }else{
-           // console.log("load level 2");
             callBackFunction({ level: level, program: prog });
-        
-        //  callBackFunction({ level: level, program: eval("gameData.userProgram" + level) });
           }        
 
       } else {

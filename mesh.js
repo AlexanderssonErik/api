@@ -173,6 +173,154 @@ class Mesh {
 }
 
 
+class MeshBaseTrans extends Mesh {
+    static init({ mesh = [] }) {
+
+        MeshBaseTrans._staticMesh = mesh;
+
+        let emissiveColor = 0.3;
+        let alphaSetting = 0.7;
+
+        MeshBaseTrans._staticMaterial = [];
+        MeshBaseTrans._staticMaterial[0] = new BABYLON.StandardMaterial("", scene); // NA
+        MeshBaseTrans._staticMaterial[0].diffuseColor = new BABYLON.Color3(0.95, 1, 0.98);
+        MeshBaseTrans._staticMaterial[0].emissiveColor = new BABYLON.Color3(0.18, 0.2, 0.19);
+        MeshBaseTrans._staticMaterial[0].alpha = alphaSetting;
+
+        MeshBaseTrans._staticMaterial[1] = new BABYLON.StandardMaterial("", scene);      //RED
+        MeshBaseTrans._staticMaterial[1].diffuseColor = new BABYLON.Color3(1, 0, 0);
+        MeshBaseTrans._staticMaterial[1].emissiveColor = new BABYLON.Color3(emissiveColor, 0, 0);
+        MeshBaseTrans._staticMaterial[1].alpha = alphaSetting;
+
+        MeshBaseTrans._staticMaterial[2] = new BABYLON.StandardMaterial("", scene); //GREEN 
+        MeshBaseTrans._staticMaterial[2].diffuseColor = new BABYLON.Color3(0, 1, 0);
+        MeshBaseTrans._staticMaterial[2].emissiveColor = new BABYLON.Color3(0, emissiveColor, 0);
+        MeshBaseTrans._staticMaterial[2].alpha = alphaSetting;
+
+        MeshBaseTrans._staticMaterial[3] = new BABYLON.StandardMaterial("", scene); //YELLOW
+        MeshBaseTrans._staticMaterial[3].diffuseColor = new BABYLON.Color3(1, 1, 0);
+        MeshBaseTrans._staticMaterial[3].emissiveColor = new BABYLON.Color3(emissiveColor, emissiveColor, 0);
+        MeshBaseTrans._staticMaterial[3].alpha = alphaSetting;
+
+        MeshBaseTrans._staticMaterial[4] = new BABYLON.StandardMaterial("", scene); //BLUE
+        MeshBaseTrans._staticMaterial[4].diffuseColor = new BABYLON.Color3(0, 0, 1);
+        MeshBaseTrans._staticMaterial[4].emissiveColor = new BABYLON.Color3(0, 0, emissiveColor);
+        MeshBaseTrans._staticMaterial[4].alpha = alphaSetting;
+
+        MeshBaseTrans._staticMaterial[5] = new BABYLON.StandardMaterial("", scene); //MAGENTA
+        MeshBaseTrans._staticMaterial[5].diffuseColor = new BABYLON.Color3(1, 0, 1);
+        MeshBaseTrans._staticMaterial[5].emissiveColor = new BABYLON.Color3(emissiveColor, 0, emissiveColor);
+        MeshBaseTrans._staticMaterial[5].alpha = alphaSetting;
+
+        MeshBaseTrans._staticMaterial[6] = new BABYLON.StandardMaterial("", scene); //CYAN
+        MeshBaseTrans._staticMaterial[6].diffuseColor = new BABYLON.Color3(0, 1, 1);
+        MeshBaseTrans._staticMaterial[6].emissiveColor = new BABYLON.Color3(0, emissiveColor, emissiveColor);
+        MeshBaseTrans._staticMaterial[6].alpha = alphaSetting;
+
+        MeshBaseTrans._staticMaterial[7] = new BABYLON.StandardMaterial("", scene); //WHITE
+        MeshBaseTrans._staticMaterial[7].diffuseColor = new BABYLON.Color3(1, 1, 1);
+        MeshBaseTrans._staticMaterial[7].emissiveColor = new BABYLON.Color3(0.5, 0.5, 0.5);
+        MeshBaseTrans._staticMaterial[7].alpha = alphaSetting;
+
+        MeshBaseTrans._staticMaterial[8] = new BABYLON.StandardMaterial("", scene); //WHITE
+        MeshBaseTrans._staticMaterial[8].diffuseColor = new BABYLON.Color3(1, 1, 1);
+        MeshBaseTrans._staticMaterial[8].emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3);
+        MeshBaseTrans._staticMaterial[8].alpha = 0.4;
+
+        MeshBaseTrans._staticMaterial[9] = new BABYLON.StandardMaterial("", scene); //WHITE
+        MeshBaseTrans._staticMaterial[9].diffuseColor = new BABYLON.Color3(0.9, 0.9, 0.9);
+        MeshBaseTrans._staticMaterial[9].emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3);
+        MeshBaseTrans._staticMaterial[9].alpha = 0.1;
+
+
+        MeshBaseTrans._staticMaterial[10] = new BABYLON.StandardMaterial("", scene); //CYAN
+        MeshBaseTrans._staticMaterial[10].diffuseColor = new BABYLON.Color3(0, 1, 1);
+        MeshBaseTrans._staticMaterial[10].emissiveColor = new BABYLON.Color3(0, emissiveColor, emissiveColor);
+        MeshBaseTrans._staticMaterial[10].alpha = 0.4;
+
+        
+        MeshBaseTrans._staticMaterial[11] = new BABYLON.StandardMaterial("", scene); //MAGENTA
+        MeshBaseTrans._staticMaterial[11].diffuseColor = new BABYLON.Color3(1, 0, 1);
+        MeshBaseTrans._staticMaterial[11].emissiveColor = new BABYLON.Color3(emissiveColor, 0, emissiveColor);
+        MeshBaseTrans._staticMaterial[11].alpha = 0.4;
+
+        MeshBaseTrans._staticMaterial[12] = new BABYLON.StandardMaterial("", scene);      //RED
+        MeshBaseTrans._staticMaterial[12].diffuseColor = new BABYLON.Color3(1, 0, 0);
+        MeshBaseTrans._staticMaterial[12].emissiveColor = new BABYLON.Color3(emissiveColor, 0, 0);
+        MeshBaseTrans._staticMaterial[12].alpha = 0.4;
+
+    }
+    constructor(block) {
+        super({ mesh: MeshBaseTrans._staticMesh.map(item => item.clone()) }, block);
+        this._mesh.isTransBase = true;
+        this._mesh.forEach((item, index) => item.name = this);
+
+        let i = 0;
+        for (let x = 0; x < 10; x++) {
+            for (let z = 0; z < 10; z++) {
+                if (z == 0) {
+                    this._mesh[i].material = MeshBaseTrans._staticMaterial[10];
+                }else if( z == 9){
+                    this._mesh[i].material = MeshBaseTrans._staticMaterial[11];
+
+                } else if ((x > 0 && x < 3 || x > 3 && x < 6 || x > 6 && x < 9) && (z > 0 && z < 3 || z > 3 && z < 6 || z > 6 && z < 9)) {
+                    this._mesh[i].material = MeshBaseTrans._staticMaterial[9];
+                } else {
+                    this._mesh[i].material = MeshBaseTrans._staticMaterial[8];
+                }
+                i++;
+            }
+        }
+        this._mesh[0].material = MeshBaseTrans._staticMaterial[meshColor.red];
+        this._mesh[1].material = MeshBaseTrans._staticMaterial[meshColor.blue];
+        this._mesh[10].material = MeshBaseTrans._staticMaterial[meshColor.yellow];
+        this._mesh[11].material = MeshBaseTrans._staticMaterial[meshColor.green];
+
+
+        this._mesh[8].material = MeshBaseTrans._staticMaterial[meshColor.yellow];
+        this._mesh[9].material = MeshBaseTrans._staticMaterial[meshColor.cyan];
+        this._mesh[18].material = MeshBaseTrans._staticMaterial[meshColor.magenta];
+        this._mesh[19].material = MeshBaseTrans._staticMaterial[meshColor.white];
+
+        this._mesh[4].material = MeshBaseTrans._staticMaterial[12];
+        this._mesh[5].material = MeshBaseTrans._staticMaterial[12];
+        this._mesh[14].material = MeshBaseTrans._staticMaterial[12];
+        this._mesh[15].material = MeshBaseTrans._staticMaterial[12];
+
+
+        // this._updateColor();
+    }
+
+    moveX(dir) {
+        this._block.x += dir;
+        this._updatePos();
+    }
+
+    moveY(dir) {
+        this._block.y += dir;
+        this._updatePos();
+    }
+
+    moveZ(dir) {
+        this._block.z += dir;
+        this._updatePos();
+    }
+
+
+    _updatePos() {
+        super._updatePos();
+        this._mesh[0].alphaIndex = this._block.y;
+
+    }
+
+    _updateColor() {
+        return;
+        // this._mesh[0].material = MeshBaseTrans._staticMaterial[this._block.color[0]];  //remove?
+    }
+
+
+}
+
 
 
 class MeshBase extends Mesh {
@@ -529,6 +677,8 @@ class Mesh2x4Trans extends Mesh {
 
 
 }
+
+
 
 class MeshShadow extends Mesh {
     static init() {
@@ -1049,6 +1199,8 @@ class MeshNumberPillar extends Mesh {
         }
     }
 }
+
+
 
 
 class MeshPad extends Mesh {

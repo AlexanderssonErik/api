@@ -65,7 +65,9 @@ let settings = {
 
         startButton.addChild(new GuiButtonImg("./icon/games/guidedBuild.svg", function () { new GuidedBuild() }), guiOptions.childRight);
         startButton.addChild(new GuiButtonImg("./icon/games/freeBuild.svg", function () { new FreeBuild() }), guiOptions.childRight)
-        
+        startButton.addChild(new GuiButtonImg("./icon/games/freeBuild.svg", function () { new FreeFreeBuild() }), guiOptions.childRight)
+  
+
         button = new GuiButtonImg("./icon/games/categoryProjection.svg");
         startButton.addChild(button, guiOptions.childBottom)
         button.addChild(new GuiButtonImg("./icon/games/tangram.svg", function () { new Tangram() }), guiOptions.childRight);

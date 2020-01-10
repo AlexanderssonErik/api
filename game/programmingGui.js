@@ -415,8 +415,10 @@ class ProgrammingGui {
   _playSlow() {
     if(this._stepEnd){
       this._reset();
+      this._step();
       this._playTimer = setInterval(this._step.bind(this), 2000);
     }else if(this._playTimer == null){
+      this._step();
       this._playTimer = setInterval(this._step.bind(this), 2000);
     }else{
       clearTimeout(this._playTimer);

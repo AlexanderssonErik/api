@@ -626,7 +626,8 @@ class Game {
                 if (this._meshPixel.length > countPixel) {
                     this._meshPixel[countPixel].block = item;
                 } else {
-                    this._meshPixel.push(new MeshPixelTrans(item));
+                   // this._meshPixel.push(new MeshPixelTrans(item));
+                    this._meshPixel.push(new MeshPixel(item));
                 }
                 countPixel++;
             }
