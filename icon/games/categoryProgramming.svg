@@ -1,65 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
-	<!ENTITY ns_extend "http://ns.adobe.com/Extensibility/1.0/">
-	<!ENTITY ns_ai "http://ns.adobe.com/AdobeIllustrator/10.0/">
-	<!ENTITY ns_graphs "http://ns.adobe.com/Graphs/1.0/">
-	<!ENTITY ns_vars "http://ns.adobe.com/Variables/1.0/">
-	<!ENTITY ns_imrep "http://ns.adobe.com/ImageReplacement/1.0/">
-	<!ENTITY ns_sfw "http://ns.adobe.com/SaveForWeb/1.0/">
-	<!ENTITY ns_custom "http://ns.adobe.com/GenericCustomNamespace/1.0/">
-	<!ENTITY ns_adobe_xpath "http://ns.adobe.com/XPath/1.0/">
-]>
-<svg version="1.1" xmlns:x="&ns_extend;" xmlns:i="&ns_ai;" xmlns:graph="&ns_graphs;"
-	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="231px" height="229px"
-	 viewBox="0 0 231 229" enable-background="new 0 0 231 229" xml:space="preserve">
-<metadata>
-	<sfw  xmlns="&ns_sfw;">
-		<slices></slices>
-		<sliceSourceBounds  height="16383" width="16383" y="-8306" x="-8076" bottomLeftOrigin="true"></sliceSourceBounds>
-	</sfw>
-</metadata>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="231px"
+	 height="229px" viewBox="0 0 231 229" enable-background="new 0 0 231 229" xml:space="preserve">
 <g id="compass_icon">
 </g>
 <g id="Layer_3">
 </g>
-<g id="Layer_4">
-	<polygon fill="none" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" points="47.735,80.895 47.735,53.585 
-		103.257,53.585 103.257,80.783 126.521,80.783 126.521,53.585 182.267,53.585 182.267,80.895 192.829,80.895 192.829,175.082 
-		37.171,175.082 37.171,80.895 	"/>
-	<path fill="none" stroke="#FFFFFF" stroke-width="6.0816" stroke-miterlimit="10" d="M47.337,127.574"/>
+<g id="Layer_5">
+	<polygon fill="none" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" points="47.235,75.174 47.235,47.865 
+		102.757,47.865 102.757,75.063 126.021,75.063 126.021,47.865 181.767,47.865 181.767,75.174 192.329,75.174 192.329,169.361 
+		36.671,169.361 36.671,75.174 	"/>
+	<path fill="none" stroke="#FFFFFF" stroke-width="6.0816" stroke-miterlimit="10" d="M46.837,121.854"/>
+	<g>
+	</g>
+	<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="45.668" y1="158.332" x2="109" y2="158.332"/>
 	
-		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="46.168" y1="164.053" x2="109.5" y2="164.053"/>
+		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="64.334" y1="143.832" x2="183.336" y2="143.832"/>
 	
-		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="64.834" y1="149.553" x2="183.836" y2="149.553"/>
+		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="142.04" y1="129.332" x2="183.336" y2="129.332"/>
 	
-		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="142.54" y1="135.053" x2="183.836" y2="135.053"/>
+		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="104.001" y1="114.832" x2="183.336" y2="114.832"/>
 	
-		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="104.501" y1="120.553" x2="183.836" y2="120.553"/>
+		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="45.668" y1="100.333" x2="151.667" y2="100.333"/>
 	
-		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="46.168" y1="106.053" x2="152.167" y2="106.053"/>
+		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="164.75" y1="58.167" x2="175.333" y2="58.167"/>
 	
-		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="165.25" y1="63.886" x2="175.833" y2="63.886"/>
+		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="85.666" y1="85.833" x2="183.335" y2="85.833"/>
 	
-		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="86.167" y1="91.553" x2="183.835" y2="91.553"/>
+		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="149.495" y1="71.333" x2="175.333" y2="71.333"/>
+	<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="56" y1="71.333" x2="93.667" y2="71.333"/>
+	<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="76.797" y1="58.167" x2="93.667" y2="58.167"/>
+	<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="45.668" y1="85.833" x2="79.666" y2="85.833"/>
 	
-		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="149.995" y1="77.053" x2="175.833" y2="77.053"/>
-	<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="56.5" y1="77.053" x2="94.167" y2="77.053"/>
-	<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="77.296" y1="63.886" x2="94.167" y2="63.886"/>
-	<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="46.168" y1="91.553" x2="80.167" y2="91.553"/>
+		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="157.667" y1="100.333" x2="183.336" y2="100.333"/>
+	<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="45.668" y1="114.832" x2="98" y2="114.832"/>
 	
-		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="158.167" y1="106.053" x2="183.836" y2="106.053"/>
-	<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="46.168" y1="120.553" x2="98.5" y2="120.553"/>
+		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="45.668" y1="129.332" x2="136.122" y2="129.332"/>
 	
-		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="46.168" y1="135.053" x2="136.622" y2="135.053"/>
+		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="45.668" y1="143.832" x2="58.334" y2="143.832"/>
+	<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="115" y1="158.332" x2="183.336" y2="158.332"/>
+	<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="56.334" y1="58.167" x2="70.797" y2="58.167"/>
 	
-		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="46.168" y1="149.553" x2="58.833" y2="149.553"/>
+		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="134.729" y1="58.167" x2="158.75" y2="58.167"/>
 	
-		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="115.5" y1="164.053" x2="183.836" y2="164.053"/>
-	<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="56.833" y1="63.886" x2="71.296" y2="63.886"/>
-	
-		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="135.229" y1="63.886" x2="159.25" y2="63.886"/>
-	
-		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="135.167" y1="77.053" x2="143.995" y2="77.053"/>
+		<line fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6" stroke-miterlimit="10" x1="134.667" y1="71.333" x2="143.495" y2="71.333"/>
+	<g>
+		<path fill="#FFFFFF" d="M7.571,183.484c1.613-0.27,3.724-0.5,6.412-0.5c3.302,0,5.72,0.768,7.256,2.15
+			c1.382,1.229,2.265,3.109,2.265,5.412c0,2.342-0.691,4.186-1.997,5.529c-1.804,1.881-4.645,2.84-7.908,2.84
+			c-0.999,0-1.92-0.037-2.688-0.229v10.365h-3.34V183.484z M10.912,195.961c0.729,0.191,1.651,0.27,2.764,0.27
+			c4.031,0,6.488-1.998,6.488-5.49c0-3.455-2.457-5.107-6.104-5.107c-1.459,0-2.572,0.115-3.148,0.27V195.961z"/>
+		<path fill="#FFFFFF" d="M27.269,196.268c0-2.188-0.039-4.068-0.154-5.797h2.956l0.154,3.686h0.115
+			c0.844-2.496,2.917-4.068,5.183-4.068c0.346,0,0.614,0.037,0.921,0.076v3.186c-0.346-0.076-0.691-0.076-1.152-0.076
+			c-2.38,0-4.069,1.766-4.53,4.301c-0.077,0.459-0.115,1.035-0.115,1.572v9.906h-3.378V196.268z"/>
+		<path fill="#FFFFFF" d="M56.255,199.607c0,6.873-4.799,9.867-9.252,9.867c-4.991,0-8.907-3.686-8.907-9.559
+			c0-6.182,4.108-9.828,9.214-9.828C52.646,190.088,56.255,193.965,56.255,199.607z M41.551,199.801
+			c0,4.068,2.303,7.141,5.605,7.141c3.225,0,5.644-3.033,5.644-7.219c0-3.148-1.574-7.102-5.566-7.102
+			C43.279,192.621,41.551,196.307,41.551,199.801z"/>
+		<path fill="#FFFFFF" d="M76.413,206.326c0,4.301-0.883,6.873-2.649,8.523c-1.843,1.65-4.453,2.227-6.795,2.227
+			c-2.227,0-4.684-0.537-6.181-1.535l0.845-2.611c1.229,0.807,3.148,1.498,5.452,1.498c3.455,0,5.989-1.805,5.989-6.527v-2.035
+			h-0.077c-0.998,1.729-3.033,3.109-5.912,3.109c-4.607,0-7.909-3.916-7.909-9.059c0-6.297,4.108-9.828,8.408-9.828
+			c3.225,0,4.952,1.65,5.797,3.186h0.077l0.115-2.803h2.995c-0.115,1.305-0.154,2.842-0.154,5.068V206.326z M73.034,197.803
+			c0-0.574-0.038-1.074-0.192-1.496c-0.614-1.996-2.227-3.609-4.722-3.609c-3.225,0-5.528,2.727-5.528,7.025
+			c0,3.648,1.881,6.68,5.49,6.68c2.111,0,3.993-1.305,4.684-3.455c0.192-0.574,0.269-1.229,0.269-1.803V197.803z"/>
+		<path fill="#FFFFFF" d="M81.751,196.268c0-2.188-0.039-4.068-0.154-5.797h2.956l0.154,3.686h0.115
+			c0.844-2.496,2.917-4.068,5.183-4.068c0.346,0,0.614,0.037,0.921,0.076v3.186c-0.346-0.076-0.691-0.076-1.152-0.076
+			c-2.38,0-4.069,1.766-4.53,4.301c-0.077,0.459-0.115,1.035-0.115,1.572v9.906h-3.378V196.268z"/>
+		<path fill="#FFFFFF" d="M107.167,204.6c0,1.611,0.077,3.186,0.269,4.453h-3.033l-0.269-2.342h-0.115
+			c-1.037,1.459-3.033,2.764-5.682,2.764c-3.762,0-5.682-2.648-5.682-5.336c0-4.492,3.993-6.949,11.172-6.91v-0.385
+			c0-1.498-0.422-4.299-4.223-4.262c-1.766,0-3.57,0.5-4.875,1.383l-0.768-2.266c1.536-0.959,3.801-1.611,6.143-1.611
+			c5.682,0,7.064,3.877,7.064,7.563V204.6z M103.904,199.57c-3.686-0.078-7.87,0.574-7.87,4.184c0,2.227,1.459,3.225,3.148,3.225
+			c2.457,0,4.031-1.535,4.569-3.109c0.115-0.383,0.153-0.768,0.153-1.074V199.57z"/>
+		<path fill="#FFFFFF" d="M112.621,195.5c0-1.957-0.077-3.494-0.154-5.029h2.956l0.154,3.033h0.115
+			c1.036-1.766,2.765-3.416,5.874-3.416c2.495,0,4.414,1.535,5.221,3.723h0.077c0.575-1.074,1.343-1.842,2.111-2.418
+			c1.113-0.846,2.304-1.305,4.069-1.305c2.496,0,6.143,1.611,6.143,8.061v10.904h-3.302v-10.48c0-3.609-1.344-5.721-4.03-5.721
+			c-1.959,0-3.418,1.42-4.031,3.033c-0.154,0.498-0.27,1.074-0.27,1.689v11.479h-3.301v-11.135c0-2.955-1.306-5.066-3.878-5.066
+			c-2.073,0-3.647,1.689-4.185,3.379c-0.192,0.459-0.269,1.074-0.269,1.65v11.172h-3.301V195.5z"/>
+		<path fill="#FFFFFF" d="M144.643,195.5c0-1.957-0.076-3.494-0.153-5.029h2.956l0.154,3.033h0.115
+			c1.036-1.766,2.764-3.416,5.873-3.416c2.496,0,4.415,1.535,5.221,3.723h0.077c0.576-1.074,1.344-1.842,2.112-2.418
+			c1.113-0.846,2.303-1.305,4.068-1.305c2.496,0,6.143,1.611,6.143,8.061v10.904h-3.301v-10.48c0-3.609-1.344-5.721-4.031-5.721
+			c-1.958,0-3.417,1.42-4.031,3.033c-0.153,0.498-0.269,1.074-0.269,1.689v11.479h-3.302v-11.135c0-2.955-1.305-5.066-3.877-5.066
+			c-2.074,0-3.647,1.689-4.186,3.379c-0.191,0.459-0.269,1.074-0.269,1.65v11.172h-3.302V195.5z"/>
+		<path fill="#FFFFFF" d="M180.427,185.25c0,1.152-0.806,2.072-2.149,2.072c-1.229,0-2.035-0.92-2.035-2.072
+			s0.845-2.111,2.111-2.111C179.582,183.139,180.427,184.061,180.427,185.25z M176.664,209.053v-18.582h3.379v18.582H176.664z"/>
+		<path fill="#FFFFFF" d="M185.648,195.5c0-1.957-0.038-3.494-0.153-5.029h2.995l0.191,3.072h0.076
+			c0.922-1.729,3.072-3.455,6.143-3.455c2.572,0,6.565,1.535,6.565,7.908v11.057h-3.378v-10.711c0-2.996-1.113-5.49-4.301-5.49
+			c-2.188,0-3.916,1.574-4.529,3.455c-0.154,0.422-0.23,0.998-0.23,1.574v11.172h-3.379V195.5z"/>
+		<path fill="#FFFFFF" d="M222.852,206.326c0,4.301-0.883,6.873-2.648,8.523c-1.844,1.65-4.453,2.227-6.795,2.227
+			c-2.228,0-4.685-0.537-6.182-1.535l0.845-2.611c1.229,0.807,3.147,1.498,5.451,1.498c3.456,0,5.989-1.805,5.989-6.527v-2.035
+			h-0.076c-0.999,1.729-3.033,3.109-5.913,3.109c-4.606,0-7.908-3.916-7.908-9.059c0-6.297,4.108-9.828,8.407-9.828
+			c3.225,0,4.953,1.65,5.797,3.186h0.077l0.115-2.803h2.995c-0.115,1.305-0.154,2.842-0.154,5.068V206.326z M219.473,197.803
+			c0-0.574-0.037-1.074-0.191-1.496c-0.614-1.996-2.227-3.609-4.723-3.609c-3.225,0-5.527,2.727-5.527,7.025
+			c0,3.648,1.881,6.68,5.49,6.68c2.111,0,3.992-1.305,4.684-3.455c0.191-0.574,0.268-1.229,0.268-1.803V197.803z"/>
+	</g>
 </g>
 </svg>

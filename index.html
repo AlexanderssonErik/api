@@ -132,6 +132,10 @@
 
         */
 
+         
+        let url = new URL(document.URL);
+        let publicShapeNo = url.searchParams.get("shape");
+
 
 
         var canvas = document.getElementById("renderCanvas");
@@ -145,10 +149,10 @@
         let scene = new BABYLON.Scene(engine);
         scene.clearColor = new BABYLON.Color3(0.7, 0.8, 0.9);
 
-        /*var url = "https://upload.wikimedia.org/wikipedia/commons/e/e9/Gradient_1024x768.jpg";
-    var background = new BABYLON.Layer("back", url, scene);
-	background.isBackground = true;*/
 
+    /*let background = new BABYLON.Layer("", "./icon/blueWhite.jpg", scene);
+   // let background = new BABYLON.Layer("", "./icon/blue.jpg", scene);
+	background.isBackground = true;*/
         engine.displayLoadingUI();
 
 
@@ -214,100 +218,14 @@
                 MeshNumber.init(meshesNumber());
             }
 
+            if(publicShapeNo != null){
+            
+                let freeFreeBuild = new FreeFreeBuild();               
+                database.loadFreeShape({  shapeNo: publicShapeNo, callBackFunction: function (param) { freeFreeBuild._callBackLoad(param) }.bind(this) });
+
+            }
   
-        /*
-            let block = [new Block2x2({ x: 0, y: 0, z: 0, r: 0, color: [2, 2] }), new Block2x2({ x: 2, y: 0, z: 0, r: 0 }), new Block2x2({ x: 4, y: 0, z: 2, r: 0 }), new Block2x2({ x: 4, y: 2, z: 2, r: 0 }), new Block2x2({ x: 4, y: 1, z: 2, r: 0 })]
         
-            let avatedPixel = new BlockAvatard({ x: 0, y: 2, z: 0, r: 0 })
-           
-            let me = new MeshAvatard(avatedPixel, block );
-
-            avatedPixel.z = 1;
-            avatedPixel.y = 1;
-
-            me.updatePos();*/
-
-
-            /* let mesh = new MeshPixel(block);
- 
-            // mesh._mesh.forEach(item => item.scaling.y = 5);
- 
-            // mesh._mesh[0].scaling.y = 5;
- 
-             mesh._mesh[0].scaling.x = 0.5;
- 
-             mesh._mesh[0].scaling.y = 0.5;
-             mesh._mesh[0].scaling.z = 0.5;
- 
-   
- 
- 
-             let block2 = new Block2x2({ x: 2, y: 0, z: 0, r: 0 })
- 
- let mesh2 = new Mesh2x2(block2);
- 
- // mesh._mesh.forEach(item => item.scaling.y = 5);
- 
- // mesh._mesh[0].scaling.y = 5;
- 
- scale = new BABYLON.Vector3(0.5, 0.5, 0.5);
- 
- mesh2._mesh[0].scaling = scale;
- 
- mesh2._mesh[1].scaling = scale;*/
-
-
-            /*
-            mesh2._mesh[0].scaling .x = 0.5;
-            
-            mesh2._mesh[0].scaling.y = 0.5;
-            mesh2._mesh[0].scaling.z = 0.5;
-            
-            
-            mesh2._mesh[1].scaling.x = 0.5;
-            
-            mesh2._mesh[1].scaling.y = 0.5;
-            mesh2._mesh[1].scaling.z = 0.5;
-            */
-            /*camera.fovView();
-
-            
-                        let b = [];
-                        let m = [];
-            
-                        //y,
-                        for (let y = 0; y < 10; y++) {
-            
-                          //  if (y % 2 != 0) {
-                            //if (y % 2 == 0) {
-                            for (let x = 1; x < 6; x++) {
-                                    if (x == 1) {
-                                        b[y] = [];
-                                        m[y] = [];
-                                    }
-                                    for (let z = 1; z < 6; z++) {
-                                        if (z == 1) {
-                                            b[y][x] = [];
-                                            m[y][x] = [];
-                                        }
-                                        if((x == 1 && z ==1 )|| (x == 5 && z ==5 )||(x == 5 && z ==1 )||(x == 1 && z ==5 )){
-                                        b[y][x][z] = new BlockShadowTop({ x: x, y: y + 0.1, z: z, color: [ y%6] });
-            
-                                        m[y][x][z] =  new MeshShadowTopDrop(b[y][x][z] , y * Mesh._staticPitch, 6 + y%6);
-                                        }else{
-                                            b[y][x][z] = new BlockShadowTop({ x: x, y: y + 0.1, z: z, color: [ y%6] });
-            
-                                            m[y][x][z] =  new MeshShadowTopDrop(b[y][x][z] , y * Mesh._staticPitch, y%6);
-            
-                                        }
-                                       // m[y][x][z] = new MeshShadowTopDrop(b[y][x][z]);
-            
-                                    }
-                                }
-              
-            
-                        }*/
-
 
 
         };
@@ -328,7 +246,7 @@
 
                 } else if (pickResult.hit) {
                     if( pickResult.pickedMesh.name instanceof MeshBaseTrans){                       
-                        moveTransBase.pointerDown(evt, pickResult.pickedMesh.name)
+                        moveTransBase.pointerDown(evt, pickResult.pickedMesh.transBaseFunction)
                     }else{
                         colorWheel.pointerDown(evt, pickResult.pickedMesh.name)
                     }
@@ -367,24 +285,6 @@
             MeshNumber.init(meshesNumber());
             console.log("State: Failed. Frame rate was " + optimizer.currentFrameRate + "scaling " + engine.getHardwareScalingLevel());
         });
-
-        /*console.log("canvas.width: " + canvas.width);
-        console.log("canvas.height: " + canvas.height);
-        console.log("pixel count: " + canvas.height * canvas.width);*/
-
-
-        //setTimeout(function () { optimizer.start();}, 1000);
-
-
-
-        /* setTimeout(function () {
-             console.log("setHardwareScalingLevel(0.5);");
-             engine.setHardwareScalingLevel(0.5)
-             setTimeout(function () { optimizer.start();}, 10000);
-
-         }, 10000);*/
-
-        //optimizer.start();
 
 
     </script>

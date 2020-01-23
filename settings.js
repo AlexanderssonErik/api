@@ -65,7 +65,7 @@ let settings = {
 
         startButton.addChild(new GuiButtonImg("./icon/games/guidedBuild.svg", function () { new GuidedBuild() }), guiOptions.childRight);
         startButton.addChild(new GuiButtonImg("./icon/games/freeBuild.svg", function () { new FreeBuild() }), guiOptions.childRight)
-        startButton.addChild(new GuiButtonImg("./icon/games/freeBuild.svg", function () { new FreeFreeBuild() }), guiOptions.childRight)
+        startButton.addChild(new GuiButtonImg("./icon/games/freeFreeBuild.svg", function () { new FreeFreeBuild() }), guiOptions.childRight)
   
 
         button = new GuiButtonImg("./icon/games/categoryProjection.svg");
@@ -95,8 +95,8 @@ let settings = {
 
         button = new GuiButtonImg("./icon/games/categoryProgramming.svg");
         startButton.addChild(button, guiOptions.childBottom)
-        button.addChild(new GuiButtonImg("./icon/games/categoryProgramming.svg", function () { new Programming() }), guiOptions.childRight);
-        button.addChild(new GuiButtonImg("./icon/games/categoryProgramming.svg", function () { new ReadProgram() }), guiOptions.childRight);
+        button.addChild(new GuiButtonImg("./icon/games/programming.svg", function () { new Programming() }), guiOptions.childRight);
+        button.addChild(new GuiButtonImg("./icon/games/readProgram.svg", function () { new ReadProgram() }), guiOptions.childRight);
 
 
 

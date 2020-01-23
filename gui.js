@@ -225,8 +225,97 @@ class GuiMoveTransBase extends Gui {
     }
     pointerMove(evt) {
      
-        let pitch = 0.1;
+        let pitch = 3;
 
+        let radius = ((Math.sqrt(Math.pow(Math.abs(evt.pageX - this._downPageX), 2) + Math.pow(Math.abs(evt.pageY - this._downPageY), 2))) / window.innerWidth) * 100;
+        let angle = Math.atan((evt.pageX - this._downPageX) / (evt.pageY - this._downPageY));
+
+        let dir = radius - this._lastRadius
+
+        if(Math.abs(dir) > pitch){
+            if(dir>0){
+                dir = 1;
+            }else{
+                dir = -1;
+
+            }
+
+            if (evt.pageY < this._downPageY) {
+                //up
+                if(angle >0){
+                    //left
+                    if (camera.lookingFront){ 
+                        this._mesh({x:dir, y:dir, z:dir });
+                        
+                    } else if (camera.lookingBack){
+                        this._mesh({x:-dir, y:dir, z:-dir });
+
+                    }else if (camera.lookingLeft){
+                        this._mesh({x:dir, y:dir, z:-dir });
+                    }else{
+                        this._mesh({x:-dir, y:dir, z:dir });
+                    }
+                    
+                }else{
+                    //right
+                    if (camera.lookingFront){ 
+                            this._mesh({x:dir, y:dir, z:-dir });
+                    } else if (camera.lookingBack){
+                        this._mesh({x:-dir, y:dir, z:dir });
+                    }else if (camera.lookingLeft){
+                        this._mesh({x:-dir, y:dir, z:-dir });
+                    }else{
+                        this._mesh({x:dir, y:dir, z:dir });
+                    }
+                    
+                   
+                    
+                }
+
+            }else{
+                //down
+                if(angle >0){
+                    //right
+                    if (camera.lookingFront){ 
+                        this._mesh({x:-dir, y:-dir, z:-dir });
+                    } else if (camera.lookingBack){
+                        this._mesh({x:dir, y:-dir, z:dir });
+                    }else if (camera.lookingLeft){
+                        this._mesh({x:-dir, y:-dir, z:dir });
+                    }else{
+                        this._mesh({x:dir, y:-dir, z:-dir });
+                    }
+                    
+                    
+                }else{
+                    //left
+                    if (camera.lookingFront){ 
+                        this._mesh({x:-dir, y:-dir, z:dir });
+                    } else if (camera.lookingBack){
+                        this._mesh({x:dir, y:-dir, z:-dir });
+                    }else if (camera.lookingLeft){
+                        this._mesh({x:dir, y:-dir, z:dir });
+                    }else{
+                        this._mesh({x:-dir, y:-dir, z:-dir });
+                    }
+                    
+                    
+                }
+
+            }
+         
+            this._lastRadius = radius;
+        }/*else if(this._lastRadius - radius  > pitch){
+            this._mesh(-1);
+            this._lastRadius = radius;
+
+        }*/
+
+
+
+    
+
+/*
         if (camera.lookingFront) {
             if ((evt.pageX - this._downPageX) / window.innerWidth < -pitch) {  
                 this._mesh.moveZ(1);         
@@ -290,7 +379,7 @@ class GuiMoveTransBase extends Gui {
            // world.moveY(-1);
             this._downPageY = evt.pageY;
         }
-
+*/
    
     }
     pointerUp() {
@@ -298,6 +387,8 @@ class GuiMoveTransBase extends Gui {
         scene.onPointerMove = null;
         scene.onPointerUp = null;
         Gui._pointerUpFunction = null;
+
+        this._lastRadius = 0;
 
         this._hide();
     }

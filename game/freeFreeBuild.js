@@ -5,16 +5,20 @@ class FreeFreeBuild extends Game {
     level.push({ difficulty: [], image: null });
 
     level.push({ difficulty: [], image: "./icon/level/lvl1Diy.svg" });
-    level[level.length - 1].difficulty.push({ stage: [], image: "./icon/level/lvl1Diy.svg" });
+    level[level.length - 1].difficulty.push({ stage: [], image: "./icon/level/lvl1ShapeLoad.svg" });
     level[level.length - 1].difficulty.push({ stage: [], image: "./icon/level/lvl1DiyCreate.svg" });
 
     level.push({ difficulty: [], image: "./icon/level/lvl2Diy.svg" });
-    level[level.length - 1].difficulty.push({ stage: [], image: "./icon/level/lvl2Diy.svg" });
+    level[level.length - 1].difficulty.push({ stage: [], image: "./icon/level/lvl2ShapeLoad.svg" });
     level[level.length - 1].difficulty.push({ stage: [], image: "./icon/level/lvl2DiyCreate.svg" });
 
     level.push({ difficulty: [], image: "./icon/level/lvl3Diy.svg" });
-    level[level.length - 1].difficulty.push({ stage: [], image: "./icon/level/lvl3Diy.svg" });
+    level[level.length - 1].difficulty.push({ stage: [], image: "./icon/level/lvl3ShapeLoad.svg" });
     level[level.length - 1].difficulty.push({ stage: [], image: "./icon/level/lvl3DiyCreate.svg" });
+
+    level.push({ difficulty: [], image: "./icon/level/lvl3Diy.svg" });
+    level[level.length - 1].difficulty.push({ stage: [], image: "./icon/level/lvl3Diy.svg" });
+
 
 
     super({ level: level });
@@ -66,17 +70,21 @@ class FreeFreeBuild extends Game {
 
   _setLevel({ level = 0, difficulty = 0 }) {
 
+    if (level == 4) {
 
-   if (level > 0) {
-    if (difficulty == 0) {
-      database.loadProgram({ name: this.constructor.name, level: level, callBackFunction: function (param) { this._callBackLoad(param) }.bind(this) });
+      database.saveFreeShape({ shape: this._createSaveObject() });
       return;
-    } else if (difficulty == 1) {  
-      database.saveProgram({ name: this.constructor.name, level: level, program: this._createSaveObject() });
-      return;
+
+    } else if (level > 0) {
+      if (difficulty == 0) {
+        database.loadProgram({ name: this.constructor.name, level: level, callBackFunction: function (param) { this._callBackLoad(param) }.bind(this) });
+        return;
+      } else if (difficulty == 1) {
+        database.saveProgram({ name: this.constructor.name, level: level, program: this._createSaveObject() });
+        return;
+      }
     }
-  }
-  super._setLevel({ level: level, difficulty: difficulty });
+    super._setLevel({ level: level, difficulty: difficulty });
     this._paintedBlocks = world.block;
     this.update();
 
@@ -91,14 +99,15 @@ class FreeFreeBuild extends Game {
       this._pixels = [];
       this._lockedChanged = true;
     }
+    this.update();
 
   }
 
   _createSaveObject() {
-    let shape = { pixels: ""};
+    let shape = { pixels: "" };
     shape.pixels = Block.string(this._pixels);
-    return shape; 
- 
+    return shape;
+
   }
   update() {
 
@@ -143,22 +152,22 @@ class FreeFreeBuild extends Game {
 
     this._showWorldBlock(sculptBlocks);
 
-    
-        let setlocked = Block.calcSet({ left: world.block, right: this._lockBlock, careColor: false, careRotation: false });
-        if (setlocked.intersectionLeft.length > 0) {
-          setlocked.intersectionLeft[0].color = meshColor.red;         
-          
-          if(!this._locked){
-            this._lockedChanged = true;
-          }
-          this._locked = true;
-        } else{
-          if(this._locked){
-            this._lockedChanged = true;
-          }
-          this._locked = false;
 
-        }
+    let setlocked = Block.calcSet({ left: world.block, right: this._lockBlock, careColor: false, careRotation: false });
+    if (setlocked.intersectionLeft.length > 0) {
+      setlocked.intersectionLeft[0].color = meshColor.red;
+
+      if (!this._locked) {
+        this._lockedChanged = true;
+      }
+      this._locked = true;
+    } else {
+      if (this._locked) {
+        this._lockedChanged = true;
+      }
+      this._locked = false;
+
+    }
 
     let updateSet = Block.calcSet({ left: world.block, right: this._lastBlocks, careColor: false });
     if ((updateSet.diffLeft.length != 0 || updateSet.diffRight.length != 0) && this._freeDebounce < 2) {
@@ -169,17 +178,17 @@ class FreeFreeBuild extends Game {
       this._freeDebounce = 0;
 
       updateSet = Block.calcSet({ left: sculptBlocks, right: this._lastSculptBlocks, careColor: true });
-      if (updateSet.diffLeft.length != 0 || updateSet.diffRight.length != 0 ||  this._lockedChanged ) {
+      if (updateSet.diffLeft.length != 0 || updateSet.diffRight.length != 0 || this._lockedChanged) {
         this._lockedChanged = false;
         this._lastSculptBlocks = sculptBlocks;
 
         let worldPixel = BlockPixel.convertBlock(sculptBlocks);
         set = Block.calcSet({ left: worldPixel, right: this._pixels, careColor: false });
 
-      
+
         if (!this._locked) {
           this._pixels = set.diffLeft.concat(set.intersectionLeft, set.diffRight);
-        } 
+        }
 
         for (let i = 0; i < this._pixels.length; i++) {
           if (this._pixels[i].color[0] == meshColor.black) {
@@ -191,7 +200,7 @@ class FreeFreeBuild extends Game {
         this.show({ block: set.diffRight, careColor: true });
       }
     }
- 
+
 
   }
 

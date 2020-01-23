@@ -185,10 +185,15 @@ let database = {
     if (!this._user.loggedIn || this._user.uid == "") {
       return;
     }
+    console.log("this._user.uid: " + this._user.uid)
+    console.log(" this._user.displayName: " + this._user.displayName)
+    console.log(" this._user.email: " + this._user.email)
+
     this._analytics.logEvent('select_content', {
       content_type: name,
-      item_id: this._user.uid,
-      items: [{ name: this._user.uid }]
+      uid: this._user.uid,
+      uName: this._user.displayName,
+      uMail: this._user.email,
     });
 
   },
@@ -244,7 +249,7 @@ let database = {
     if (!this._user.loggedIn || this._user.uid == "") {
       return;
     }
-   
+
     this._data.collection(name).doc(this._user.uid).set({ ["userProgram" + level]: program }, { merge: true }).then(function () {
     }).catch(function (error) {
       alert("save program error: " + error.message);
@@ -252,12 +257,76 @@ let database = {
 
   },
 
+  saveFreeShape: function ({shape = null }) {
 
-  loadProgram: function ({ name = null, level = null, callBackFunction = null }) {
     if (!this._user.loggedIn || this._user.uid == "") {
       return;
     }
+
+    this._data.collection("FreeFreeBuildPublic").add(shape).then(function (docRef) {
+      alert("http://bilo.online/?shape=" + docRef.id);
+    }).catch(function (error) {
+      alert("save free shape error: " + error.message);
+    });
+
+  },
+
+
+
+  loadFreeShape: function ({ shapeNo = null, level = null, callBackFunction = null }) {
     
+ 
+    let docRef = this._data.collection("FreeFreeBuildPublic").doc(shapeNo);
+
+    docRef.get().then(function (doc) {
+      if (doc.exists) {
+
+        let prog = doc.data();
+
+        //firebase is stupid need to sometime reload
+        if (prog == null) {
+
+          docRef = database._data.collection(name).doc(database._user.uid);
+          docRef.get().then(function (doc) {
+            prog = doc.data();
+
+            if (prog == null) {
+              callBackFunction({ level: level, program: null });
+            } else {
+              callBackFunction({ level: level, program: prog });
+            }
+
+          });
+
+          return
+        }
+
+        if (prog == null) {
+          callBackFunction({ level: level, program: null });
+        } else {
+          callBackFunction({ level: level, program: prog });
+        }
+
+      } else {
+        callBackFunction({ level: level, program: null });
+        console.log("no program data: ");
+      }
+
+    }.bind(level)).catch(function (error) {
+      console.log("load program error:", error);
+    });
+
+
+
+  },
+
+
+  loadProgram: function ({ name = null, level = null, callBackFunction = null }) {
+    
+    if (!this._user.loggedIn || this._user.uid == "") {
+      return;
+    }
+   
     let docRef = this._data.collection(name).doc(this._user.uid);
 
     docRef.get().then(function (doc) {
@@ -265,40 +334,41 @@ let database = {
 
         let gameData = doc.data();
 
-          let prog = eval("gameData.userProgram" + level) ;   
-          //firebase is stupid need to sometime reload
-          if(prog == null){
+        let prog = eval("gameData.userProgram" + level);
+        
+        //firebase is stupid need to sometime reload
+        if (prog == null) {
 
-  
-            docRef = database._data.collection(name).doc(database._user.uid);
-            docRef.get().then(function (doc) {
-              gameData = doc.data();
- 
-              prog = eval("gameData.userProgram" + level) ;   
 
-              if (prog == null) {
-                callBackFunction({ level: level, program: null });
-              }else{
-                callBackFunction({ level: level, program: prog });
-              }  
+          docRef = database._data.collection(name).doc(database._user.uid);
+          docRef.get().then(function (doc) {
+            gameData = doc.data();
 
-            });
+            prog = eval("gameData.userProgram" + level);
 
-            return 
-          }
+            if (prog == null) {
+              callBackFunction({ level: level, program: null });
+            } else {
+              callBackFunction({ level: level, program: prog });
+            }
 
-          if (prog == null) {     
-            callBackFunction({ level: level, program: null });
-          }else{
-            callBackFunction({ level: level, program: prog });
-          }        
+          });
+
+          return
+        }
+
+        if (prog == null) {
+          callBackFunction({ level: level, program: null });
+        } else {
+          callBackFunction({ level: level, program: prog });
+        }
 
       } else {
         callBackFunction({ level: level, program: null });
         console.log("no program data: ");
       }
-    
-    }.bind(level)).catch(function (error) { 
+
+    }.bind(level)).catch(function (error) {
       console.log("load program error:", error);
     });
 

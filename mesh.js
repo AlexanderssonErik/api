@@ -179,7 +179,7 @@ class MeshBaseTrans extends Mesh {
         MeshBaseTrans._staticMesh = mesh;
 
         let emissiveColor = 0.3;
-        let alphaSetting = 0.7;
+        let alphaSetting = 0.9;
 
         MeshBaseTrans._staticMaterial = [];
         MeshBaseTrans._staticMaterial[0] = new BABYLON.StandardMaterial("", scene); // NA
@@ -225,35 +225,37 @@ class MeshBaseTrans extends Mesh {
         MeshBaseTrans._staticMaterial[8] = new BABYLON.StandardMaterial("", scene); //WHITE
         MeshBaseTrans._staticMaterial[8].diffuseColor = new BABYLON.Color3(1, 1, 1);
         MeshBaseTrans._staticMaterial[8].emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3);
-        MeshBaseTrans._staticMaterial[8].alpha = 0.4;
+        MeshBaseTrans._staticMaterial[8].alpha = 0.9;
 
         MeshBaseTrans._staticMaterial[9] = new BABYLON.StandardMaterial("", scene); //WHITE
         MeshBaseTrans._staticMaterial[9].diffuseColor = new BABYLON.Color3(0.9, 0.9, 0.9);
         MeshBaseTrans._staticMaterial[9].emissiveColor = new BABYLON.Color3(0.3, 0.3, 0.3);
-        MeshBaseTrans._staticMaterial[9].alpha = 0.1;
+        MeshBaseTrans._staticMaterial[9].alpha = 0.4;
 
 
         MeshBaseTrans._staticMaterial[10] = new BABYLON.StandardMaterial("", scene); //CYAN
         MeshBaseTrans._staticMaterial[10].diffuseColor = new BABYLON.Color3(0, 1, 1);
         MeshBaseTrans._staticMaterial[10].emissiveColor = new BABYLON.Color3(0, emissiveColor, emissiveColor);
-        MeshBaseTrans._staticMaterial[10].alpha = 0.4;
+        MeshBaseTrans._staticMaterial[10].alpha = 0.9;
 
         
         MeshBaseTrans._staticMaterial[11] = new BABYLON.StandardMaterial("", scene); //MAGENTA
         MeshBaseTrans._staticMaterial[11].diffuseColor = new BABYLON.Color3(1, 0, 1);
         MeshBaseTrans._staticMaterial[11].emissiveColor = new BABYLON.Color3(emissiveColor, 0, emissiveColor);
-        MeshBaseTrans._staticMaterial[11].alpha = 0.4;
+        MeshBaseTrans._staticMaterial[11].alpha = 0.9;
 
         MeshBaseTrans._staticMaterial[12] = new BABYLON.StandardMaterial("", scene);      //RED
         MeshBaseTrans._staticMaterial[12].diffuseColor = new BABYLON.Color3(1, 0, 0);
         MeshBaseTrans._staticMaterial[12].emissiveColor = new BABYLON.Color3(emissiveColor, 0, 0);
-        MeshBaseTrans._staticMaterial[12].alpha = 0.4;
+        MeshBaseTrans._staticMaterial[12].alpha = 0.9;
 
     }
     constructor(block) {
         super({ mesh: MeshBaseTrans._staticMesh.map(item => item.clone()) }, block);
-        this._mesh.isTransBase = true;
-        this._mesh.forEach((item, index) => item.name = this);
+        this._mesh.isTransBase = true;//?
+
+        //this._mesh.forEach((item, index) => item.name = this);
+        
 
         let i = 0;
         for (let x = 0; x < 10; x++) {
@@ -287,6 +289,21 @@ class MeshBaseTrans extends Mesh {
         this._mesh[14].material = MeshBaseTrans._staticMaterial[12];
         this._mesh[15].material = MeshBaseTrans._staticMaterial[12];
 
+        this._mesh[100].material = MeshBaseTrans._staticMaterial[meshColor.white];
+        this._mesh[101].material = MeshBaseTrans._staticMaterial[meshColor.white];
+        this._mesh[102].material = MeshBaseTrans._staticMaterial[meshColor.white];
+
+
+        this._mesh[100].name = this;
+        this._mesh[101].name = this;
+        this._mesh[102].name = this;
+        
+
+
+        this._mesh[100].transBaseFunction = function ( {x = 0, y =0, z = 0 }) { this.moveX(x); }.bind(this);//
+        this._mesh[101].transBaseFunction = function ({x = 0, y =0, z = 0 } ) { this.moveY(y); }.bind(this);////this.moveY;
+        this._mesh[102].transBaseFunction = function ({x = 0, y =0, z = 0 }) { this.moveZ(z); }.bind(this);//this.moveZ;
+
 
         // this._updateColor();
     }
@@ -294,16 +311,19 @@ class MeshBaseTrans extends Mesh {
     moveX(dir) {
         this._block.x += dir;
         this._updatePos();
+        camera.moveX(dir);
     }
 
     moveY(dir) {
         this._block.y += dir;
         this._updatePos();
+        camera.moveY(dir);
     }
 
     moveZ(dir) {
         this._block.z += dir;
         this._updatePos();
+        camera.moveZ(dir);
     }
 
 
