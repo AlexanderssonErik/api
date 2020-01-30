@@ -455,7 +455,16 @@ class MeshPixel extends Mesh {
     }
     constructor(block) {
         super({ mesh: MeshPixel._staticMesh.map(item => item.clone()), line: MeshPixel._staticLine.map(item => item.clone()) }, block);
+        this._mesh.forEach((item, index) => item.name = function ({ color = 0}) { this.colorWheel({ color: color }); }.bind(this));
+
     }
+
+    colorWheel({  color = 0 }) {
+        this._mesh.forEach(item => item.material = Mesh._staticMaterial[color]);
+         this._block.color = color;
+
+    }
+
 }
 
 class MeshPixelTrans extends MeshPixel {

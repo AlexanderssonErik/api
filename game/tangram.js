@@ -1,12 +1,12 @@
 class Tangram extends Game {
-  constructor() {
+  constructor(master = null) {
 
     let level = [];
 
     level.push({ difficulty: [], image: null });
 
     tangramLevel.buildLevel(level)
-    super({ level: level, userCreatedLevel: true, displayLevel: true, displayStage: true });
+    super({ level: level, userCreatedLevel: true, displayLevel: true, displayStage: true, scoreIsTime: true, master: master  });
 
 
     this._showAllSides = false;

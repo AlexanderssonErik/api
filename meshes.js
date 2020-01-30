@@ -660,7 +660,7 @@ function meshesPixel() {
 
     let pixel = BABYLON.MeshBuilder.ExtrudePolygon("", { shape: shape, depth: 1.18, sideOrientation: BABYLON.Mesh.FRONTSIDE }, scene);
     pixel.rotation.x = Math.PI;
-    pixel.isPickable = false;
+    pixel.isPickable = true;
     scene.meshes.pop();
 
     data.mesh.push(pixel);

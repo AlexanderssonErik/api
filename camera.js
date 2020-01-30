@@ -178,6 +178,7 @@ let camera = {
   free() {
     this._arcRotateCamera.lowerBetaLimit = -Math.PI;
     this._arcRotateCamera.upperBetaLimit = Math.PI;
+    this._arcRotateCamera.upperRadiusLimit = 80;
 
     this._free = true;
 
@@ -188,6 +189,7 @@ let camera = {
   noFree() {
     this._free = false;
     this._arcRotateCamera.setTarget(new BABYLON.Vector3(4.5, 0, 4.5));
+    this._arcRotateCamera.upperRadiusLimit = 40;
     this._lastFreeTarget = new BABYLON.Vector3(4.5, 0, 4.5);
 
   },

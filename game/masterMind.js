@@ -1,11 +1,11 @@
 class MasterMind extends Game {
-  constructor() {
+  constructor(master = null) {
     let level = [];
 
-    super({ level: level, userCreatedLevel: false, displayLevel: true });
+    super({ level: level, userCreatedLevel: false, displayLevel: true, scoreIsLocal: true,  master: master  });
 
     this._masterMindCurrentLevel = 1;
-    this._score = 0
+    this._scoreMasterMind = 0
     this._levelScoreProgression = [0, 3, 8, 14, 21, 28, 99];
     this._columnHeight = 2;
 
@@ -47,7 +47,7 @@ class MasterMind extends Game {
   }
 
   close() {
-
+    this.saveScore();  
     this._meshPlayfield.forEach(item => item.dispose());
     this._meshPlayfield = [];
     super.close();
@@ -57,7 +57,7 @@ class MasterMind extends Game {
     super.reset();
 
     this._masterMindCurrentLevel = 1;
-    this._score = 0
+    this._scoreMasterMind = 0
 
   }
 
@@ -65,8 +65,15 @@ class MasterMind extends Game {
 
     clearTimeout(this._timeoutDelay);
     this._timeoutDelay = null;
-    this._score++;
-    if (this._score >= this._levelScoreProgression[this._masterMindCurrentLevel]) {
+
+    if(Game._master != null){
+      this.win({filterWin: false})
+      return;
+    }
+
+    this._scoreMasterMind++;
+    this.score =  this._scoreMasterMind;
+    if (this._scoreMasterMind >= this._levelScoreProgression[this._masterMindCurrentLevel]) {
       sound.win();
       this._masterMindCurrentLevel++;
       this._setLevel({ level: this._masterMindCurrentLevel, difficulty: 0 });
@@ -150,7 +157,10 @@ class MasterMind extends Game {
           if (green == this._columnHeight) {
             if (this._timeoutDelay == null) {
               this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 1500);
-              sound.correct(1);
+              if(Game._master == null){          
+                sound.correct(1);
+              }
+
             }
 
           }

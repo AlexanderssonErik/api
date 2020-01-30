@@ -185,9 +185,6 @@ let database = {
     if (!this._user.loggedIn || this._user.uid == "") {
       return;
     }
-    console.log("this._user.uid: " + this._user.uid)
-    console.log(" this._user.displayName: " + this._user.displayName)
-    console.log(" this._user.email: " + this._user.email)
 
     this._analytics.logEvent('select_content', {
       content_type: name,
@@ -257,6 +254,109 @@ let database = {
 
   },
 
+
+  saveScore: function ({ name = null, level = null, difficulty = null, stage = null, score = null }) {
+    if (!this._user.loggedIn || this._user.uid == "") {
+      return;
+    }
+
+    this._data.collection(name).doc(this._user.uid).set({ ["scoreL" + level + "D" + difficulty + "S" + stage]: firebase.firestore.FieldValue.arrayUnion({ timeStamp: firebase.firestore.Timestamp.now().toMillis(), score: score }) }, { merge: true }).then(function () {
+    }).catch(function (error) {
+      alert("saveScore  error: " + error.message);
+    });
+
+  },
+
+
+
+  loadScore: function ({ name = null, level = null,  difficulty = null, stage = null, callBackFunction = null }) {
+    
+    if (!this._user.loggedIn || this._user.uid == "") {
+      return;
+    }
+   
+    let docRef = this._data.collection(name).doc(this._user.uid);
+
+    docRef.get().then(function (doc) {
+      if (doc.exists) {
+
+        let gameData = doc.data();
+        let score = eval("gameData.scoreL" + level + "D" + difficulty + "S" + stage);
+
+        //firebase need to sometimes reload
+        if (score == null) {
+
+
+          docRef = database._data.collection(name).doc(database._user.uid);
+          docRef.get().then(function (doc) {
+            gameData = doc.data();
+
+            score =  eval("gameData.scoreL" + level + "D" + difficulty + "S" + stage);
+
+            if (score == null) {
+              callBackFunction({ });
+            } else {
+              let no = [0, 0, 0];
+        
+              score.forEach( function (item){
+                if(item.score >= no[0]){
+                  no[2] = no[1];
+                  no[1] = no[0];
+                  no[0] = item.score;
+                }else if(item.score >= no[1]){
+                  no[2] = no[1];
+                  no[1] = item.score;
+                }else if(item.score >= no[2]){
+                  no[2] = item.score;
+                }
+    
+              })
+    
+              callBackFunction({ no1: no[0], no2: no[1], no3: no[2] });
+            }
+
+          });
+
+          return
+        }
+
+        if (score == null) {
+          callBackFunction({ });
+        } else {
+          let no = [0, 0, 0];
+        
+          score.forEach( function (item){
+            if(item.score >= no[0]){
+              no[2] = no[1];
+              no[1] = no[0];
+              no[0] = item.score;
+            }else if(item.score >= no[1]){
+              no[2] = no[1];
+              no[1] = item.score;
+            }else if(item.score >= no[2]){
+              no[2] = item.score;
+            }
+
+          })
+
+          callBackFunction({ no1: no[0], no2: no[1], no3: no[2] });
+        }
+
+      } else {
+        callBackFunction({  });
+        console.log("no program data: ");
+      }
+
+    }.bind(level)).catch(function (error) {
+      console.log("load program error:", error);
+    });
+
+
+
+  },
+
+
+
   saveFreeShape: function ({shape = null }) {
 
     if (!this._user.loggedIn || this._user.uid == "") {
@@ -283,7 +383,7 @@ let database = {
 
         let prog = doc.data();
 
-        //firebase is stupid need to sometime reload
+           //firebase need to sometimes reload
         if (prog == null) {
 
           docRef = database._data.collection(name).doc(database._user.uid);
@@ -336,7 +436,7 @@ let database = {
 
         let prog = eval("gameData.userProgram" + level);
         
-        //firebase is stupid need to sometime reload
+          //firebase need to sometimes reload
         if (prog == null) {
 
 

@@ -1,12 +1,12 @@
 class ReadProgram extends Game {
-  constructor() {
+  constructor(master = null) {
     let level = [];
 
     level.push({ difficulty: [], image: null });
 
     readProgramLevel.buildLevel(level);
 
-    super({ level: level, userCreatedLevel: false });
+    super({ level: level, userCreatedLevel: false, displayLevel: true, displayStage: true, scoreIsTime: true, scoreTimeTick: 15000, master: master  });
 
     this._timeoutDelay = null;
 

@@ -1,11 +1,11 @@
 class Whack extends Game {
-  constructor() {
+  constructor(master = null) {
     let level = [];
 
-    super({ level: level, userCreatedLevel: false, displayLevel: true });
+    super({ level: level, userCreatedLevel: false, displayLevel: true, scoreIsLocal: true, master: master });
 
 
-    this._score = 0
+    this._scoreWhack = 0
     this._levelScoreProgression = [0, 3, 8, 14, 21, 28, 99];
 
     this._whackCurrentLevel = 1;
@@ -161,7 +161,7 @@ class Whack extends Game {
     this._win = false;
     this._fail = false;
 
-    this._score = this._levelScoreProgression[this._whackCurrentLevel - 1];
+    this._scoreWhack = this._levelScoreProgression[this._whackCurrentLevel - 1];
 
     Block.setColor({ block: world.block, color: meshColor.black });
 
@@ -213,10 +213,16 @@ class Whack extends Game {
 
       this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 100);
 
-      if (this._fail) {
-        this._reset();
+      if (this._fail) {    
+        this.saveScore();
+        this.score = 0;
+        this._reset();        
         return
       } else if (this._win) {
+        if(Game._master != null){
+          this.win({filterWin: false})
+          return;
+        }
         sound.win();
         this._whackCurrentLevel++;
         this._reset();
@@ -271,7 +277,14 @@ class Whack extends Game {
 
                 } else {
                   setMoveUp.intersectionLeft.forEach(itemFail => itemFail.color = meshColor.red);
+                  
+                  if(Game._master != null){
+                    this.masterFail();          
+                    return;
+                  }
+
                   sound.fail();
+                  
                   this._fail = true;
                   clearTimeout(this._timeoutDelay);
                   this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 1000);
@@ -291,13 +304,17 @@ class Whack extends Game {
                   setWhack.intersectionLeft[i].color = meshColor.green;
                   item.currentLevel++;
                   foundWhack = true;
-                  this._score++;
+                  this._scoreWhack++;
 
-                  if (this._score == this._levelScoreProgression[this._whackCurrentLevel]) {
+                  this.score = this.score + Math.floor(Math.pow(1.5, this._whackCurrentLevel) );
+
+
+
+                  if (this._scoreWhack == this._levelScoreProgression[this._whackCurrentLevel]) {
                     this._win = true;
                   } else {
                     item.state = this._enumWhackState.moveDown;
-                    sound.correct((this._score - this._levelScoreProgression[this._whackCurrentLevel - 1]) / (this._levelScoreProgression[this._whackCurrentLevel] - this._levelScoreProgression[this._whackCurrentLevel - 1]))
+                    sound.correct((this._scoreWhack - this._levelScoreProgression[this._whackCurrentLevel - 1]) / (this._levelScoreProgression[this._whackCurrentLevel] - this._levelScoreProgression[this._whackCurrentLevel - 1]))
                   }
                   break;
 
@@ -310,6 +327,12 @@ class Whack extends Game {
               } else {
                 if (item.timeOutCount == item.speed) {
                   setWhack.intersectionLeft.forEach(itemFail => itemFail.color = meshColor.red);
+                  if(Game._master != null){
+                    this.masterFail();          
+                    return;
+                  }
+
+
                   sound.fail();
                   this._fail = true;
                   clearTimeout(this._timeoutDelay);

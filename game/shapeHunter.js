@@ -1,11 +1,11 @@
 class ShapeHunter extends Game {
-  constructor() {
+  constructor(master = null) {
     let level = [];
 
     level.push({ difficulty: [], image: null });
     shapeHunterLevel.buildLevel(level)
 
-    super({ level: level, userCreatedLevel: true, displayLevel: true, displayStage: true });
+    super({ level: level, userCreatedLevel: true, displayLevel: true, displayStage: true, scoreIsTime: true, master: master  });
 
     this._activeStagePixel = [];
     this._activeStageForbiddenPixel = [];

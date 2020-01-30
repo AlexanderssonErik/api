@@ -66,6 +66,8 @@
     <script src="./game/readProgram.js"></script>
     <script src="./game/readProgramLevel.js"></script>
 
+    <script src="./game/party.js"></script>
+
     <style>
         html,
         body,
@@ -150,9 +152,9 @@
         scene.clearColor = new BABYLON.Color3(0.7, 0.8, 0.9);
 
 
-    /*let background = new BABYLON.Layer("", "./icon/blueWhite.jpg", scene);
-   // let background = new BABYLON.Layer("", "./icon/blue.jpg", scene);
-	background.isBackground = true;*/
+   // let background = new BABYLON.Layer("", "./icon/blueWhite.jpg", scene);
+   // //let background = new BABYLON.Layer("", "./icon/blue.jpg", scene);
+	//background.isBackground = true;
         engine.displayLoadingUI();
 
 
@@ -203,6 +205,8 @@
         ble.init();
 
         database.init({ enabled: true }); //first create your own firebase account and configure database.js before enabling the database (still need to call database.init)
+
+
 
         ProgrammingProgram.init();
 

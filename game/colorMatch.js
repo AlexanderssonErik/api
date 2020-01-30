@@ -1,8 +1,8 @@
 class ColorMatch extends Game {
-  constructor() {
+  constructor(master = null) {
     let level = [];
 
-    super({ level: level, userCreatedLevel: false, displayLevel: true });
+    super({ level: level, userCreatedLevel: false, displayLevel: true, scoreIsLocal: true, master: master });
 
     this._colorMatchLevel = [
       [new Block2x2({ x: 7, y: 0, z: 5, r: 1, color: [0, 0] }), new Block2x2({ x: 7, y: 1, z: 5, r: 1, color: [0, 0] }),],
@@ -86,10 +86,6 @@ class ColorMatch extends Game {
 
     super.update();
 
-    world.base.ledFront = meshColor.black;
-    world.base.ledLeft = meshColor.black;
-    world.base.ledRight = meshColor.black;
-    world.base.ledBack = meshColor.black;
 
     let set = Block.calcSet({ left: world.block, right: this._activeDisplayBlocks, careColor: false, careRotation: false });
     this.show({ block: set.diffRight, careColor: false });
@@ -112,6 +108,10 @@ class ColorMatch extends Game {
 
         break;
       case this._enumColorMatchState.delayShowColor:
+        world.base.ledFront = meshColor.black;
+        world.base.ledLeft = meshColor.black;
+        world.base.ledRight = meshColor.black;
+        world.base.ledBack = meshColor.black;
 
         if (set.diffRight.length != 0) {
           this._colorMatchState = this._enumColorMatchState.build;
@@ -130,6 +130,10 @@ class ColorMatch extends Game {
         break;
 
       case this._enumColorMatchState.showColor:
+        world.base.ledFront = meshColor.black;
+        world.base.ledLeft = meshColor.black;
+        world.base.ledRight = meshColor.black;
+        world.base.ledBack = meshColor.black;
 
         if (this._timeoutDelay == null) {
 
@@ -219,18 +223,33 @@ class ColorMatch extends Game {
         break;
 
       case this._enumColorMatchState.win:
-        if (this._redPad.mesh != null) {
-          sound.win();
-          this._redPad.mesh.dispose();
-          this._greenPad.mesh.dispose();
-          this._bluePad.mesh.dispose();
-          this._redPad.mesh = null;
-        }
 
         Block.copyColor({ to: world.block, from: this._activeDisplayBlocks, careRotation: false })
 
         setWorldAndDisplayBlocks = Block.calcSet({ left: world.block, right: this._activeDisplayBlocks, careColor: false, careRotation: false });
         Block.setColor({ block: setWorldAndDisplayBlocks.diffLeft, color: meshColor.green, blink: true });
+
+        if(Game._master != null){
+          this.win({filterWin: false})
+          return;
+        }
+
+        world.base.ledFront = meshColor.black;
+        world.base.ledLeft = meshColor.black;
+        world.base.ledRight = meshColor.black;
+        world.base.ledBack = meshColor.black;
+
+        if (this._redPad.mesh != null) {
+  
+          this.score = this.score + Math.floor(Math.pow(1.5, (this._colorMatchCurrentLevel + 1)) );
+
+          sound.win();
+
+          this._redPad.mesh.dispose();
+          this._greenPad.mesh.dispose();
+          this._bluePad.mesh.dispose();
+          this._redPad.mesh = null;
+        }
 
         if (setWorldAndDisplayBlocks.diffLeft.length == 0) {
           clearTimeout(this._timeoutDelay);
@@ -238,7 +257,9 @@ class ColorMatch extends Game {
           this._winCount++;
           if (this._winCount > 1) {
             this._winCount = 0;
+           
             this._colorMatchCurrentLevel++;
+            
             this._setLevel({ level: this._colorMatchCurrentLevel+1, difficulty: 0 }); 
             if (this._colorMatchLevel.length > this._colorMatchCurrentLevel) {
               this._activeDisplayBlocks = this._colorMatchLevel[this._colorMatchCurrentLevel];
@@ -248,19 +269,33 @@ class ColorMatch extends Game {
         break;
 
       case this._enumColorMatchState.fail:
+        Block.copyColor({ to: world.block, from: this._activeDisplayBlocks, careRotation: false })
+
+        setWorldAndDisplayBlocks = Block.calcSet({ left: world.block, right: this._activeDisplayBlocks, careColor: false, careRotation: false });
+        Block.setColor({ block: setWorldAndDisplayBlocks.diffLeft, color: meshColor.red, blink: true });
+        
+        if(Game._master != null){
+          this.masterFail();    
+          return;
+        }
+
+        world.base.ledFront = meshColor.black;
+        world.base.ledLeft = meshColor.black;
+        world.base.ledRight = meshColor.black;
+        world.base.ledBack = meshColor.black;
+
         if (this._redPad.mesh != null) {
+    
+
+          this.saveScore();
           sound.fail();
           this._redPad.mesh.dispose();
           this._greenPad.mesh.dispose();
           this._bluePad.mesh.dispose();
           this._redPad.mesh = null;
           this._winCount = 0;
+          this.score = 0;
         }
-
-        Block.copyColor({ to: world.block, from: this._activeDisplayBlocks, careRotation: false })
-
-        setWorldAndDisplayBlocks = Block.calcSet({ left: world.block, right: this._activeDisplayBlocks, careColor: false, careRotation: false });
-        Block.setColor({ block: setWorldAndDisplayBlocks.diffLeft, color: meshColor.red, blink: true });
 
         if (setWorldAndDisplayBlocks.diffLeft.length == 0) {
           this._colorMatchState = this._enumColorMatchState.build;

@@ -5,7 +5,7 @@ let tangram2DLevel = {
         level.push({ difficulty: [], image: null });
         level[level.length - 1].difficulty.push({ stage: [], image: null });
         level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([new Block2x2({ x: 5, y: 0, z: 7, r: 2, color: [2, 2] }),]);
-        level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([new Block2x2({ x: 7, y: 0, z: 3, r: 2, color: [1, 1] }),]);
+        level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([new Block2x2({ x: 7, y: 0, z: 2, r: 2, color: [1, 1] }),]);
         level[level.length - 1].difficulty[level[level.length - 1].difficulty.length - 1].stage.push([new Block2x2({ x: 3, y: 0, z: 4, r: 2, color: [4, 4] }),]);
 
         level.push({ difficulty: [], image: null });

@@ -2,7 +2,7 @@ class Columns extends Game {
   constructor() {
     let level = [];
 
-    super({ level: level, userCreatedLevel: false, displayLevel: true });
+    super({ level: level, userCreatedLevel: false, displayLevel: true, scoreIsLocal: true  });
 
     this._enumColumnsState = {
       setColor: 0,
@@ -22,7 +22,7 @@ class Columns extends Game {
 
 
     this._columnsCurrentLevel = 1;
-    this._score = 0
+    this._scoreColumns = 0
     this._levelScoreProgression = [0, 30, 80, 140, 210, 280, 990];
 
 
@@ -96,6 +96,7 @@ class Columns extends Game {
 
   close() {
 
+    this.saveScore();
     this._meshPlayfield.forEach(item => item.dispose());
     this._meshPlayfield = [];
     super.close();
@@ -106,7 +107,7 @@ class Columns extends Game {
     Block.setColor({ block: world.block, color: 0, blink: false });
     this._playFieldBlocks = [];
     this._columnsCurrentLevel = 1;
-    this._score = 0
+    this._scoreColumns = 0
     this._secretCountIndex = 0;
 
   }
@@ -246,7 +247,8 @@ class Columns extends Game {
           this._threeInARow(-2, 1, 2, currentPlayFieldBlocksPixels, forRemoval);
           this._threeInARow(-2, -1, 2, currentPlayFieldBlocksPixels, forRemoval);
 
-          this._score += forRemoval.length;
+          this._scoreColumns += forRemoval.length;
+          this.score = this._scoreColumns;
 
           BlockPixel.setBlockColor({ block: forRemoval, color: 0, blink: false, colorComplete: false });
 
@@ -261,13 +263,13 @@ class Columns extends Game {
 
             }.bind(this));
 
-            if (this._score >= this._levelScoreProgression[this._columnsCurrentLevel]) {
+            if (this._scoreColumns >= this._levelScoreProgression[this._columnsCurrentLevel]) {
               sound.win();
               this._columnsCurrentLevel++;
               this._setLevel({ level: this._columnsCurrentLevel, difficulty: 0 });
               return;
             } else {
-              sound.correct((this._score - this._levelScoreProgression[this._columnsCurrentLevel - 1]) / (this._levelScoreProgression[this._columnsCurrentLevel] - this._levelScoreProgression[this._columnsCurrentLevel - 1]));
+              sound.correct((this._scoreColumns - this._levelScoreProgression[this._columnsCurrentLevel - 1]) / (this._levelScoreProgression[this._columnsCurrentLevel] - this._levelScoreProgression[this._columnsCurrentLevel - 1]));
 
             }
           }

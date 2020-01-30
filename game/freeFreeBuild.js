@@ -170,6 +170,7 @@ class FreeFreeBuild extends Game {
     }
 
     let updateSet = Block.calcSet({ left: world.block, right: this._lastBlocks, careColor: false });
+
     if ((updateSet.diffLeft.length != 0 || updateSet.diffRight.length != 0) && this._freeDebounce < 2) {
       this._lastBlocks = world.block;
 
@@ -179,8 +180,9 @@ class FreeFreeBuild extends Game {
 
       updateSet = Block.calcSet({ left: sculptBlocks, right: this._lastSculptBlocks, careColor: true });
       if (updateSet.diffLeft.length != 0 || updateSet.diffRight.length != 0 || this._lockedChanged) {
+    
         this._lockedChanged = false;
-        this._lastSculptBlocks = sculptBlocks;
+        this._lastSculptBlocks = Block.copy(sculptBlocks);
 
         let worldPixel = BlockPixel.convertBlock(sculptBlocks);
         set = Block.calcSet({ left: worldPixel, right: this._pixels, careColor: false });
@@ -188,10 +190,12 @@ class FreeFreeBuild extends Game {
 
         if (!this._locked) {
           this._pixels = set.diffLeft.concat(set.intersectionLeft, set.diffRight);
+
         }
 
         for (let i = 0; i < this._pixels.length; i++) {
           if (this._pixels[i].color[0] == meshColor.black) {
+    
             this._pixels.splice(i, 1);
             i--;
           }

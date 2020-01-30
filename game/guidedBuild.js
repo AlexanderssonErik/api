@@ -1,13 +1,16 @@
 class GuidedBuild extends Game {
-  constructor() {
+  constructor(master = null) {
     let level = [];
 
     level.push({ difficulty: [], image: null });
     guidedBuildLevel.buildLevel(level)
 
-    super({ level: level, userCreatedLevel: true, displayLevel: true, displayStage: true  });
+
+    super({ level: level, userCreatedLevel: true, displayLevel: true, displayStage: true, scoreIsTime: true, master: master });
 
     this._setLevel({ level: 1, difficulty: 0 });
+
+
 
 
   }

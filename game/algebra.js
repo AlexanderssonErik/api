@@ -1,5 +1,5 @@
 class Algebra extends Game {
-  constructor() {
+  constructor(master = null) {
     let level = [];
 
     level.push({ difficulty: [], image: null });
@@ -66,7 +66,7 @@ class Algebra extends Game {
 
 
 
-    super({ level: level });
+    super({ level: level, displayLevel: true, scoreIsTime: true, scoreTimeTick: 1000, master: master   });
 
     this._result = 0;
 
@@ -151,21 +151,12 @@ class Algebra extends Game {
 
 
   _setLevel({ level = 0, difficulty = 0 }) {
-
+    this.reset();
     super._setLevel({ level: level, difficulty: difficulty });
 
 
-    this.reset();
+   // this.reset(); moved due to score
 
-    this._leftPillar.active = false;
-    this._centerPillar.active = false;
-    this._rightPillar.active = false;
-
-    this._leftNumber.active = false;
-    this._leftOperator.active = false;
-    this._centerNumber.active = false;
-    this._rightOperator.active = false;
-    this._rightNumber.active = false;
 
     this._leftOperator.block.color = meshColor.green;
     this._rightOperator.block.color = meshColor.green;
@@ -405,7 +396,7 @@ class Algebra extends Game {
       this._rightPillar.mesh = new MeshNumberPillar(this._rightPillar.block)
     }
 
-
+ 
     this._updateNumber({ newVal: this._leftNumber.val, number: this._leftNumber, yellow: this._leftNumber.yellow, green: this._leftNumber.green });
 
     if (this._minusCalc) {
@@ -413,12 +404,10 @@ class Algebra extends Game {
     } else {
       this._leftOperator.val = MeshNumber._staticOperator.plus;
     }
+   
     this._updateNumber({ newVal: this._leftOperator.val, number: this._leftOperator });
-
     this._updateNumber({ newVal: this._centerNumber.val, number: this._centerNumber, yellow: this._leftNumber.yellow, green: this._leftNumber.green });
-
     this._updateNumber({ newVal: this._rightOperator.val, number: this._rightOperator });
-
     this._updateNumber({ newVal: this._rightNumber.val, number: this._rightNumber, yellow: this._leftNumber.yellow, green: this._leftNumber.green });
 
     this.update(); //Remove?
@@ -428,7 +417,7 @@ class Algebra extends Game {
 
   _updateNumber({ newVal = 0, number = null, fixed = false, yellow = false, green = false }) {
     if (number.active) {
-
+  
       if (yellow) {
         number.block.color = meshColor.yellow;
       }
@@ -574,20 +563,25 @@ class Algebra extends Game {
     if (this._leftPillar.active) {
       BlockPixel.setBlockColor({ block: setLeftPillar.intersectionLeft, color: this._leftNumber.block.color[0], colorComplete: false });
     }
+ 
+    
     this._updateNumber({ newVal: leftNumber, number: this._leftNumber, fixed: this._leftNumber.fixed, yellow: this._leftNumber.yellow, green: this._leftNumber.green });
 
     if (this._centerPillar.active) {
       BlockPixel.setBlockColor({ block: setCenterPillar.intersectionLeft, color: this._centerNumber.block.color[0], colorComplete: false });
     }
+  
     this._updateNumber({ newVal: centerNumber, number: this._centerNumber, fixed: this._centerNumber.fixed, yellow: this._centerNumber.yellow, green: this._centerNumber.green });
 
     if (!this._rightOperator.fixed) {
+     
       this._updateNumber({ newVal: rightOperator, number: this._rightOperator });
     }
 
     if (this._rightPillar.active) {
       BlockPixel.setBlockColor({ block: setRightPillar.intersectionLeft, color: this._rightNumber.block.color[0], colorComplete: false });
     }
+
     this._updateNumber({ newVal: rightNumber, number: this._rightNumber, fixed: this._rightNumber.fixed, yellow: this._rightNumber.yellow, green: this._rightNumber.green });
 
     if (this._levelIndex == 1) {
@@ -602,7 +596,7 @@ class Algebra extends Game {
   }
 
   _resetMesh(obj) {
-    if (obj.mesh != null) {
+    if (obj.mesh != null) {    
       obj.mesh.dispose();
       obj.mesh = null;
     }
@@ -610,16 +604,27 @@ class Algebra extends Game {
 
   reset() {
     super.reset();
-
-    this._resetMesh(this._leftNumber);
-    this._resetMesh(this._leftOperator);
-    this._resetMesh(this._centerNumber);
-    this._resetMesh(this._rightOperator);
-    this._resetMesh(this._rightNumber);
+   
+    this._resetMesh(this._leftNumber);    
+    this._resetMesh(this._leftOperator);   
+    this._resetMesh(this._centerNumber);    
+    this._resetMesh(this._rightOperator); 
+    this._resetMesh(this._rightNumber); 
 
     this._resetMesh(this._leftPillar);
     this._resetMesh(this._centerPillar);
     this._resetMesh(this._rightPillar);
+
+    this._leftPillar.active = false;
+    this._centerPillar.active = false;
+    this._rightPillar.active = false;
+
+    this._leftNumber.active = false;
+    this._leftOperator.active = false;
+    this._centerNumber.active = false;
+    this._rightOperator.active = false;
+    this._rightNumber.active = false;
+
 
   }
   close() {

@@ -1,11 +1,11 @@
 class Tangram2D extends Game {
-  constructor() {
+  constructor(master = null) {
     let level = [];
 
     level.push({ difficulty: [], image: null });
     tangram2DLevel.buildLevel(level)
 
-    super({ level: level, userCreatedLevel: true, displayLevel: true, displayStage: true });
+    super({ level: level, userCreatedLevel: true, displayLevel: true, displayStage: true, scoreIsTime: true, scoreTimeTick: 10000, master: master  });
     this._tangram2DState = 0;
 
     this._enumTangram2DState = {

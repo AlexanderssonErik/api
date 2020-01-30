@@ -5,14 +5,22 @@ class Game {
     static init() {
         this._active = null;
         this._levelMenu = null;
+        this._master = null;
     }
 
 
     static update() {
 
-        if (this._active != null) {
-            this._active.update();
-        }
+
+
+            if (this._active != null) {
+                if (Game._master != null && (this._active.state == this._active.enumState.win || this._active.state == this._active.enumState.fail)){
+                    return;
+                }
+
+                this._active.update();
+            }
+        
     }
 
     static close() {
@@ -30,8 +38,13 @@ class Game {
     }
 
 
-    constructor({ level = null, levelMenu = true, userCreatedLevel = false, displayLevel = false, displayStage = false }) {
+    constructor({ level = null, levelMenu = true, userCreatedLevel = false, displayLevel = false, displayStage = false, scoreIsTime = false, scoreIsLocal = false, scoreTimeTick = 5000, master = null }) {
 
+
+        if (Game._master != null && Game._master != master) {
+            Game._master.close();
+        }
+        Game._master = master;
 
         if (Game._active != null) {
             Game._active.close();
@@ -49,10 +62,12 @@ class Game {
 
         this._levelIndex = 0;
         this._difficultyIndex = 0;
+        this._stageIndex = 0;
         this._level = level;
         this._levelMenu = [];
         this.activeStage = null;
         this.previousActiveStage = null;
+
 
         this._meshBlock2x2 = [];
         this._meshBlock2x4 = [];
@@ -75,6 +90,43 @@ class Game {
         this._filterWinCount = 0;
         this._timeOutNextWhenBlocksRemoved = null;
 
+        //score
+        if (Game._master == null) {
+            this._scoreIsTime = scoreIsTime;
+            this._scoreIsLocal = scoreIsLocal;
+            this._scoreTimer = null;
+            this._scoreTimeTick = scoreTimeTick;
+        } else {
+            this._scoreIsTime = false;
+            this._scoreIsLocal = false;
+        }
+
+        if (this._scoreIsTime || this._scoreIsLocal) {
+            this._scoreHighDisplay = [];
+            this._scoreHighDisplay[0] = new GuiTextLevel("No1: 0");
+            this._scoreHighDisplay[1] = new GuiTextLevel("No2: 0");
+            this._scoreHighDisplay[2] = new GuiTextLevel("No3: 0");
+            this._scoreHighDisplay[0].setVisible(0.5, 0, guiOptions.center, guiOptions.top);
+            this._scoreHighDisplay[1].setVisible(0.5, 1, guiOptions.center, guiOptions.top);
+            this._scoreHighDisplay[2].setVisible(0.5, 2, guiOptions.center, guiOptions.top);
+
+            this._score = 100;
+            if (this._scoreIsTime) {
+                this._scoreDisplay = new GuiTextLevel("Score: 100");
+                this._scoreDisplay.setVisible(0, 2, guiOptions.center, guiOptions.top);
+            } else if (this._scoreIsLocal) {
+                this._score = 0;
+                this._scoreDisplay = new GuiTextLevel("Score: 0");
+                this._scoreDisplay.setVisible(0, 2, guiOptions.center, guiOptions.top);
+                database.loadScore({ name: this.constructor.name, level: 0, difficulty: 0, stage: 0, callBackFunction: function (param) { this._setHighScore(param) }.bind(this) });
+
+            }
+
+
+
+
+        }
+
 
         //buttons
         this._okButton = null;
@@ -91,11 +143,12 @@ class Game {
         this.state = 0;
 
         Game._active = this;
-        if (levelMenu) {
+        if (Game._master == null && levelMenu) {
             this._buildLevelMenu(this._level, userCreatedLevel);
         }
-
-        database.selectContent({ name: this.constructor.name });
+        if (Game._master == null) {
+            database.selectContent({ name: this.constructor.name });
+        }
 
     }
 
@@ -103,7 +156,7 @@ class Game {
     _buildUserLevel({ level = 0, difficulty = 0 }) {
 
         this.reset();
-        Block.setColor({block: world.block, color: meshColor.black})
+        Block.setColor({ block: world.block, color: meshColor.black })
         colorWheel.colorComplete();
         world.showBase();
         world.showBlock();
@@ -116,14 +169,14 @@ class Game {
 
     _saveUserLevel({ level = 0, difficulty = 0 }) {
 
- 
+
         database.saveUserLevel({ name: this.constructor.name, difficulty: difficulty, block: world.blockString });
-       if(world.block.length >0){
-        setTimeout(function() { this._loadUserLevel({ level: level, difficulty: difficulty }); }.bind(this), 500);
-        this._okButton.setNotVisible();
-        this._okButton = null;
-       }
-        
+        if (world.block.length > 0) {
+            setTimeout(function () { this._loadUserLevel({ level: level, difficulty: difficulty }); }.bind(this), 500);
+            this._okButton.setNotVisible();
+            this._okButton = null;
+        }
+
     }
 
     _loadUserLevel({ level = 0, difficulty = 0 }) {
@@ -195,12 +248,53 @@ class Game {
         this._setLevel({ level: level, difficulty: difficulty });
     }
 
+    saveScore() {
+        database.saveScore({ name: this.constructor.name, level: 0, difficulty: 0, stage: 0, score: this._score });
+
+        //neede delay?
+
+        setTimeout(function () { database.loadScore({ name: this.constructor.name, level: 0, difficulty: 0, stage: 0, callBackFunction: function (param) { this._setHighScore(param) }.bind(this) }) }.bind(this), 1000);
+        // database.loadScore({ name: this.constructor.name, level: 0, difficulty: 0, stage: 0, callBackFunction: function (param) { this._setHighScore(param) }.bind(this) });
+
+    }
+
+    get score() {
+        return this._score;
+    }
+
+    set score(score) {
+        if(Game._master == null){
+        this._score = score;
+        this._scoreDisplay.text = "Score: " + this._score;
+        }
+    }
+
+
+    _scoreTimerFunction() {
+        if (this._score > 0) {
+            this._score -= 5;
+            this._scoreTimer = setTimeout(this._scoreTimerFunction.bind(this), this._scoreTimeTick);
+            this._scoreDisplay.text = "Score: " + this._score;
+        } else {
+            this._scoreTimer = null;
+        }
+    }
+
+    _setHighScore({ no1 = null, no2 = null, no3 = null }) {
+        if (no1 != null) {
+            this._scoreHighDisplay[0].text = "No1: " + no1;
+        }
+        if (no2 != null) {
+            this._scoreHighDisplay[1].text = "No2: " + no2;
+        }
+        if (no3 != null) {
+            this._scoreHighDisplay[2].text = "No3: " + no3;
+        }
+    }
+
     _setLevel({ level = 1, difficulty = 0, update = true }) {
 
         database.setLevel({ name: this.constructor.name, level: level, difficulty: difficulty });
-
-
-
 
         if (this._level[level] == null || this._level[level].difficulty[difficulty] == null) {
             console.log("no level!!!!")
@@ -215,7 +309,7 @@ class Game {
 
         this._levelIndex = level;
         this._difficultyIndex = difficulty;
-       
+
 
         let randStage = 0;
 
@@ -238,14 +332,33 @@ class Game {
             this.activeStage = this._level[level].difficulty[difficulty].stage[0];
         }
 
-        if (this._displayLevel) {
+        this._stageIndex = randStage;
 
+        if (this._displayLevel) {
             if (this._displayStage) {
                 this._levelDisplay.text = "Lv: " + (this._levelIndex) + "." + (this._difficultyIndex + 1) + "-" + (randStage + 1);
             } else {
                 this._levelDisplay.text = "Lv: " + (this._levelIndex) + "." + (this._difficultyIndex + 1);
             }
+        }
 
+        if (this._scoreIsTime) {
+            if (level == 0) {
+                this._scoreDisplay.text = "";
+                this._scoreHighDisplay[0].text = "";
+                this._scoreHighDisplay[1].text = "";
+                this._scoreHighDisplay[2].text = "";
+            } else {
+                database.loadScore({ name: this.constructor.name, level: this._levelIndex, difficulty: this._difficultyIndex, stage: this._stageIndex, callBackFunction: function (param) { this._setHighScore(param) }.bind(this) });
+
+                this._score = 100;
+                this._scoreDisplay.text = "Score: 100";
+                this._scoreTimer = setTimeout(this._scoreTimerFunction.bind(this), this._scoreTimeTick);
+
+                this._scoreHighDisplay[0].text = "No1: 0";
+                this._scoreHighDisplay[1].text = "No2: 0";
+                this._scoreHighDisplay[2].text = "No3: 0";
+            }
         }
 
         if (update) {
@@ -253,6 +366,7 @@ class Game {
         }
 
     }
+
 
 
     get difficultyIndex() {
@@ -291,6 +405,12 @@ class Game {
         if (this._timeOutNextWhenBlocksRemoved != null) {
             clearTimeout(this._timeOutNextWhenBlocksRemoved);
             this._timeOutNextWhenBlocksRemoved = null;
+        }
+
+        if (this._scoreTimer != null) {
+            clearTimeout(this._scoreTimer);
+            this._scoreTimer = null;
+
         }
 
 
@@ -339,13 +459,14 @@ class Game {
     }
 
     showDifficultyButton() {
+        if (Game._master == null) {
 
-        this._difficultyUpButton = new GuiButtonImg("./icon/level/difficultyUp.svg", function () { this._difficultyUp() }.bind(this)); //this.reset.bind(this));
-        this._difficultyUpButton.setVisible(2, 0, guiOptions.center, guiOptions.bottom);
+            this._difficultyUpButton = new GuiButtonImg("./icon/level/difficultyUp.svg", function () { this._difficultyUp() }.bind(this)); //this.reset.bind(this));
+            this._difficultyUpButton.setVisible(2, 0, guiOptions.center, guiOptions.bottom);
 
-        this._difficultyDownButton = new GuiButtonImg("./icon/level/difficultyDown.svg", function () { this._difficultyDown() }.bind(this)); //this.reset.bind(this));
-        this._difficultyDownButton.setVisible(-2, 0, guiOptions.center, guiOptions.bottom);
-
+            this._difficultyDownButton = new GuiButtonImg("./icon/level/difficultyDown.svg", function () { this._difficultyDown() }.bind(this)); //this.reset.bind(this));
+            this._difficultyDownButton.setVisible(-2, 0, guiOptions.center, guiOptions.bottom);
+        }
     }
 
 
@@ -402,6 +523,14 @@ class Game {
         }
     }
 
+    masterFail(){
+        this.state = this.enumState.fail;
+        if (Game._master != null) {
+            Game._master.fail();
+            return;
+        }
+    }
+
     win({ nextWhenBlocksRemoved = true, filterWin = true, nextButton = true }) {
         if (this.state == this.enumState.win) {
             return;
@@ -413,10 +542,23 @@ class Game {
 
 
         this.state = this.enumState.win;
+
+
+        if (Game._master != null) {
+            Game._master.win();
+            return;
+        }
+
         sound.win();
 
-
         database.win({ name: this.constructor.name, level: this._levelIndex, difficulty: this._difficultyIndex });
+
+        if (this._scoreIsTime) {
+            clearTimeout(this._scoreTimer);
+            this._scoreTimer = null;
+            database.saveScore({ name: this.constructor.name, level: this._levelIndex, difficulty: this._difficultyIndex, stage: this._stageIndex, score: this._score });
+
+        }
 
         Block.setColor(world.base, meshColor.green);
 
@@ -626,7 +768,7 @@ class Game {
                 if (this._meshPixel.length > countPixel) {
                     this._meshPixel[countPixel].block = item;
                 } else {
-                   // this._meshPixel.push(new MeshPixelTrans(item));
+                    // this._meshPixel.push(new MeshPixelTrans(item));
                     this._meshPixel.push(new MeshPixel(item));
                 }
                 countPixel++;
@@ -658,12 +800,20 @@ class Game {
 
     close() {
 
+
         this.reset();
         this._levelMenu.forEach(item => item.setNotVisible());
         this._levelMenu = [];
 
         if (this._displayLevel) {
             this._levelDisplay.setNotVisible();
+        }
+
+
+
+        if (this._scoreIsTime || this._scoreIsLocal) {
+            this._scoreDisplay.setNotVisible();
+            this._scoreHighDisplay.forEach(item => item.setNotVisible());
         }
 
     }
