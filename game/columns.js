@@ -2,7 +2,7 @@ class Columns extends Game {
   constructor() {
     let level = [];
 
-    super({ level: level, userCreatedLevel: false, displayLevel: true, scoreIsLocal: true  });
+    super({ level: level, userCreatedLevel: false, displayLevel: true, scoreIsLocal: true });
 
     this._enumColumnsState = {
       setColor: 0,
@@ -39,7 +39,7 @@ class Columns extends Game {
     this._playfield.forEach(item => this._meshPlayfield.push(new MeshPad(item)));
 
     this._setLevel({ level: 1, difficulty: 0 });
-
+    colorWheel.colorComplete();
 
   }
 
@@ -51,44 +51,45 @@ class Columns extends Game {
     this._columnsState = this._enumColumnsState.setColor;
     this._currentColor = 0;
 
-
+    //drop blocks
+    //remove magenta
     switch (level) {
       case 1:
         this._colorCount = 4;
 
         this._speedColorSelect = 4;
-        this._secretCount = 4;
+        this._secretCount = 1000;
 
         break;
       case 2:
         this._colorCount = 5;
         this._speedColorSelect = 3;
-        this._secretCount = 3;
+        this._secretCount = 1000;
 
         break;
       case 3:
         this._colorCount = 6;
         this._speedColorSelect = 2;
-        this._secretCount = 3;
+        this._secretCount = 1000;
 
         break;
       case 4:
-        this._colorCount = 7;
+        this._colorCount = 6;
         this._speedColorSelect = 1;
-        this._secretCount = 3;
+        this._secretCount = 1000;
 
 
         break;
       default:
-        this._colorCount = 7;
+        this._colorCount = 6;
         this._speedColorSelect = 1;
-        this._secretCount = 3;
+        this._secretCount = 10;
 
         break;
 
     }
     //remove select timing
-    this._speedColorSelect =1;
+    this._speedColorSelect = 1;
 
     this.update();
 
@@ -156,8 +157,11 @@ class Columns extends Game {
     let setForRemovalBlocks = Block.calcSet({ left: world.block, right: this._forRemovalBlocks, careColor: false, careRotation: false });
     this._forRemovalBlocks = setForRemovalBlocks.intersectionLeft;
 
-    let setCurrentPlayFieldBlocks = BlockPillar.calcSet({ left: world.block, right: this._playfield, careColor: false, careRotation: false });
-    setCurrentPlayFieldBlocks = Block.calcSet({ left: setCurrentPlayFieldBlocks.intersectionLeft, right: this._forRemovalBlocks, careColor: false, careRotation: false });
+    let completeCurrentPlayFieldBlocks = BlockPillar.calcSet({ left: world.block, right: this._playfield, careColor: false, careRotation: false });
+    completeCurrentPlayFieldBlocks = completeCurrentPlayFieldBlocks.intersectionLeft;
+
+    let setCurrentPlayFieldBlocks = Block.calcSet({ left: completeCurrentPlayFieldBlocks, right: this._forRemovalBlocks, careColor: false, careRotation: false });
+
 
     currentPlayFieldBlocks = setCurrentPlayFieldBlocks.diffLeft;
 
@@ -177,15 +181,20 @@ class Columns extends Game {
         if (this._timeoutDelay == null) {
 
           while (this._displayColors.length < 3) {
-            let randColor = Math.floor(1 + Math.random() * this._colorCount);
+            
+            let randColor = Math.floor(1 + Math.random() * this._colorCount);            
+            //cyan is difficult to see
+            if (randColor >= meshColor.cyan) {
+              randColor++;
+            }
             if (this._displayColors.find(item => item == randColor) === undefined) {
               this._displayColors.push(randColor);
             }
           }
-
+    
           //remove pick by timing placement function
-          this._displayColors[1]= this._displayColors[0];
-          this._displayColors[2]= this._displayColors[0];
+          this._displayColors[1] = this._displayColors[0];
+          this._displayColors[2] = this._displayColors[0];
 
           if (currentPlayFieldBlocks.some(function (item) {
             if (!item.color.some(itemFind => itemFind != 0)) {
@@ -252,25 +261,12 @@ class Columns extends Game {
 
           BlockPixel.setBlockColor({ block: forRemoval, color: 0, blink: false, colorComplete: false });
 
+
           if (forRemoval.length > 0) {
-
-            forRemoval.forEach(function (item) {
-              if (!item.block.color.some(itemFind => itemFind != 0)) {
-                if (!(this._forRemovalBlocks.some(itemFind => itemFind == item.block))) {
-                  this._forRemovalBlocks.push(item.block);
-                }
-              }
-
-            }.bind(this));
-
             if (this._scoreColumns >= this._levelScoreProgression[this._columnsCurrentLevel]) {
-              sound.win();
-              this._columnsCurrentLevel++;
-              this._setLevel({ level: this._columnsCurrentLevel, difficulty: 0 });
-              return;
+
             } else {
               sound.correct((this._scoreColumns - this._levelScoreProgression[this._columnsCurrentLevel - 1]) / (this._levelScoreProgression[this._columnsCurrentLevel] - this._levelScoreProgression[this._columnsCurrentLevel - 1]));
-
             }
           }
 
@@ -286,7 +282,8 @@ class Columns extends Game {
         if (this._timeoutDelay == null) {
 
           let blockDropped = false;
-          let curretBlocksPixels = BlockPixel.convertBlock(currentPlayFieldBlocks);
+          let curretBlocksPixels = BlockPixel.convertBlock(completeCurrentPlayFieldBlocks);
+
           this._playfield.forEach(function (item) {
 
             let set = BlockPillar.calcSet({ left: curretBlocksPixels, right: item, careColor: false, careRotation: false });
@@ -331,10 +328,31 @@ class Columns extends Game {
               }
             }
           });
+
+          this._forRemovalBlocks = [];
+          completeCurrentPlayFieldBlocks.forEach(function (item) {
+            if (!item.color.some(itemFind => itemFind != 0)) {
+              if (!(this._forRemovalBlocks.some(itemFind => itemFind == item))) {
+                this._forRemovalBlocks.push(item);
+              }
+            }
+
+          }.bind(this));
+
           if (blockDropped) {
             this._columnsState = this._enumColumnsState.checkThree;
+
           } else {
             this._columnsState = this._enumColumnsState.setColor;
+
+
+
+            if (this._scoreColumns >= this._levelScoreProgression[this._columnsCurrentLevel]) {
+              sound.win();
+              this._columnsCurrentLevel++;
+              this._setLevel({ level: this._columnsCurrentLevel, difficulty: 0 });
+              return;
+            }
           }
           this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 100);
           this._speedColorSelectIndex = this._speedColorSelect;

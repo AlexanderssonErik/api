@@ -20,7 +20,7 @@ class BlockTris extends Game {
 
         this._blockTrisCurrentLevel = 1;
         this._scoreBlockTris = 0
-        this._levelScoreProgression = [0, 3, 8, 14, 21, 28, 99];
+        this._levelScoreProgression = [0, 2, 8, 14, 21, 28, 99];
 
         this._columnHeight = 2;
         this._shadowCount = 1;
@@ -74,8 +74,6 @@ class BlockTris extends Game {
         this._dropQuickCount = 0;
         this._dropButton = new GuiButtonImg("./icon/games/ok.svg", function () { this._quickDrop() }.bind(this)); //this.reset.bind(this));
         this._dropButton.setVisible(0, 0, guiOptions.center, guiOptions.bottom);
-
-
 
         this._timeoutDelay = null;
         this._setLevel({ level: 1, difficulty: 0 });
@@ -344,14 +342,15 @@ class BlockTris extends Game {
                             let layer = this._patternMesh.length;
                             this._patternMesh[layer] = [];
                             this._patternShadow[i].forEach(function (item) {
-                                this._patternMesh[layer].push(new MeshShadowTopDrop(item, this._patternStartY * Mesh._staticPitch, this._color));
+                                this._patternMesh[layer].push(new MeshShadowTopDrop(item, this._patternStartY * Mesh._staticPitch, this._color + 6));
                             }.bind(this));
 
 
                             for (let x = 1; x < 6; x++) {
                                 for (let z = 1; z < 6; z++) {
                                     if (!(this._patternShadow[i].some(item => item.x == x && item.z == z))) {
-                                        this._patternMesh[layer].push(new MeshShadowTopDrop(new BlockShadowBottom({ x: x, z: z }), this._patternStartY * Mesh._staticPitch, this._color + 6));
+                                       // this._patternMesh[layer].push(new MeshShadowTopDrop(new BlockShadowBottom({ x: x, z: z }), this._patternStartY * Mesh._staticPitch, this._color + 6));
+                                       this._patternMesh[layer].push(new MeshShadowTopDrop(new BlockShadowBottom({ x: x, z: z }), this._patternStartY * Mesh._staticPitch, this._color ));
                                     }
                                 }
                             }

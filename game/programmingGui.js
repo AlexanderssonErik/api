@@ -2118,7 +2118,9 @@ class ProgrammingGui {
 
   close() {
     this._reset();
+    this._programHideForPlay = false;
     this.hide();
+
 
     colorWheel.disenable();
 

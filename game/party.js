@@ -216,7 +216,7 @@ class Party {
 
 
     this._fail = false;
-    this._giveUpButton.setVisible(0, 0, guiOptions.center, guiOptions.bottom);
+    this._giveUpButton.setVisible(0, 0, guiOptions.right, guiOptions.top);
 
   }
 

@@ -525,9 +525,13 @@ class GuiButton extends Gui {
         this._pointerMoveFunction = pointerMove;
         this._pointerDownFunction = pointerDown;
 
- 
-        this._background = 'rgba(96, 96, 96, 0.3)';
-        this._backgroundDown = 'rgba(96, 96, 96, 0.5)';
+        this._background = 'rgba(0, 160, 255, 0.7)';  
+        this._backgroundDown = 'rgba(96, 96, 96, 1)'
+     //   this._backgroundDown = 'rgba(70, 70, 70, 1)';
+        //this._backgroundDown = 'rgba(0, 0, 255, 1)';
+      // 
+        /*this._background = 'rgba(96, 96, 96, 0.3)';
+        this._backgroundDown = 'rgba(96, 96, 96, 0.5)';*/
         this._child = [[], [], [], []];
         this._direction = null;
         this._parent = null;

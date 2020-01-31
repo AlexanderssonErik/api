@@ -161,11 +161,13 @@ let camera = {
     this._arcRotateCamera.fov = 0.2;
     this._arcRotateCamera.upperRadiusLimit = 100;
     this._baseDown = true;
-    this._arcRotateCamera.setTarget(new BABYLON.Vector3(4.5, 5.5, 4.5));
-    this._arcRotateCamera.radius = 70;
-    this._arcRotateCamera.beta = Math.PI / 2 - Math.PI / 15;
+    this._arcRotateCamera.setTarget(new BABYLON.Vector3(4.5, 4.0, 4.5)); //5.5
+    this._arcRotateCamera.radius = 55; //70
+    //this._arcRotateCamera.beta = Math.PI / 2 - Math.PI / 15;
+    this._arcRotateCamera.beta = Math.PI / 2 - Math.PI / 10;
 
     this._arcRotateCamera.alpha = Math.PI + Math.PI / 8;
+    //this._arcRotateCamera.alpha = Math.PI + Math.PI / 4;
     this._arcRotateCamera.lowerBetaLimit = Math.PI / 8;
     this._arcRotateCamera.upperBetaLimit = Math.PI;
     this.lock();
