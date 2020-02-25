@@ -72,7 +72,7 @@ class BlockTris extends Game {
         camera.fovView();
 
         this._dropQuickCount = 0;
-        this._dropButton = new GuiButtonImg("./icon/games/ok.svg", function () { this._quickDrop() }.bind(this)); //this.reset.bind(this));
+        this._dropButton = new GuiButtonImg("./icon/games/blockTris/drop.svg", function () { this._quickDrop() }.bind(this)); //this.reset.bind(this));
         this._dropButton.setVisible(0, 0, guiOptions.center, guiOptions.bottom);
 
         this._timeoutDelay = null;
@@ -377,11 +377,16 @@ class BlockTris extends Game {
 
                     if (this._dropQuickCount > 0) {
                         this._dropQuickCount--;
-                        this._patternMesh.forEach(item => item.forEach(itemDrop => itemDrop.drop(600)));
-                        this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 700);
+                       // this._patternMesh.forEach(item => item.forEach(itemDrop => itemDrop.drop(600)));
+                       this._patternMesh.forEach(item => item.forEach(itemDrop => itemDrop.prepDrop(200)));
+                       this._patternMesh.forEach(item => item.forEach(itemDrop => itemDrop.drop()));
+                        this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), 300);
                     } else {
-                        this._patternMesh.forEach(item => item.forEach(itemDrop => itemDrop.drop(this._dropSpeed - this._dropSpeedStop)));
-                        this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), this._dropSpeed);
+                       // this._patternMesh.forEach(item => item.forEach(itemDrop => itemDrop.drop(this._dropSpeed - this._dropSpeedStop)));
+                       this._patternMesh.forEach(item => item.forEach(itemDrop => itemDrop.prepDrop(this._dropSpeed - this._dropSpeedStop)));
+                       this._patternMesh.forEach(item => item.forEach(itemDrop => itemDrop.drop()));
+                      
+                       this._timeoutDelay = setTimeout(this._timeoutDelayFunction.bind(this), this._dropSpeed);
                     }
 
                     this._blockTrisState = this._enumBlockTrisState.check;

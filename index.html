@@ -37,7 +37,7 @@
     <script src="./game/guidedBuild.js"></script>
     <script src="./game/guidedBuildLevel.js"></script>
 
-    <script src="./game/freeBuild.js"></script>    
+    <script src="./game/freeBuild.js"></script>
     <script src="./game/freeFreeBuild.js"></script>
 
     <script src="./game/tangram.js"></script>
@@ -134,7 +134,7 @@
 
         */
 
-         
+
         let url = new URL(document.URL);
         let publicShapeNo = url.searchParams.get("shape");
 
@@ -152,9 +152,9 @@
         scene.clearColor = new BABYLON.Color3(0.7, 0.8, 0.9);
 
 
-    let background = new BABYLON.Layer("", "./icon/blueWhite.jpg", scene);
-  // let background = new BABYLON.Layer("", "./icon/blue.jpg", scene);
-	background.isBackground = true;
+        let background = new BABYLON.Layer("", "./icon/blueWhite.jpg", scene);
+        // let background = new BABYLON.Layer("", "./icon/blue.jpg", scene);
+        background.isBackground = true;
         engine.displayLoadingUI();
 
 
@@ -211,8 +211,8 @@
         ProgrammingProgram.init();
 
         let colorWheel = new GuiColorWheel();
-        let moveTransBase = new GuiMoveTransBase();
-       
+  
+
 
         window.onload = function () {
             engine.hideLoadingUI();
@@ -222,14 +222,13 @@
                 MeshNumber.init(meshesNumber());
             }
 
-            if(publicShapeNo != null){
-            
-                let freeFreeBuild = new FreeFreeBuild();               
-                database.loadFreeShape({  shapeNo: publicShapeNo, callBackFunction: function (param) { freeFreeBuild._callBackLoad(param) }.bind(this) });
+            if (publicShapeNo != null) {
 
+                let freeFreeBuild = new FreeFreeBuild();
+                database.loadFreeShape({ shapeNo: publicShapeNo, callBackFunction: function (param) { freeFreeBuild._callBackLoad(param) }.bind(this) });
             }
-  
-        
+
+          
 
 
         };
@@ -249,18 +248,14 @@
                 if (Gui.pointerDown(evt)) {
 
                 } else if (pickResult.hit) {
-                    if( pickResult.pickedMesh.name instanceof MeshBaseTrans){                       
-                        moveTransBase.pointerDown(evt, pickResult.pickedMesh.transBaseFunction)
-                    }else{
-                        colorWheel.pointerDown(evt, pickResult.pickedMesh.name)
-                    }
+                    colorWheel.pointerDown(evt, pickResult.pickedMesh.name);
                 } else {
                     camera.pointerDown();
                 }
             };
 
-            engine.runRenderLoop(function () { 
-                   scene.render();
+            engine.runRenderLoop(function () {
+                scene.render();
             });
             window.addEventListener("resize", function () {
                 clearTimeout(timeOutResizeDeBounce);

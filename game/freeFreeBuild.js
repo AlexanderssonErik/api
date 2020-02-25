@@ -16,10 +16,7 @@ class FreeFreeBuild extends Game {
     level[level.length - 1].difficulty.push({ stage: [], image: "./icon/level/lvl3ShapeLoad.svg" });
     level[level.length - 1].difficulty.push({ stage: [], image: "./icon/level/lvl3DiyCreate.svg" });
 
-    level.push({ difficulty: [], image: "./icon/level/lvl3Diy.svg" });
-    level[level.length - 1].difficulty.push({ stage: [], image: "./icon/level/lvl3Diy.svg" });
-
-
+    level.push({ difficulty: [], image: "./icon/level/share.svg" });
 
     super({ level: level });
 
@@ -66,6 +63,49 @@ class FreeFreeBuild extends Game {
 
     this._setLevel({ level: 0, difficulty: 0 });
 
+    this._leftRightButton = new GuiButtonSlider("./icon/games/freeFreeBuild/leftRight.svg", null, this._leftRight.bind(this), null, true); //this.reset.bind(this));
+    this._leftRightButton.setVisible(0, 0, guiOptions.center, guiOptions.bottom);
+
+    this._upDownButton = new GuiButtonSlider("./icon/games/freeFreeBuild/upDown.svg", null, this._upDown.bind(this), null, false); //this.reset.bind(this));
+    this._upDownButton.setVisible(0, 0, guiOptions.right, guiOptions.center);
+
+    this._inOutButton = new GuiButtonSlider("./icon/games/freeFreeBuild/inOut.svg", null, this._inOut.bind(this), null, false); //this.reset.bind(this));
+    this._inOutButton.setVisible(0, 0, guiOptions.left, guiOptions.center);
+
+
+  }
+
+  _leftRight(dir) {
+
+    if (camera.lookingFront) {
+      this._baseMesh.moveZ(-dir);
+    } else if (camera.lookingBack) {
+      this._baseMesh.moveZ(dir);
+    } else if (camera.lookingLeft) {
+      this._baseMesh.moveX(-dir);
+    } else {
+      this._baseMesh.moveX(dir);
+    }
+
+
+  }
+
+  _upDown(dir) {
+    this._baseMesh.moveY(-dir);
+  }
+
+  _inOut(dir) {
+    if (camera.lookingFront) {
+      this._baseMesh.moveX(-dir);
+    } else if (camera.lookingBack) {
+      this._baseMesh.moveX(dir);
+    } else if (camera.lookingLeft) {
+      this._baseMesh.moveZ(dir);
+    } else {
+      this._baseMesh.moveZ(-dir);
+    }
+
+
   }
 
   _setLevel({ level = 0, difficulty = 0 }) {
@@ -93,6 +133,7 @@ class FreeFreeBuild extends Game {
   _callBackLoad({ level = 0, program = null }) {
 
     if (program != null) {
+      camera.freeLoadSaved();
       this._pixels = eval(program.pixels);
       this._lockedChanged = true;
     } else {
@@ -180,7 +221,7 @@ class FreeFreeBuild extends Game {
 
       updateSet = Block.calcSet({ left: sculptBlocks, right: this._lastSculptBlocks, careColor: true });
       if (updateSet.diffLeft.length != 0 || updateSet.diffRight.length != 0 || this._lockedChanged) {
-    
+
         this._lockedChanged = false;
         this._lastSculptBlocks = Block.copy(sculptBlocks);
 
@@ -195,7 +236,7 @@ class FreeFreeBuild extends Game {
 
         for (let i = 0; i < this._pixels.length; i++) {
           if (this._pixels[i].color[0] == meshColor.black) {
-    
+
             this._pixels.splice(i, 1);
             i--;
           }
@@ -260,6 +301,10 @@ class FreeFreeBuild extends Game {
     camera.reset();
     camera.zoomToStartPos();
     super.close();
+
+    this._leftRightButton.setNotVisible();
+    this._upDownButton.setNotVisible();
+    this._inOutButton.setNotVisible();
 
   }
 

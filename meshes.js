@@ -805,32 +805,6 @@ function createPlaneTransBase() {
 
 }
 
-function createArrowTransBase() {
-
-
-    let shape = [new BABYLON.Vector3(-1, 0, 0),
-    new BABYLON.Vector3(-0.5, 0, -0.75),
-    new BABYLON.Vector3(-0.5, 0, -0.5),
-    new BABYLON.Vector3(0.5, 0, -0.5),
-
-    new BABYLON.Vector3(0.5, 0, -0.75),
-    new BABYLON.Vector3(1, 0, 0),
-    new BABYLON.Vector3(0.5, 0, 0.75),
-    new BABYLON.Vector3(0.5, 0, 0.5),
-
-    new BABYLON.Vector3(-0.5, 0, 0.5),
-    new BABYLON.Vector3(-0.5, 0, 0.75),
-
-    ];
-
-    let arrow = BABYLON.MeshBuilder.ExtrudePolygon("", { shape: shape, depth: 0.2, sideOrientation: BABYLON.Mesh.FRONTSIDE }, scene);
-    arrow.rotation.x = Math.PI;
-    arrow.position.y = -0.20;
-
-    return arrow;
-
-}
-
 function createBlockTransBase() {
 
     let shadow = BABYLON.MeshBuilder.CreatePlane("blockPixel", { width: 0.9, height: 0.9 }, scene);
@@ -975,35 +949,7 @@ function meshesTransBase() {
         }
     }
 
-    let xArrow = createArrowTransBase();
-    xArrow.position.z = -1.5;
-    xArrow = BABYLON.Mesh.MergeMeshes([xArrow]);
-    xArrow.isPickable = true;
-    scene.meshes.pop();
-    data.mesh.push(xArrow);
-  //  data.mesh.xArrow = xArrow;
 
-  
-
-
-    let yArrow = createArrowTransBase();
-    yArrow.position.z = 10.5;
-    yArrow.rotation.z = Math.PI / 2;
-    yArrow = BABYLON.Mesh.MergeMeshes([yArrow]);
-    yArrow.isPickable = true;
-    scene.meshes.pop();
-    data.mesh.push(yArrow);
-   // data.mesh.yArrow = yArrow;
-
-   let zArrow = createArrowTransBase();
-   zArrow.position.x = -1.5;
-   zArrow.rotation.y = Math.PI / 2;
-   zArrow = BABYLON.Mesh.MergeMeshes([zArrow]);
-   zArrow.isPickable = true;
-   scene.meshes.pop();
-   data.mesh.push(zArrow);
- //  data.mesh.zArrow = zArrow;
- 
     return data;
 
 }

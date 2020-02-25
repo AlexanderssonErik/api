@@ -99,12 +99,12 @@ let settings = {
         button.addChild(new GuiButtonImg("./icon/games/programming.svg", function () { new Programming() }), guiOptions.childRight);
         button.addChild(new GuiButtonImg("./icon/games/readProgram.svg", function () { new ReadProgram() }), guiOptions.childRight);
 
-        button = new GuiButtonImg("./icon/games/freeFreeBuild.svg");
+        button = new GuiButtonImg("./icon/games/party1P.svg");
         startButton.addChild(button, guiOptions.childBottom)
-        button.addChild(new GuiButtonImg("./icon/games/freeFreeBuild.svg", function () { new Party({players: 1}) }), guiOptions.childRight)
-        button.addChild(new GuiButtonImg("./icon/games/freeFreeBuild.svg", function () { new Party({players: 2}) }), guiOptions.childRight)
-        button.addChild(new GuiButtonImg("./icon/games/freeFreeBuild.svg", function () { new Party({players: 3}) }), guiOptions.childRight)
-        button.addChild(new GuiButtonImg("./icon/games/freeFreeBuild.svg", function () { new Party({players: 4}) }), guiOptions.childRight)
+        button.addChild(new GuiButtonImg("./icon/games/party1P.svg", function () { new Party({players: 1}) }), guiOptions.childRight)
+        button.addChild(new GuiButtonImg("./icon/games/party2P.svg", function () { new Party({players: 2}) }), guiOptions.childRight)
+        button.addChild(new GuiButtonImg("./icon/games/party3P.svg", function () { new Party({players: 3}) }), guiOptions.childRight)
+        button.addChild(new GuiButtonImg("./icon/games/party4P.svg", function () { new Party({players: 4}) }), guiOptions.childRight)
 
 
 

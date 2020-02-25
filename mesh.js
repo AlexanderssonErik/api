@@ -252,10 +252,9 @@ class MeshBaseTrans extends Mesh {
     }
     constructor(block) {
         super({ mesh: MeshBaseTrans._staticMesh.map(item => item.clone()) }, block);
-        this._mesh.isTransBase = true;//?
+        //this._mesh.isTransBase = true;//?
 
-        //this._mesh.forEach((item, index) => item.name = this);
-        
+
 
         let i = 0;
         for (let x = 0; x < 10; x++) {
@@ -289,23 +288,7 @@ class MeshBaseTrans extends Mesh {
         this._mesh[14].material = MeshBaseTrans._staticMaterial[12];
         this._mesh[15].material = MeshBaseTrans._staticMaterial[12];
 
-        this._mesh[100].material = MeshBaseTrans._staticMaterial[meshColor.white];
-        this._mesh[101].material = MeshBaseTrans._staticMaterial[meshColor.white];
-        this._mesh[102].material = MeshBaseTrans._staticMaterial[meshColor.white];
 
-
-        this._mesh[100].name = this;
-        this._mesh[101].name = this;
-        this._mesh[102].name = this;
-        
-
-
-        this._mesh[100].transBaseFunction = function ( {x = 0, y =0, z = 0 }) { this.moveX(x); }.bind(this);//
-        this._mesh[101].transBaseFunction = function ({x = 0, y =0, z = 0 } ) { this.moveY(y); }.bind(this);////this.moveY;
-        this._mesh[102].transBaseFunction = function ({x = 0, y =0, z = 0 }) { this.moveZ(z); }.bind(this);//this.moveZ;
-
-
-        // this._updateColor();
     }
 
     moveX(dir) {
@@ -335,9 +318,7 @@ class MeshBaseTrans extends Mesh {
 
     _updateColor() {
         return;
-        // this._mesh[0].material = MeshBaseTrans._staticMaterial[this._block.color[0]];  //remove?
     }
-
 
 }
 
@@ -935,7 +916,9 @@ class MeshShadowBottom extends MeshShadow {
 
 class MeshShadowTopDrop extends Mesh {
 
-    constructor(block, y, color) {
+
+    constructor(block, y, color, active = false) {
+
         super({ mesh: MeshShadowBottom._staticMesh.map(item => item.clone()) }, block);
 
 
@@ -951,9 +934,21 @@ class MeshShadowTopDrop extends Mesh {
 
         this._mesh[0].material = MeshShadowTopDrop._staticMaterial[color];
 
+
+   
+
+        this._animateY = new BABYLON.Animation("", "position.y", MeshShadowTopDrop._frameRate, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+        this._animateScale = new BABYLON.Animation("", "scaling", MeshShadowTopDrop._frameRate, BABYLON.Animation.ANIMATIONTYPE_VECTOR3, BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT);
+
+        this._endFrame = 0;
+
     }
 
     static init({ mesh = [] }) {
+
+
+        MeshShadowTopDrop._frameRate = 20;
+        
 
         MeshShadowTopDrop._baseScaling = 0.95;
         MeshShadowTopDrop._divScaling = 40;
@@ -1040,7 +1035,7 @@ class MeshShadowTopDrop extends Mesh {
         this._updateColor();
     }
 
-    drop(speed) {
+  /*  drop(speed) {
 
         let frameRate = 20;
         let endFrame = frameRate * speed / 1000;
@@ -1054,7 +1049,27 @@ class MeshShadowTopDrop extends Mesh {
         scene.beginDirectAnimation(this._mesh[0], [animateScale], 0, endFrame, false);
         scene.beginDirectAnimation(this._mesh[0], [animateY], 0, endFrame, false);
 
+    }*/
+
+    prepDrop(speed){
+
+        this._endFrame =  MeshShadowTopDrop._frameRate  * speed / 1000;
+
+        this._animateScale.setKeys([{ frame: 0, value: new BABYLON.Vector3(MeshShadowTopDrop._baseScaling - this._mesh[0].position.y / MeshShadowTopDrop._divScaling, MeshShadowTopDrop._baseScaling - this._mesh[0].position.y / MeshShadowTopDrop._divScaling, MeshShadowTopDrop._baseScaling - this._mesh[0].position.y / MeshShadowTopDrop._divScaling) }, { frame:  this._endFrame , value: new BABYLON.Vector3(MeshShadowTopDrop._baseScaling - (this._mesh[0].position.y - 1) / MeshShadowTopDrop._divScaling, MeshShadowTopDrop._baseScaling - (this._mesh[0].position.y - 1) / MeshShadowTopDrop._divScaling, MeshShadowTopDrop._baseScaling - (this._mesh[0].position.y - 1) / MeshShadowTopDrop._divScaling) }]);
+        this._animateY.setKeys([{ frame: 0, value: this._mesh[0].position.y }, { frame:  this._endFrame, value: this._mesh[0].position.y - Mesh._staticPitch }]);
+
+
+       
+
     }
+    drop(){
+        scene.beginDirectAnimation(this._mesh[0], [this._animateScale], 0,  this._endFrame , false);
+        scene.beginDirectAnimation(this._mesh[0], [this._animateY], 0,  this._endFrame , false);
+
+
+    }
+
+
 
 }
 

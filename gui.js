@@ -72,7 +72,7 @@ class Gui {
         this._horPos = 0;
         this._verPos = 0;
 
-     
+
 
         this._size = [4, 7, 13];
         this._sizeWidthMulti = 1;
@@ -179,221 +179,6 @@ class Gui {
     }
 }
 
-class GuiMoveTransBase extends Gui {
-    constructor() {
-        //  super(null);
-        super(document.createElement('IMG'));
-        this._mesh = null;
-        this._downPageX = null;
-        this._downPageY = null;
-        this._lastRadius = 0;
-        /*this._element.src = "./icon/colorWheel/rgb.svg";
-        this._size = [15, 30, 50];
-        this._element.style.background = 'rgba(0, 0, 0, 0.0)';
-        this._background = 'rgba(0, 0, 0, 0.0)';
-        this._currentMeshFunction = null
-
-        this._horAlign = guiOptions.left;
-        this._verAlign = guiOptions.top;
-
-        this._downPageX = null;
-        this._downPageY = null;
-
-        this._colorComplete = true;
-
-        this._enabled = false;*/
-
-    }
-
-    _hide() {
-        return;
-    }
-
-    pointerDown(evt, mesh) {
-
-
-        this._mesh = mesh;
-        scene.onPointerMove = this.pointerMove.bind(this);
-        scene.onPointerUp = this.pointerUp.bind(this);
-        Gui._pointerUpFunction = this.pointerUp.bind(this);
-
-        this._downPageX = evt.pageX;
-        this._downPageY = evt.pageY;
-
-        super.pointerDown();
-
-    }
-    pointerMove(evt) {
-     
-        let pitch = 3;
-
-        let radius = ((Math.sqrt(Math.pow(Math.abs(evt.pageX - this._downPageX), 2) + Math.pow(Math.abs(evt.pageY - this._downPageY), 2))) / window.innerWidth) * 100;
-        let angle = Math.atan((evt.pageX - this._downPageX) / (evt.pageY - this._downPageY));
-
-        let dir = radius - this._lastRadius
-
-        if(Math.abs(dir) > pitch){
-            if(dir>0){
-                dir = 1;
-            }else{
-                dir = -1;
-
-            }
-
-            if (evt.pageY < this._downPageY) {
-                //up
-                if(angle >0){
-                    //left
-                    if (camera.lookingFront){ 
-                        this._mesh({x:dir, y:dir, z:dir });
-                        
-                    } else if (camera.lookingBack){
-                        this._mesh({x:-dir, y:dir, z:-dir });
-
-                    }else if (camera.lookingLeft){
-                        this._mesh({x:dir, y:dir, z:-dir });
-                    }else{
-                        this._mesh({x:-dir, y:dir, z:dir });
-                    }
-                    
-                }else{
-                    //right
-                    if (camera.lookingFront){ 
-                            this._mesh({x:dir, y:dir, z:-dir });
-                    } else if (camera.lookingBack){
-                        this._mesh({x:-dir, y:dir, z:dir });
-                    }else if (camera.lookingLeft){
-                        this._mesh({x:-dir, y:dir, z:-dir });
-                    }else{
-                        this._mesh({x:dir, y:dir, z:dir });
-                    }
-                    
-                   
-                    
-                }
-
-            }else{
-                //down
-                if(angle >0){
-                    //right
-                    if (camera.lookingFront){ 
-                        this._mesh({x:-dir, y:-dir, z:-dir });
-                    } else if (camera.lookingBack){
-                        this._mesh({x:dir, y:-dir, z:dir });
-                    }else if (camera.lookingLeft){
-                        this._mesh({x:-dir, y:-dir, z:dir });
-                    }else{
-                        this._mesh({x:dir, y:-dir, z:-dir });
-                    }
-                    
-                    
-                }else{
-                    //left
-                    if (camera.lookingFront){ 
-                        this._mesh({x:-dir, y:-dir, z:dir });
-                    } else if (camera.lookingBack){
-                        this._mesh({x:dir, y:-dir, z:-dir });
-                    }else if (camera.lookingLeft){
-                        this._mesh({x:dir, y:-dir, z:dir });
-                    }else{
-                        this._mesh({x:-dir, y:-dir, z:-dir });
-                    }
-                    
-                    
-                }
-
-            }
-         
-            this._lastRadius = radius;
-        }/*else if(this._lastRadius - radius  > pitch){
-            this._mesh(-1);
-            this._lastRadius = radius;
-
-        }*/
-
-
-
-    
-
-/*
-        if (camera.lookingFront) {
-            if ((evt.pageX - this._downPageX) / window.innerWidth < -pitch) {  
-                this._mesh.moveZ(1);         
-                camera.moveZ(1);
-               // world.moveZ(1);
-                this._downPageX = evt.pageX;
-            } else if ((evt.pageX - this._downPageX) / window.innerWidth > pitch) {
-                this._mesh.moveZ(-1);      
-                camera.moveZ(-1);
-               // world.moveZ(-1);
-                this._downPageX = evt.pageX;
-            }
-            
-    
-        } else if (camera.lookingBack) {
-            if ((evt.pageX - this._downPageX) / window.innerWidth < -pitch) {
-              this._mesh.moveZ(-1);      
-              camera.moveZ(-1);
-              //world.moveZ(-1);
-                this._downPageX = evt.pageX;
-            } else if ((evt.pageX - this._downPageX) / window.innerWidth > pitch) {
-                this._mesh.moveZ(1);      
-                camera.moveZ(1);
-                //world.moveZ(1);
-                this._downPageX = evt.pageX;
-            }    
-        } else if (camera.lookingLeft){
-            if ((evt.pageX - this._downPageX) / window.innerWidth > pitch) {
-                this._mesh.moveX(-1);      
-                camera.moveX(-1);
-                //world.moveX(-1);
-                this._downPageX = evt.pageX;
-            } else if ((evt.pageX - this._downPageX) / window.innerWidth < -pitch) {
-               this._mesh.moveX(1);      
-               camera.moveX(1);
-               //world.moveX(1);
-                this._downPageX = evt.pageX;
-            }
-        } else {
-            if ((evt.pageX - this._downPageX) / window.innerWidth > pitch) {
-                this._mesh.moveX(1);      
-                camera.moveX(1);
-                //world.moveX(1);
-                this._downPageX = evt.pageX;
-            } else if ((evt.pageX - this._downPageX) / window.innerWidth < -pitch) {
-                this._mesh.moveX(-1);      
-                camera.moveX(-1);
-                //world.moveX(-1);
-                this._downPageX = evt.pageX;
-            }
-        }
-
-        if ((evt.pageY - this._downPageY) / window.innerHeight < -pitch) {
-           this._mesh.moveY(1);      
-           camera.moveY(1);
-          // world.moveY(1);
-            this._downPageY = evt.pageY;
-        } else if ((evt.pageY - this._downPageY) / window.innerHeight > +pitch) {
-            this._mesh.moveY(-1);      
-            camera.moveY(-1);
-           // world.moveY(-1);
-            this._downPageY = evt.pageY;
-        }
-*/
-   
-    }
-    pointerUp() {
-        super.pointerUp();
-        scene.onPointerMove = null;
-        scene.onPointerUp = null;
-        Gui._pointerUpFunction = null;
-
-        this._lastRadius = 0;
-
-        this._hide();
-    }
-
-}
 
 class GuiColorWheel extends Gui {
     constructor() {
@@ -525,11 +310,11 @@ class GuiButton extends Gui {
         this._pointerMoveFunction = pointerMove;
         this._pointerDownFunction = pointerDown;
 
-        this._background = 'rgba(0, 160, 255, 0.7)';  
+        this._background = 'rgba(0, 160, 255, 0.7)';
         this._backgroundDown = 'rgba(96, 96, 96, 1)'
-     //   this._backgroundDown = 'rgba(70, 70, 70, 1)';
+        //   this._backgroundDown = 'rgba(70, 70, 70, 1)';
         //this._backgroundDown = 'rgba(0, 0, 255, 1)';
-      // 
+        // 
         /*this._background = 'rgba(96, 96, 96, 0.3)';
         this._backgroundDown = 'rgba(96, 96, 96, 0.5)';*/
         this._child = [[], [], [], []];
@@ -684,6 +469,109 @@ class GuiButtonImg extends GuiButton {
 
     }
 }
+
+
+class GuiButtonSlider extends GuiButton {
+
+    constructor(img, pointerUp, pointerMove, pointerDown, horizontal) {
+        super(document.createElement('IMG'), pointerUp, pointerMove, pointerDown);
+        this._element.src = img;
+        this._horizontal = horizontal;
+      /*  this._size = [4, 7, 13];
+        this._element.style.borderRadius = "10px";
+        this._margin = [0.5, 1, 2];
+        
+        if (horizontal) {
+            this._sizeWidthMulti = 5;
+        } else {
+            this._size[0] *= 5;
+            this._size[1] *= 5;
+            this._size[2] *= 5;
+            this._margin[0] *= 5; 
+            this._margin[1] *= 5; 
+            this._margin[2] *= 5; 
+
+            this._sizeWidthMulti = 1 / 5;
+        }*/
+       
+
+        this._downPageX = null;
+        this._downPageY = null;
+
+        this._lastDragDistance = 0;
+
+
+    }
+
+    pointerDown(evt, mesh) {
+
+
+        this._lastDragDistance = 0;
+        this._downPageX = evt.pageX;
+        this._downPageY = evt.pageY;
+
+        super.pointerDown();
+
+    }
+
+
+    pointerMove(evt) {
+
+        let pitch = 3;
+
+        let dragDistance;
+
+        if (this._horizontal) {
+            dragDistance = ((evt.pageX - this._downPageX) / window.innerWidth) * 100;
+        } else {
+            dragDistance = ((evt.pageY - this._downPageY) / window.innerWidth) * 100;
+        }
+
+        let dir = dragDistance - this._lastDragDistance
+
+        if (Math.abs(dir) > pitch) {
+            if (dir > 0) {
+                dir = 1;
+            } else {
+                dir = -1;
+            }
+
+            if (this._pointerMoveFunction != null) {
+                this._pointerMoveFunction(dir);
+            }
+            
+        this._lastDragDistance = dragDistance;
+        }
+
+
+
+
+    }
+
+  /*  _setVisible(hor, ver, horAlign, verAlign) {
+
+
+        this._visible = true;
+        this._setPos({ hor: hor, ver: ver, horAlign: horAlign, verAlign: verAlign });
+
+        let buttonPosition = {
+            xMin: Math.round(window.innerWidth * Number(this._element.style.left.slice(0, this._element.style.left.length - 1)) / 100),
+            xMax: Math.round(window.innerWidth * (Number(this._element.style.left.slice(0, this._element.style.left.length - 1)) + (this._size[Gui._SizeSetting] - this._margin[Gui._SizeSetting]) * this._sizeWidthMulti) / 100),
+            yMin: Math.round(window.innerHeight * Number(this._element.style.top.slice(0, this._element.style.top.length - 1)) / 100),
+            yMax: Math.round(window.innerHeight * (Number(this._element.style.top.slice(0, this._element.style.top.length - 1)) + window.innerWidth / window.innerHeight * (this._size[Gui._SizeSetting] - this._margin[Gui._SizeSetting])) / 100),
+            guiElement: this
+        }
+        /* console.log("x min: " + buttonPosition.xMin)
+         console.log("x max: " + buttonPosition.xMax)
+         console.log("x min: " + buttonPosition.yMin)
+         console.log("x max: " + buttonPosition.yMax)
+         console.log("dsdf: " + Number(this._element.style.left.slice(0, this._element.style.left.length - 1)));*/
+
+       /* Gui._VisibleStack.push(buttonPosition);
+
+    }*/
+}
+
 
 class GuiButtonTxt extends GuiButton {
 
@@ -992,10 +880,46 @@ class GuiTextLevel extends Gui {
     set text(text) {
         this._element.textContent = text;
     }
-
-
-
 }
+
+
+
+
+
+class GuiTextDatabase extends Gui {
+    constructor(text) {
+        super(document.createElement('p'), null);
+
+        this._element.textContent = text;
+        this._background = 'rgba(0, 0, 0, 0)';
+        this._element.style.textAlign = "center";
+        this._element.style.color = 'white';
+        this._sizeWidthMulti = 2.5;
+
+        this._size = [1.75, 2.5, 5];
+       // this._margin = [2, 4, 8];
+
+    }
+    _setPos({ hor = 0, ver = 0, horAlign = 0, verAlign = 0 }) {
+
+        this._element.style.lineHeight = window.innerWidth * (this._size[Gui._SizeSetting] - this._margin[Gui._SizeSetting]) / 100 + 'px';
+        this._element.style.fontSize = window.innerHeight * window.innerWidth / window.innerHeight * this._size[Gui._SizeSetting] / 200 + 'px'
+
+        super._setPos({ hor: hor, ver: ver, horAlign: horAlign, verAlign: verAlign })
+    }
+
+    pointerDown(evt) {
+        return;
+    }
+
+    set text(text) {
+        this._element.textContent = text;
+    }
+    get text() {
+        return this._element.textContent;
+    }
+}
+
 
 class GuiText extends Gui {
     constructor(text) {

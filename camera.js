@@ -184,8 +184,10 @@ let camera = {
 
     this._free = true;
 
+  },
 
-
+  freeLoadSaved(){
+    this._arcRotateCamera.radius = 60;
   },
 
   noFree() {
@@ -280,11 +282,12 @@ let camera = {
     if (this._locked) {
       return;
     }
-    this._arcRotateCamera.radius = 20;
-
+    
     if (this._free) {
+      this._arcRotateCamera.radius = 80;
       this._arcRotateCamera.setTarget(new BABYLON.Vector3(this._lastFreeTarget.x, this._lastFreeTarget.y, this._lastFreeTarget.z));
     } else {
+      this._arcRotateCamera.radius = 20;
       this._arcRotateCamera.setTarget(new BABYLON.Vector3(4.5, 0, 4.5));
     }
   },

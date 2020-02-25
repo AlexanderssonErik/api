@@ -23,6 +23,10 @@ let database = {
   _passwordInput: null,
 
   _pendingSettingOfScore: false,
+  _statusText: null,
+  _statusTextGui: null,
+  _statusTextInterval: null,
+
   _user: {
     loggedIn: false,
     uid: "",
@@ -35,9 +39,11 @@ let database = {
       this._emailInput = new GuiInput("email");
       this._passwordInput = new GuiInput("password");
       this._signInGoogleButton = new GuiButtonImg("./icon/signIn/googleGSignIn.svg", this._signInGoolge);
-      this._mailSignInMenu = new GuiButtonImg("./icon/signIn/googleSignIn.svg", this._signInMailMenu.bind(this));
+      //this._mailSignInMenu = new GuiButtonImg("./icon/signIn/googleSignIn.svg", this._signInMailMenu.bind(this));
+      this._mailSignInMenu = new GuiButtonImg("./icon/signIn/emailText.svg", this._signInMailMenu.bind(this));
       this._createSignInMailButton = new GuiButtonImg("./icon/signIn/createAccount.svg", this._createSignInMail);
       this._signInMailButton = new GuiButtonImg("./icon/signIn/signIn1.svg", this._signInMail);
+      //this._signInMailButton = new GuiButtonImg("./icon/signIn/email.svg", this._signInMail);
     }
     this._signInGoogleButton.setVisible(0, -1, guiOptions.center, guiOptions.center);
     this._mailSignInMenu.setVisible(0, 1, guiOptions.center, guiOptions.center);
@@ -132,9 +138,36 @@ let database = {
         }
       });
 
+      this._statusTextGui = new GuiTextDatabase("");
+      this._statusTextGui.setVisible(-1, 0, guiOptions.right, guiOptions.top);
+
+
+
     }
 
   },
+
+  _startStatus: function (text) {
+    this._statusText = text;
+    this._statusTextGui.text = text;
+
+    this._statusTextInterval = setInterval(function () {
+      if (this._statusTextGui.text == this._statusText) {
+        this._statusTextGui.text = "";
+      } else {
+        this._statusTextGui.text = this._statusText;
+      }
+
+    }.bind(this), 400);
+
+  },
+
+  _endStatus: function (text) {
+    clearInterval(this._statusTextInterval);
+    this._statusTextGui.text = "";
+
+  },
+
 
   _createSignInMail: function () {
 
@@ -231,13 +264,19 @@ let database = {
       return;
     }
 
+    this._startStatus("saving")
+
     let userLevel = {};
     eval("userLevel.difficulty" + difficulty + '= "' + block + '"');
 
     this._data.collection(name).doc(this._user.uid).set({ userLevel: userLevel }, { merge: true }).then(function () {
-    }).catch(function (error) {
+      database._endStatus();
+    }).catch(function (error) {    
       alert("save user level error: " + error.message);
     });
+
+
+   
 
   },
 
@@ -247,7 +286,10 @@ let database = {
       return;
     }
 
+    this._startStatus("saving")
+
     this._data.collection(name).doc(this._user.uid).set({ ["userProgram" + level]: program }, { merge: true }).then(function () {
+      database._endStatus();
     }).catch(function (error) {
       alert("save program error: " + error.message);
     });
@@ -269,12 +311,12 @@ let database = {
 
 
 
-  loadScore: function ({ name = null, level = null,  difficulty = null, stage = null, callBackFunction = null }) {
-    
+  loadScore: function ({ name = null, level = null, difficulty = null, stage = null, callBackFunction = null }) {
+
     if (!this._user.loggedIn || this._user.uid == "") {
       return;
     }
-   
+
     let docRef = this._data.collection(name).doc(this._user.uid);
 
     docRef.get().then(function (doc) {
@@ -291,27 +333,27 @@ let database = {
           docRef.get().then(function (doc) {
             gameData = doc.data();
 
-            score =  eval("gameData.scoreL" + level + "D" + difficulty + "S" + stage);
+            score = eval("gameData.scoreL" + level + "D" + difficulty + "S" + stage);
 
             if (score == null) {
-              callBackFunction({ });
+              callBackFunction({});
             } else {
               let no = [0, 0, 0];
-        
-              score.forEach( function (item){
-                if(item.score >= no[0]){
+
+              score.forEach(function (item) {
+                if (item.score >= no[0]) {
                   no[2] = no[1];
                   no[1] = no[0];
                   no[0] = item.score;
-                }else if(item.score >= no[1]){
+                } else if (item.score >= no[1]) {
                   no[2] = no[1];
                   no[1] = item.score;
-                }else if(item.score >= no[2]){
+                } else if (item.score >= no[2]) {
                   no[2] = item.score;
                 }
-    
+
               })
-    
+
               callBackFunction({ no1: no[0], no2: no[1], no3: no[2] });
             }
 
@@ -321,19 +363,19 @@ let database = {
         }
 
         if (score == null) {
-          callBackFunction({ });
+          callBackFunction({});
         } else {
           let no = [0, 0, 0];
-        
-          score.forEach( function (item){
-            if(item.score >= no[0]){
+
+          score.forEach(function (item) {
+            if (item.score >= no[0]) {
               no[2] = no[1];
               no[1] = no[0];
               no[0] = item.score;
-            }else if(item.score >= no[1]){
+            } else if (item.score >= no[1]) {
               no[2] = no[1];
               no[1] = item.score;
-            }else if(item.score >= no[2]){
+            } else if (item.score >= no[2]) {
               no[2] = item.score;
             }
 
@@ -343,7 +385,7 @@ let database = {
         }
 
       } else {
-        callBackFunction({  });
+        callBackFunction({});
         console.log("no program data: ");
       }
 
@@ -357,13 +399,17 @@ let database = {
 
 
 
-  saveFreeShape: function ({shape = null }) {
+  saveFreeShape: function ({ shape = null }) {
 
     if (!this._user.loggedIn || this._user.uid == "") {
       return;
     }
 
+    this._startStatus("saving")
+
     this._data.collection("FreeFreeBuildPublic").add(shape).then(function (docRef) {
+      database._endStatus();
+      window.open("http://bilo.online/?shape=" + docRef.id);
       alert("http://bilo.online/?shape=" + docRef.id);
     }).catch(function (error) {
       alert("save free shape error: " + error.message);
@@ -374,8 +420,9 @@ let database = {
 
 
   loadFreeShape: function ({ shapeNo = null, level = null, callBackFunction = null }) {
-    
- 
+
+    this._startStatus("loading")
+
     let docRef = this._data.collection("FreeFreeBuildPublic").doc(shapeNo);
 
     docRef.get().then(function (doc) {
@@ -383,13 +430,14 @@ let database = {
 
         let prog = doc.data();
 
-           //firebase need to sometimes reload
+        //firebase need to sometimes reload
         if (prog == null) {
 
           docRef = database._data.collection(name).doc(database._user.uid);
           docRef.get().then(function (doc) {
             prog = doc.data();
 
+            database._endStatus();
             if (prog == null) {
               callBackFunction({ level: level, program: null });
             } else {
@@ -401,6 +449,7 @@ let database = {
           return
         }
 
+        database._endStatus();
         if (prog == null) {
           callBackFunction({ level: level, program: null });
         } else {
@@ -422,11 +471,12 @@ let database = {
 
 
   loadProgram: function ({ name = null, level = null, callBackFunction = null }) {
-    
+
     if (!this._user.loggedIn || this._user.uid == "") {
       return;
     }
-   
+    this._startStatus("loading")
+
     let docRef = this._data.collection(name).doc(this._user.uid);
 
     docRef.get().then(function (doc) {
@@ -435,8 +485,8 @@ let database = {
         let gameData = doc.data();
 
         let prog = eval("gameData.userProgram" + level);
-        
-          //firebase need to sometimes reload
+
+        //firebase need to sometimes reload
         if (prog == null) {
 
 
@@ -445,7 +495,7 @@ let database = {
             gameData = doc.data();
 
             prog = eval("gameData.userProgram" + level);
-
+            database._endStatus();
             if (prog == null) {
               callBackFunction({ level: level, program: null });
             } else {
@@ -456,6 +506,8 @@ let database = {
 
           return
         }
+
+        database._endStatus();
 
         if (prog == null) {
           callBackFunction({ level: level, program: null });
@@ -482,13 +534,15 @@ let database = {
       return;
     }
 
+    this._startStatus("loading")
+
     let docRef = this._data.collection(name).doc(this._user.uid)//.collection("userLevel")//.doc("difficulty" + difficulty);
 
 
     docRef.get().then(function (doc) {
       if (doc.exists) {
         let gameData = doc.data();
-
+        database._endStatus();
         if (gameData.userLevel == null) {
           callBackFunction({ difficulty: difficulty, block: null });
         } else {
